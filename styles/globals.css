@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Global styles for the Temu clone. Tailwind’s utility classes
+  handle most of the heavy lifting, but you can define additional
+  styles here. The body background and font smoothing improve
+  readability.
+*/
+body {
+  @apply bg-gray-100 antialiased;
+}
+
+/* Add a subtle focus outline for accessibility */
+a:focus,
+button:focus,
+input:focus {
+  outline: 2px dashed theme('colors.primary');
+  outline-offset: 2px;
+}
