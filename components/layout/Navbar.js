@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
-import { useCart } from '../context/CartContext';
-import { categories } from '../data/products';
+import { useCart } from '../../context/CartContext';
+import { categories } from '../../data/products';
 
 /**
  * Navigation bar component. Displays a top promo bar, the site
