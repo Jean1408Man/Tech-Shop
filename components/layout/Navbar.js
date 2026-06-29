@@ -4,11 +4,13 @@ import { useCart } from "../../context/CartContext";
 import { categories } from "../../data/products";
 import { Search } from "lucide-react";
 import { Dropdown, DropdownList } from "../dropdown/Dropdown";
-
+import { useAuth } from '../../hooks/useAuth';
 export default function Navbar() {
   const { cartItems } = useCart();
-  const [query, setQuery] = useState("");
+  const { user, isAuthenticated, isHydrated, logout } = useAuth();
+  const [query, setQuery] = useState('');
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const displayName = user?.name || user?.email;
 
   return (
     <header className="bg-primary text-white sticky top-0 z-[1000] shadow-md">
@@ -44,15 +46,35 @@ export default function Navbar() {
           />
           <Search size={16} className="text-gray-800" />
         </div>
-
-        {/* Admin link */}
-        <div className="flex items-center space-x-4">
-          <Link
-            href="/admin"
-            className="text-sm font-medium hover:text-gray-200 transition-colors"
-          >
-            Admin
-          </Link>
+        {/* Cart icon */}
+        <div className="ml-auto flex items-center space-x-3">
+          {isHydrated && isAuthenticated ? (
+            <div className="flex items-center space-x-2">
+              {displayName && (
+                <span className="hidden max-w-40 truncate text-sm md:inline">
+                  Hola, {displayName}
+                </span>
+              )}
+              <button
+                type="button"
+                onClick={logout}
+                className="rounded-md bg-white px-3 py-1 text-sm font-semibold text-primary hover:bg-gray-100"
+              >
+                Salir
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center space-x-2 text-sm font-semibold">
+              <Link href="/login" legacyBehavior>
+                <a className="hover:underline">Entrar</a>
+              </Link>
+              <Link href="/register" legacyBehavior>
+                <a className="rounded-md bg-white px-3 py-1 text-primary hover:bg-gray-100">
+                  Crear cuenta
+                </a>
+              </Link>
+            </div>
+          )}
           <Link href="/cart" legacyBehavior>
             <a className="relative" aria-label="Ver carrito">
               <span className="text-2xl">🛒</span>
