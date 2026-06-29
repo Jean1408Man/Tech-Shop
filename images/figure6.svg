@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="1153.59 238.59 128.82 136.82">
+  <defs>
+    <style>
+      .cls-4 {
+        fill: none;
+        stroke: #d84f33;
+        stroke-linecap: round;
+        stroke-miterlimit: 10;
+        stroke-width: 32.82px;
+      }
+    </style>
+  </defs>
+  <line class="cls-4" x1="1266" y1="279" x2="1266" y2="335"/>
+  <line class="cls-4" x1="1218" y1="255" x2="1218" y2="359"/>
+  <line class="cls-4" x1="1170" y1="279" x2="1170" y2="335"/>
+</svg>

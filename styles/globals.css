@@ -1,3 +1,4 @@
+@import "tailwind-animations";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -12,10 +13,12 @@ body {
   @apply bg-gray-100 antialiased;
 }
 
-/* Add a subtle focus outline for accessibility */
-a:focus,
-button:focus,
-input:focus {
-  outline: 2px dashed theme('colors.primary');
-  outline-offset: 2px;
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-none {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }

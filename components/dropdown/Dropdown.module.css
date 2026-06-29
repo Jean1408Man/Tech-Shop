@@ -1,0 +1,26 @@
+.body {
+  opacity: 0;
+  transform: translateY(-16px);
+  transition: all 0.25s ease-out 0.15s;
+  pointer-events: none;
+}
+
+.btn:hover + .body,
+.dropdown:hover .body {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+  transition: all 0.25s ease-out 0.15s;
+}
+
+.dropdown:hover .btn {
+  background-color: color-mix(in srgb, black, transparent 95%);
+}
+
+.btn div {
+  display: none;
+}
+
+.dropdown:hover .btn div {
+  display: block;
+}

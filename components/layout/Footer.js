@@ -7,37 +7,85 @@
 export default function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-300 mt-8">
-      <div className="container mx-auto px-4 py-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="max-w-[1856px] mx-auto px-4 py-8 grid grid-cols-2 md:grid-cols-4 gap-4">
         <div>
           <h3 className="text-white font-semibold mb-2">Acerca de</h3>
           <ul className="space-y-1 text-sm">
-            <li><a href="#" className="hover:underline">Quiénes somos</a></li>
-            <li><a href="#" className="hover:underline">Nuestra misión</a></li>
-            <li><a href="#" className="hover:underline">Carreras</a></li>
+            <li>
+              <a href="#" className="hover:underline">
+                Quiénes somos
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:underline">
+                Nuestra misión
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:underline">
+                Carreras
+              </a>
+            </li>
           </ul>
         </div>
         <div>
           <h3 className="text-white font-semibold mb-2">Servicio al cliente</h3>
           <ul className="space-y-1 text-sm">
-            <li><a href="#" className="hover:underline">Ayuda</a></li>
-            <li><a href="#" className="hover:underline">Envíos y devoluciones</a></li>
-            <li><a href="#" className="hover:underline">Contacto</a></li>
+            <li>
+              <a href="#" className="hover:underline">
+                Ayuda
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:underline">
+                Envíos y devoluciones
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:underline">
+                Contacto
+              </a>
+            </li>
           </ul>
         </div>
         <div>
           <h3 className="text-white font-semibold mb-2">Comunidad</h3>
           <ul className="space-y-1 text-sm">
-            <li><a href="#" className="hover:underline">Blog</a></li>
-            <li><a href="#" className="hover:underline">Programa de afiliados</a></li>
-            <li><a href="#" className="hover:underline">Influencers</a></li>
+            <li>
+              <a href="#" className="hover:underline">
+                Blog
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:underline">
+                Programa de afiliados
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:underline">
+                Influencers
+              </a>
+            </li>
           </ul>
         </div>
         <div>
           <h3 className="text-white font-semibold mb-2">Legal</h3>
           <ul className="space-y-1 text-sm">
-            <li><a href="#" className="hover:underline">Términos de uso</a></li>
-            <li><a href="#" className="hover:underline">Privacidad</a></li>
-            <li><a href="#" className="hover:underline">Cookies</a></li>
+            <li>
+              <a href="#" className="hover:underline">
+                Términos de uso
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:underline">
+                Privacidad
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:underline">
+                Cookies
+              </a>
+            </li>
           </ul>
         </div>
       </div>

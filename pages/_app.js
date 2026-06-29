@@ -1,6 +1,6 @@
-import '../styles/globals.css';
-import { CartProvider } from '../context/CartContext';
-import Layout from '../components/layout/Layout';
+import "../styles/globals.css";
+import { CartProvider } from "../context/CartContext";
+import Layout from "../components/layout/Layout";
 
 function MyApp({ Component, pageProps }) {
   return (
