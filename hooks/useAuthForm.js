@@ -131,7 +131,7 @@ export function useAuthForm(mode) {
     try {
       if (isRegister) {
         await register({
-          name: values.name.trim(),
+          full_name: values.name.trim(),
           email: values.email.trim(),
           password: values.password,
         });

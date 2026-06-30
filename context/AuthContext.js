@@ -1,5 +1,6 @@
 import { createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import {
+  getCurrentUser,
   login as loginRequest,
   register as registerRequest,
 } from '../services/authService';
@@ -20,7 +21,15 @@ function readStoredSession() {
 
   try {
     const storedSession = window.localStorage.getItem(AUTH_STORAGE_KEY);
-    return storedSession ? JSON.parse(storedSession) : EMPTY_SESSION;
+    const parsedSession = storedSession ? JSON.parse(storedSession) : EMPTY_SESSION;
+
+    return parsedSession?.token
+      ? {
+          ...EMPTY_SESSION,
+          ...parsedSession,
+          isAuthenticated: true,
+        }
+      : EMPTY_SESSION;
   } catch {
     return EMPTY_SESSION;
   }
@@ -39,39 +48,25 @@ function saveSession(session) {
   window.localStorage.removeItem(AUTH_STORAGE_KEY);
 }
 
-function unwrapPayload(payload) {
-  if (!payload || typeof payload !== 'object') {
-    return {};
-  }
-
-  if (payload.data && typeof payload.data === 'object') {
-    return { ...payload, ...payload.data };
-  }
-
-  return payload;
+function getAccessToken(payload) {
+  return payload?.access_token || payload?.accessToken || payload?.token || null;
 }
 
-function getFallbackUser(values) {
-  if (!values?.email && !values?.name) {
-    return null;
-  }
-
-  return {
-    name: values.name || values.email,
-    email: values.email,
-  };
-}
-
-function buildSession(payload, values) {
-  const data = unwrapPayload(payload);
-  const token =
-    data.token || data.accessToken || data.access_token || data.authToken || data.jwt || null;
-  const user = data.user || data.customer || data.account || data.profile || getFallbackUser(values);
-
+function buildSession(token, user) {
   return {
     token,
     user,
-    isAuthenticated: Boolean(token || user),
+    isAuthenticated: Boolean(token),
+  };
+}
+
+function getFallbackUser(values) {
+  const fullName = values.full_name || values.name;
+
+  return {
+    email: values.email,
+    full_name: fullName || values.email,
+    name: fullName || values.email,
   };
 }
 
@@ -84,25 +79,47 @@ export function AuthProvider({ children }) {
     setIsHydrated(true);
   }, []);
 
-  const authenticate = useCallback(async (request, values) => {
-    const payload = await request(values);
-    const nextSession = buildSession(payload, values);
+  const createSessionFromLogin = useCallback(async (values) => {
+    const payload = await loginRequest(values);
+    const token = getAccessToken(payload);
+
+    if (!token) {
+      throw new Error('El backend no devolvio access_token.');
+    }
+
+    let user = getFallbackUser(values);
+
+    try {
+      user = await getCurrentUser(token);
+    } catch {
+      user = getFallbackUser(values);
+    }
+
+    const nextSession = buildSession(token, user);
 
     setSession(nextSession);
     saveSession(nextSession);
 
-    return payload;
+    return {
+      ...payload,
+      user,
+    };
   }, []);
 
   const login = useCallback(
-    (values) => authenticate(loginRequest, values),
-    [authenticate]
+    (values) => createSessionFromLogin(values),
+    [createSessionFromLogin]
   );
 
-  const register = useCallback(
-    (values) => authenticate(registerRequest, values),
-    [authenticate]
-  );
+  const register = useCallback(async (values) => {
+    const createdUser = await registerRequest(values);
+    const payload = await createSessionFromLogin(values);
+
+    return {
+      ...payload,
+      createdUser,
+    };
+  }, [createSessionFromLogin]);
 
   const logout = useCallback(() => {
     setSession(EMPTY_SESSION);

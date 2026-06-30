@@ -10,7 +10,7 @@ export default function Navbar() {
   const { user, isAuthenticated, isHydrated, logout } = useAuth();
   const [query, setQuery] = useState('');
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-  const displayName = user?.name || user?.email;
+  const displayName = user?.full_name || user?.name || user?.email;
 
   return (
     <header className="bg-primary text-white sticky top-0 z-[1000] shadow-md">
