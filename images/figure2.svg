@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="37 179 74.5 74.5">
+<svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52.96 60.71">
   <defs>
     <style>
-      .cls-2 {
+      .cls-1 {
         fill: #f2613f;
+        stroke-width: 0px;
       }
     </style>
   </defs>
-  <rect class="cls-2" x="37" y="179" width="74.5" height="74.5"/>
+  <g id="Capa_1-2" data-name="Capa 1">
+    <path class="cls-1" d="M22.6,60.71c16.74,0,30.35-13.62,30.35-30.35S39.34,0,22.6,0C13.63,0,5.56,3.91,0,10.12v40.46c5.56,6.21,13.63,10.12,22.6,10.12ZM22.6,15.5c8.19,0,14.85,6.66,14.85,14.85s-6.66,14.85-14.85,14.85-14.85-6.66-14.85-14.85,6.66-14.85,14.85-14.85Z"/>
+  </g>
 </svg>

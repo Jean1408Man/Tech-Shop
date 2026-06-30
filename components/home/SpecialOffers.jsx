@@ -56,7 +56,7 @@ export default function SpecialOffers() {
   }
 
   return (
-    <section className="relative overflow-hidden max-w-[1856px] mx-auto">
+    <section className="relative overflow-hidden max-w-[1856px] mx-auto border-t-2 border-primary-dark">
       <h1 className="absolute top-0 left-1/2 -translate-x-1/2 z-50 text-3xl font-bold text-white bg-primary px-12 py-4 rounded-es-full rounded-ee-full">
         Ofertas Especiales
       </h1>

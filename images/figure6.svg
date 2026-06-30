@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="1153.59 238.59 128.82 136.82">
+<svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 57.27 66.27">
   <defs>
     <style>
-      .cls-4 {
-        fill: none;
-        stroke: #d84f33;
-        stroke-linecap: round;
-        stroke-miterlimit: 10;
-        stroke-width: 32.82px;
+      .cls-1 {
+        fill: #f2613f;
+        stroke-width: 0px;
       }
     </style>
   </defs>
-  <line class="cls-4" x1="1266" y1="279" x2="1266" y2="335"/>
-  <line class="cls-4" x1="1218" y1="255" x2="1218" y2="359"/>
-  <line class="cls-4" x1="1170" y1="279" x2="1170" y2="335"/>
+  <g id="Capa_1-2" data-name="Capa 1">
+    <polygon class="cls-1" points="9.66 0 0 36.06 30.21 66.27 57.27 59.02 57.27 0 9.66 0"/>
+  </g>
 </svg>
