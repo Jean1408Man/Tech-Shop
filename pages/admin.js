@@ -1,108 +1,28 @@
-import { useState, useEffect } from "react";
-import { categories } from "../data/products";
+import { CatalogError, CatalogLoading } from "../components/catalog/CatalogFeedback";
+import { useProductAdmin } from "../hooks/useProductAdmin";
 
 export default function AdminPage() {
-  const [products, setProducts] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState(null);
-  const [formData, setFormData] = useState({
-    name: "",
-    price: "",
-    category: "",
-    image: "",
-    description: "",
-  });
+  const {
+    products,
+    categories,
+    formData,
+    editingProduct,
+    isModalOpen,
+    isLoading,
+    isSubmitting,
+    error,
+    reload,
+    openCreateModal,
+    openEditModal,
+    closeModal,
+    handleChange,
+    handleSubmit,
+    handleDelete,
+  } = useProductAdmin();
 
-  // Cargar productos desde localStorage o usar los iniciales
-  useEffect(() => {
-    const stored = localStorage.getItem("admin_products");
-    if (stored) {
-      setProducts(JSON.parse(stored));
-    } else {
-      // Importar productos iniciales
-      import("../data/products").then((module) => {
-        setProducts(module.products);
-        localStorage.setItem("admin_products", JSON.stringify(module.products));
-      });
-    }
-  }, []);
-
-  // Guardar en localStorage cuando cambien los productos
-  useEffect(() => {
-    if (products.length > 0) {
-      localStorage.setItem("admin_products", JSON.stringify(products));
-    }
-  }, [products]);
-
-  const openCreateModal = () => {
-    setEditingProduct(null);
-    setFormData({
-      name: "",
-      price: "",
-      category: "",
-      image: "",
-      description: "",
-    });
-    setIsModalOpen(true);
-  };
-
-  const openEditModal = (product) => {
-    setEditingProduct(product);
-    setFormData({
-      name: product.name,
-      price: product.price.toString(),
-      category: product.category,
-      image: product.image,
-      description: product.description,
-    });
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setEditingProduct(null);
-    setFormData({
-      name: "",
-      price: "",
-      category: "",
-      image: "",
-      description: "",
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const newProduct = {
-      id: editingProduct ? editingProduct.id : Date.now(),
-      name: formData.name,
-      price: parseFloat(formData.price),
-      category: formData.category,
-      image: formData.image,
-      description: formData.description,
-    };
-
-    if (editingProduct) {
-      setProducts(
-        products.map((p) => (p.id === editingProduct.id ? newProduct : p)),
-      );
-    } else {
-      setProducts([...products, newProduct]);
-    }
-    closeModal();
-  };
-
-  const handleDelete = (id) => {
-    if (
-      window.confirm("¿Estás seguro de que quieres eliminar este producto?")
-    ) {
-      setProducts(products.filter((p) => p.id !== id));
-    }
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  if (isLoading) {
+    return <CatalogLoading message="Cargando productos..." />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -118,6 +38,12 @@ export default function AdminPage() {
             + Nuevo Producto
           </button>
         </div>
+
+        {error && (
+          <div className="mb-6">
+            <CatalogError message={error} onRetry={reload} />
+          </div>
+        )}
 
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <table className="min-w-full divide-y divide-gray-200">
@@ -161,12 +87,13 @@ export default function AdminPage() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                      {categories.find((c) => c.slug === product.category)
-                        ?.name || product.category}
+                      {product.categoryName ||
+                        categories.find((category) => category.slug === product.category)?.name ||
+                        product.category}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ${product.price.toFixed(2)}
+                    ${Number(product.basePrice || product.price || 0).toFixed(2)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button
@@ -241,8 +168,8 @@ export default function AdminPage() {
                       Categoría
                     </label>
                     <select
-                      name="category"
-                      value={formData.category}
+                      name="categoryId"
+                      value={formData.categoryId}
                       onChange={handleChange}
                       required
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
@@ -292,9 +219,14 @@ export default function AdminPage() {
                   </button>
                   <button
                     type="submit"
+                    disabled={isSubmitting}
                     className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark"
                   >
-                    {editingProduct ? "Guardar Cambios" : "Crear Producto"}
+                    {isSubmitting
+                      ? "Guardando..."
+                      : editingProduct
+                        ? "Guardar Cambios"
+                        : "Crear Producto"}
                   </button>
                 </div>
               </form>

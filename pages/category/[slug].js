@@ -1,24 +1,36 @@
-import { useRouter } from "next/router";
-import { categories, products } from "../../data/products";
 import ProductGrid from "../../components/catalog/ProductGrid";
+import ProductNotFound from "../../components/catalog/ProductNotFound";
+import { CatalogError, CatalogLoading } from "../../components/catalog/CatalogFeedback";
+import { useCategoryPage } from "../../hooks/useCatalog";
 
 export default function CategoryPage() {
-  const router = useRouter();
-  const { slug } = router.query;
+  const {
+    category,
+    products,
+    isLoading,
+    error,
+    reload,
+    isReady,
+  } = useCategoryPage();
 
-  if (!slug) return null;
+  if (!isReady || isLoading) {
+    return <CatalogLoading message="Cargando categoria..." />;
+  }
 
-  const category = categories.find((cat) => cat.slug === slug);
-  const filteredProducts = products.filter(
-    (product) => product.category === slug,
-  );
+  if (error) {
+    return <CatalogError message={error} onRetry={reload} />;
+  }
+
+  if (!category) {
+    return <ProductNotFound message="Categoría no encontrada." />;
+  }
 
   return (
     <div className="max-w-[1856px] mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-4">
-        {category ? category.name : "Categoría desconocida"}
+        {category.name}
       </h1>
-      <ProductGrid products={filteredProducts} />
+      <ProductGrid products={products} />
     </div>
   );
 }

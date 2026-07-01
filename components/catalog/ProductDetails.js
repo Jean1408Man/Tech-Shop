@@ -3,6 +3,8 @@ import { useCart } from '../../context/CartContext';
 
 export default function ProductDetails({ product }) {
   const { addToCart } = useCart();
+  const price = Number(product.price || 0);
+  const basePrice = Number(product.basePrice || price);
 
   return (
     <div className="grid md:grid-cols-2 gap-8">
@@ -17,8 +19,23 @@ export default function ProductDetails({ product }) {
       <div>
         <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
         <p className="text-primary text-2xl font-bold mb-4">
-          ${product.price.toFixed(2)}
+          ${price.toFixed(2)}
         </p>
+        {product.hasOffer && (
+          <div className="mb-4 flex items-center gap-3">
+            <span className="rounded-full bg-primary px-3 py-1 text-sm font-semibold text-white">
+              {product.offer?.name || 'Oferta activa'}
+            </span>
+            <span className="text-sm text-gray-500">
+              Antes <span className="line-through">${basePrice.toFixed(2)}</span>
+            </span>
+          </div>
+        )}
+        {product.categoryName && (
+          <p className="mb-3 text-sm font-semibold text-gray-500">
+            {product.categoryName}
+          </p>
+        )}
         <p className="mb-6">{product.description}</p>
         <button
           onClick={() => addToCart(product)}

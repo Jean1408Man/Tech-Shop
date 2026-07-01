@@ -10,6 +10,8 @@ import { X } from "lucide-react";
  */
 export default function ProductCard({ product }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const price = Number(product.price || 0);
+  const basePrice = Number(product.basePrice || price);
 
   const openModal = (e) => {
     e.preventDefault();
@@ -37,9 +39,19 @@ export default function ProductCard({ product }) {
             {product.name}
           </h3>
           <p className="mt-1 text-primary font-bold">
-            ${product.price.toFixed(2)}
+            ${price.toFixed(2)}
           </p>
+          {product.hasOffer && (
+            <p className="text-xs text-gray-500 line-through">
+              ${basePrice.toFixed(2)}
+            </p>
+          )}
         </div>
+        {product.hasOffer && (
+          <span className="absolute left-2 top-2 rounded-full bg-primary px-2 py-1 text-xs font-semibold text-white">
+            Oferta
+          </span>
+        )}
         <button
           onClick={openModal}
           className="absolute top-2 right-2 bg-white bg-opacity-90 hover:bg-opacity-100 text-gray-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm transition-all duration-200 z-5"
@@ -78,8 +90,13 @@ export default function ProductCard({ product }) {
             <div className="relative z-10 bg-white w-full h-full p-4">
               <h2 className="text-lg font-bold mb-2">{product.name}</h2>
               <p className="text-primary font-bold text-xl mb-3">
-                ${product.price.toFixed(2)}
+                ${price.toFixed(2)}
               </p>
+              {product.hasOffer && (
+                <p className="-mt-2 mb-3 text-sm text-gray-500">
+                  Antes <span className="line-through">${basePrice.toFixed(2)}</span>
+                </p>
+              )}
               <p className="text-gray-600 text-sm mb-4">
                 {product.description}
               </p>

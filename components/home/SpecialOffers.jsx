@@ -1,57 +1,32 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-/**
- * Special Offers component displaying a carousel of images
- * fetched from an external API.
- */
-export default function SpecialOffers() {
-  const [images, setImages] = useState([]);
+export default function SpecialOffers({ offers = [] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch random images from Lorem Picsum as special offers
-    fetch("https://picsum.photos/v2/list?page=2&limit=5")
-      .then((res) => res.json())
-      .then((data) => {
-        setImages(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching special offers:", err);
-        setLoading(false);
-      });
-  }, []);
+    setCurrentIndex(0);
+  }, [offers]);
 
-  // Auto-play the slider
   useEffect(() => {
-    if (images.length === 0) return;
+    if (offers.length === 0) return;
     const interval = setInterval(() => {
       nextSlide();
     }, 5000);
     return () => clearInterval(interval);
-  }, [images, currentIndex]);
+  }, [offers, currentIndex]);
 
   const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % offers.length);
   };
 
   const prevSlide = () => {
     setCurrentIndex(
-      (prevIndex) => (prevIndex - 1 + images.length) % images.length,
+      (prevIndex) => (prevIndex - 1 + offers.length) % offers.length,
     );
   };
 
-  if (loading) {
-    return (
-      <div className="max-w-[1856px] mx-auto py-8 text-center text-gray-500">
-        Cargando ofertas especiales...
-      </div>
-    );
-  }
-
-  if (images.length === 0) {
+  if (offers.length === 0) {
     return null;
   }
 
@@ -67,11 +42,11 @@ export default function SpecialOffers() {
           className="flex transition-transform duration-500 ease-out h-full"
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
-          {images.map((image) => (
-            <div key={image.id} className="min-w-full h-full relative">
+          {offers.map((offer) => (
+            <div key={offer.id} className="min-w-full h-full relative">
               <img
-                src={image.download_url}
-                alt={`Special Offer by ${image.author}`}
+                src={offer.image}
+                alt={offer.name}
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-bottom p-8">
@@ -80,10 +55,10 @@ export default function SpecialOffers() {
                     Oferta Exclusiva
                   </p>
                   <h3 className="text-3xl font-bold mb-2">
-                    Descuentos de hasta el 50%
+                    {offer.name}
                   </h3>
                   <p className="text-lg opacity-90">
-                    Capturado por: {image.author}
+                    {offer.description || `Ahorra $${offer.discount.toFixed(2)} en productos seleccionados`}
                   </p>
                   <button className="mt-4 bg-primary hover:bg-primary-dark text-white font-bold py-2 px-6 rounded-full transition-colors">
                     Ver Ahora
@@ -112,7 +87,7 @@ export default function SpecialOffers() {
 
         {/* Indicators */}
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
-          {images.map((_, i) => (
+          {offers.map((_, i) => (
             <button
               key={i}
               onClick={() => setCurrentIndex(i)}

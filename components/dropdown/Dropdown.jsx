@@ -30,6 +30,11 @@ export function DropdownList({ list }) {
         style.body
       }
     >
+      {list.length === 0 && (
+        <span className="block px-4 py-2 text-sm text-gray-500">
+          Sin categorias
+        </span>
+      )}
       {list.map((item) => (
         <Link
           key={item.slug}

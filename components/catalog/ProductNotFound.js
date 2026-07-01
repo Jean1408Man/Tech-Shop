@@ -1,3 +1,3 @@
-export default function ProductNotFound() {
-  return <p>Producto no encontrado.</p>;
+export default function ProductNotFound({ message = 'Producto no encontrado.' }) {
+  return <p>{message}</p>;
 }

@@ -1,22 +1,34 @@
-import { useState } from "react";
-import { categories, products } from "../data/products";
 import CategoriesSection from "../components/home/CategoriesSection";
 import FeaturedProductsSection from "../components/home/FeaturedProductsSection";
 import HeroSection from "../components/home/HeroSection";
 import SpecialOffers from "../components/home/SpecialOffers";
+import { CatalogError, CatalogLoading } from "../components/catalog/CatalogFeedback";
+import { useHomeCatalog } from "../hooks/useCatalog";
 
 export default function HomePage() {
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const {
+    categories,
+    filteredProducts,
+    offers,
+    selectedCategory,
+    setSelectedCategory,
+    isLoading,
+    error,
+    reload,
+  } = useHomeCatalog();
 
-  const filteredProducts =
-    selectedCategory === "all"
-      ? products.slice(0, 8)
-      : products.filter((product) => product.category === selectedCategory);
+  if (isLoading) {
+    return <CatalogLoading message="Cargando productos..." />;
+  }
+
+  if (error) {
+    return <CatalogError message={error} onRetry={reload} />;
+  }
 
   return (
     <div className="max-w-[1856px] mx-auto">
       <HeroSection />
-      <SpecialOffers />
+      <SpecialOffers offers={offers} />
       <CategoriesSection categories={categories} />
       <FeaturedProductsSection
         products={filteredProducts}

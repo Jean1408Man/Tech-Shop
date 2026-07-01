@@ -1,9 +1,28 @@
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function CategoriesSection({ categories = [] }) {
-  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
+  useEffect(() => {
+    if (categories.length === 0) {
+      setSelectedCategory(null);
+      return;
+    }
+
+    setSelectedCategory((currentCategory) => {
+      const currentExists = categories.some(
+        (category) => category.slug === currentCategory?.slug
+      );
+
+      return currentExists ? currentCategory : categories[0];
+    });
+  }, [categories]);
+
+  if (!selectedCategory) {
+    return null;
+  }
 
   return (
     <section className="w-full max-w-[1856px] mx-auto relative overflow-hidden px-4 py-8">

@@ -1,15 +1,18 @@
-import { useRouter } from "next/router";
-import { products } from "../../data/products";
 import ProductDetails from "../../components/catalog/ProductDetails";
 import ProductNotFound from "../../components/catalog/ProductNotFound";
+import { CatalogError, CatalogLoading } from "../../components/catalog/CatalogFeedback";
+import { useProductPage } from "../../hooks/useCatalog";
 
 export default function ProductPage() {
-  const router = useRouter();
-  const { id } = router.query;
+  const { product, isLoading, error, reload } = useProductPage();
 
-  if (!id) return null;
+  if (isLoading) {
+    return <CatalogLoading message="Cargando producto..." />;
+  }
 
-  const product = products.find((p) => p.id.toString() === id);
+  if (error) {
+    return <CatalogError message={error} onRetry={reload} />;
+  }
 
   return (
     <div className="max-w-[1856px] mx-auto px-4 py-8">

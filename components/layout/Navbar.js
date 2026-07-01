@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useCart } from "../../context/CartContext";
-import { categories } from "../../data/products";
 import { Search } from "lucide-react";
 import { Dropdown, DropdownList } from "../dropdown/Dropdown";
 import { useAuth } from '../../hooks/useAuth';
+import { useNavbarCategories } from '../../hooks/useCatalog';
 export default function Navbar() {
   const { cartItems } = useCart();
   const { user, isAuthenticated, isHydrated, logout } = useAuth();
+  const categories = useNavbarCategories();
   const [query, setQuery] = useState('');
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const displayName = user?.full_name || user?.name || user?.email;
