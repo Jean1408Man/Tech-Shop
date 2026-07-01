@@ -1,17 +1,40 @@
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { useCart } from "../../context/CartContext";
 import { Search } from "lucide-react";
 import { Dropdown, DropdownList } from "../dropdown/Dropdown";
 import { useAuth } from '../../hooks/useAuth';
 import { useNavbarCategories } from '../../hooks/useCatalog';
 export default function Navbar() {
+  const router = useRouter();
   const { cartItems } = useCart();
   const { user, isAuthenticated, isHydrated, logout } = useAuth();
   const categories = useNavbarCategories();
   const [query, setQuery] = useState('');
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const displayName = user?.full_name || user?.name || user?.email;
+
+  useEffect(() => {
+    if (router.pathname === "/search") {
+      const nextQuery = Array.isArray(router.query.q)
+        ? router.query.q[0]
+        : router.query.q;
+
+      setQuery(nextQuery || "");
+    }
+  }, [router.pathname, router.query.q]);
+
+  const handleSearch = (event) => {
+    event.preventDefault();
+
+    const trimmedQuery = query.trim();
+    if (!trimmedQuery) {
+      return;
+    }
+
+    router.push(`/search?q=${encodeURIComponent(trimmedQuery)}`);
+  };
 
   return (
     <header className="bg-primary text-white sticky top-0 z-[1000] shadow-md">
@@ -20,7 +43,7 @@ export default function Navbar() {
         ¡Envío gratis en tu primera compra! Compra como un multimillonario.
       </div>
 
-      <div className="max-w-[1856px] mx-auto flex items-center justify-between p-3">
+      <div className="max-w-[1856px] mx-auto flex flex-wrap items-center gap-3 p-3 md:flex-nowrap">
         {/* Logo and Categories Toggle */}
         <div className="flex items-center space-x-4">
           <Link
@@ -37,16 +60,26 @@ export default function Navbar() {
         </div>
 
         {/* Search bar */}
-        <div className="flex-1 flex items-center gap-2 mx-4 max-w-2xl rounded-full bg-white overflow-hidden py-1.5 px-4">
+        <form
+          className="order-3 flex w-full min-w-0 items-center gap-2 overflow-hidden rounded-full bg-white py-1.5 pl-4 pr-2 md:order-none md:mx-4 md:max-w-2xl md:flex-1"
+          onSubmit={handleSearch}
+        >
           <input
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Buscar productos"
-            className="flex-1 text-gray-800 placeholder-gray-500 border-none bg-none focus:outline-none"
+            className="min-w-0 flex-1 text-gray-800 placeholder-gray-500 border-none bg-none focus:outline-none"
           />
-          <Search size={16} className="text-gray-800" />
-        </div>
+          <button
+            type="submit"
+            className="inline-flex h-8 w-8 shrink-0 items-center justify-center gap-1 rounded-full bg-primary text-sm font-semibold text-white transition-colors hover:bg-primary-dark sm:w-auto sm:px-3"
+            aria-label="Buscar productos"
+          >
+            <Search size={16} />
+            <span className="hidden sm:inline">Buscar</span>
+          </button>
+        </form>
         {/* Cart icon */}
         <div className="ml-auto flex items-center space-x-3">
           {isHydrated && isAuthenticated ? (
@@ -70,7 +103,7 @@ export default function Navbar() {
                 <a className="hover:underline">Entrar</a>
               </Link>
               <Link href="/register" legacyBehavior>
-                <a className="rounded-md bg-white px-3 py-1 text-primary hover:bg-gray-100">
+                <a className="hidden rounded-md bg-white px-3 py-1 text-primary hover:bg-gray-100 sm:inline-block">
                   Crear cuenta
                 </a>
               </Link>

@@ -399,6 +399,13 @@ Query params:
 
 - `skip`: number, default `0`
 - `limit`: number, default `100`
+- `nombre`: string opcional. Filtra productos por coincidencia parcial en `nombre`, sin distinguir mayusculas/minusculas.
+
+Ejemplo:
+
+```http
+GET /api/v1/productos/?nombre=smart
+```
 
 Respuesta `200`: `Producto[]`.
 
@@ -933,4 +940,3 @@ Esto vacia la base y carga datos demo TechShop:
 - 6 combos
 - 3 pedidos demo
 - usuario demo `demo@orbita.local` con password `demo123`
-

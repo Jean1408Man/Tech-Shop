@@ -110,9 +110,21 @@ export async function getProducts(params = {}) {
     skip: String(params.skip ?? 0),
     limit: String(params.limit ?? 100),
   });
+
+  if (params.nombre) {
+    searchParams.set('nombre', params.nombre);
+  }
+
   const products = await apiRequest(`/productos/?${searchParams.toString()}`);
 
   return Array.isArray(products) ? products.map(normalizeProduct) : [];
+}
+
+export function searchProducts(query, params = {}) {
+  return getProducts({
+    ...params,
+    nombre: query,
+  });
 }
 
 export async function getProduct(productId) {

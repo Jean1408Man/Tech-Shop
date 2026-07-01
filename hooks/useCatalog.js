@@ -6,6 +6,7 @@ import {
   getOffers,
   getProduct,
   getProducts,
+  searchProducts,
 } from '../services/catalogService';
 
 const INITIAL_CATALOG_STATE = {
@@ -18,6 +19,14 @@ const INITIAL_CATALOG_STATE = {
 
 function getErrorMessage(error) {
   return error?.message || 'No pudimos cargar los datos del catalogo.';
+}
+
+function getQueryValue(value) {
+  if (Array.isArray(value)) {
+    return value[0] || '';
+  }
+
+  return value || '';
 }
 
 export function useCatalog({ includeOffers = false } = {}) {
@@ -165,6 +174,53 @@ export function useProductPage() {
     isLoading: !router.isReady || isLoading,
     error,
     reload: loadProduct,
+  };
+}
+
+export function useProductSearch() {
+  const router = useRouter();
+  const query = getQueryValue(router.query.q).trim();
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const loadProducts = useCallback(async () => {
+    if (!router.isReady) {
+      return;
+    }
+
+    if (!query) {
+      setProducts([]);
+      setIsLoading(false);
+      setError('');
+      return;
+    }
+
+    setIsLoading(true);
+    setError('');
+
+    try {
+      setProducts(await searchProducts(query));
+    } catch (searchError) {
+      setProducts([]);
+      setError(getErrorMessage(searchError));
+    } finally {
+      setIsLoading(false);
+    }
+  }, [query, router.isReady]);
+
+  useEffect(() => {
+    loadProducts();
+  }, [loadProducts]);
+
+  return {
+    products,
+    query,
+    isLoading,
+    error,
+    reload: loadProducts,
+    hasQuery: Boolean(query),
+    isReady: router.isReady,
   };
 }
 

@@ -1,8 +1,11 @@
 import ProductCard from './ProductCard';
 
-export default function ProductGrid({ products }) {
+export default function ProductGrid({
+  products,
+  emptyMessage = 'No hay productos disponibles en esta categoría.',
+}) {
   if (!products.length) {
-    return <p>No hay productos disponibles en esta categoría.</p>;
+    return <p>{emptyMessage}</p>;
   }
 
   return (
