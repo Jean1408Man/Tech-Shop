@@ -3,6 +3,8 @@ import { useRouter } from 'next/router';
 import {
   deleteProduct,
   getCategories,
+  getCombo,
+  getCombos,
   getOffers,
   getProduct,
   getProducts,
@@ -13,6 +15,7 @@ const INITIAL_CATALOG_STATE = {
   categories: [],
   products: [],
   offers: [],
+  combos: [],
   isLoading: true,
   error: '',
 };
@@ -29,7 +32,7 @@ function getQueryValue(value) {
   return value || '';
 }
 
-export function useCatalog({ includeOffers = false } = {}) {
+export function useCatalog({ includeOffers = false, includeCombos = false } = {}) {
   const [state, setState] = useState(INITIAL_CATALOG_STATE);
 
   const loadCatalog = useCallback(async () => {
@@ -40,16 +43,18 @@ export function useCatalog({ includeOffers = false } = {}) {
     }));
 
     try {
-      const [categories, products, offers] = await Promise.all([
+      const [categories, products, offers, combos] = await Promise.all([
         getCategories(),
         getProducts(),
         includeOffers ? getOffers() : Promise.resolve([]),
+        includeCombos ? getCombos() : Promise.resolve([]),
       ]);
 
       setState({
         categories,
         products,
         offers,
+        combos,
         isLoading: false,
         error: '',
       });
@@ -60,7 +65,7 @@ export function useCatalog({ includeOffers = false } = {}) {
         error: getErrorMessage(error),
       }));
     }
-  }, [includeOffers]);
+  }, [includeCombos, includeOffers]);
 
   useEffect(() => {
     loadCatalog();
@@ -73,7 +78,7 @@ export function useCatalog({ includeOffers = false } = {}) {
 }
 
 export function useHomeCatalog() {
-  const catalog = useCatalog({ includeOffers: true });
+  const catalog = useCatalog({ includeOffers: true, includeCombos: true });
   const [selectedCategory, setSelectedCategory] = useState('all');
 
   const filteredProducts = useMemo(() => {
@@ -174,6 +179,74 @@ export function useProductPage() {
     isLoading: !router.isReady || isLoading,
     error,
     reload: loadProduct,
+  };
+}
+
+export function useCombosPage() {
+  const [combos, setCombos] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  const loadCombos = useCallback(async () => {
+    setIsLoading(true);
+    setError('');
+
+    try {
+      setCombos(await getCombos());
+    } catch (loadError) {
+      setCombos([]);
+      setError(getErrorMessage(loadError));
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadCombos();
+  }, [loadCombos]);
+
+  return {
+    combos,
+    isLoading,
+    error,
+    reload: loadCombos,
+  };
+}
+
+export function useComboPage() {
+  const router = useRouter();
+  const { id } = router.query;
+  const [combo, setCombo] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  const loadCombo = useCallback(async () => {
+    if (!router.isReady || !id) {
+      return;
+    }
+
+    setIsLoading(true);
+    setError('');
+
+    try {
+      setCombo(await getCombo(id));
+    } catch (loadError) {
+      setCombo(null);
+      setError(getErrorMessage(loadError));
+    } finally {
+      setIsLoading(false);
+    }
+  }, [id, router.isReady]);
+
+  useEffect(() => {
+    loadCombo();
+  }, [loadCombo]);
+
+  return {
+    combo,
+    isLoading: !router.isReady || isLoading,
+    error,
+    reload: loadCombo,
   };
 }
 

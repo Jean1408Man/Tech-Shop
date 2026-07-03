@@ -23,6 +23,11 @@ const API_BASE_URL = "http://localhost:8000/api/v1";
 - Los listados aceptan `skip` y `limit`.
 - `skip` por defecto: `0`.
 - `limit` por defecto: `100`.
+- Los listados de entidades aceptan filtros adicionales por campos escalares del modelo. Ejemplo: `?nombre=smart`, `?precio=25.00`, `?telefono=555`.
+- En campos string/texto, el filtro es por coincidencia parcial y no distingue mayusculas/minusculas.
+- En numeros, booleanos y fechas, el filtro es por igualdad. Si el valor no se puede convertir al tipo del campo, la respuesta es una lista vacia.
+- Los filtros no reconocidos se ignoran.
+- En `users`, por seguridad, solo se filtra por `id`, `email`, `full_name` e `is_active`.
 - Los `Decimal` llegan normalmente como strings en JSON. En frontend conviene tratarlos como string decimal o convertirlos con cuidado.
 - Las fechas son ISO 8601. El backend normaliza fechas con timezone a UTC naive al guardar ofertas.
 - Los `PUT` son parciales: puedes enviar solo los campos que cambian.
@@ -224,6 +229,13 @@ Query params:
 
 - `skip`: number, default `0`
 - `limit`: number, default `100`
+- Filtros opcionales: `id`, `email`, `full_name`, `is_active`.
+
+Ejemplo:
+
+```http
+GET /api/v1/users/?email=ana
+```
 
 Respuesta `200`:
 
@@ -297,6 +309,13 @@ Query params:
 
 - `skip`: number, default `0`
 - `limit`: number, default `100`
+- Filtros opcionales: `id`, `nombre`, `url_img`, `descripcion`.
+
+Ejemplo:
+
+```http
+GET /api/v1/categorias/?nombre=smart
+```
 
 Respuesta `200`: `Categoria[]`.
 
@@ -399,12 +418,13 @@ Query params:
 
 - `skip`: number, default `0`
 - `limit`: number, default `100`
-- `nombre`: string opcional. Filtra productos por coincidencia parcial en `nombre`, sin distinguir mayusculas/minusculas.
+- Filtros opcionales: `id`, `nombre`, `descripcion`, `precio_base`, `url_img`, `categoria_id`.
 
 Ejemplo:
 
 ```http
 GET /api/v1/productos/?nombre=smart
+GET /api/v1/productos/?precio_base=699.00
 ```
 
 Respuesta `200`: `Producto[]`.
@@ -511,6 +531,14 @@ Query params:
 
 - `skip`: number, default `0`
 - `limit`: number, default `100`
+- Filtros opcionales: `id`, `fecha_creacion`, `fecha_inicio`, `fecha_fin`, `nombre`, `descripcion`, `monto_descuento`, `imagen`.
+
+Ejemplo:
+
+```http
+GET /api/v1/ofertas/?nombre=upgrade
+GET /api/v1/ofertas/?monto_descuento=60.00
+```
 
 Respuesta `200`: `Oferta[]`.
 
@@ -614,6 +642,14 @@ Query params:
 
 - `skip`: number, default `0`
 - `limit`: number, default `100`
+- Filtros opcionales: `id`, `nombre`, `descripcion`, `precio`, `imagen`.
+
+Ejemplo:
+
+```http
+GET /api/v1/combos/?nombre=office
+GET /api/v1/combos/?precio=1499.00
+```
 
 Respuesta `200`: `Combo[]`.
 
@@ -781,6 +817,14 @@ Query params:
 
 - `skip`: number, default `0`
 - `limit`: number, default `100`
+- Filtros opcionales: `id`, `fecha`, `nombre`, `telefono`, `total`.
+
+Ejemplo:
+
+```http
+GET /api/v1/pedidos/?nombre=ana
+GET /api/v1/pedidos/?telefono=555
+```
 
 Respuesta `200`: `Pedido[]`.
 

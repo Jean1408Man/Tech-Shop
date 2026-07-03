@@ -57,6 +57,11 @@ export default function Navbar() {
           <Dropdown title="Categorías">
             <DropdownList list={categories} />
           </Dropdown>
+          <Link href="/combos" legacyBehavior>
+            <a className="hidden text-sm font-semibold hover:underline sm:inline">
+              Combos
+            </a>
+          </Link>
         </div>
 
         {/* Search bar */}

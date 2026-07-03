@@ -6,6 +6,8 @@ const DEFAULT_PRODUCT_IMAGE =
   'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=70';
 const DEFAULT_OFFER_IMAGE =
   'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=1200&q=70';
+const DEFAULT_COMBO_IMAGE =
+  'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=70';
 
 function toNumber(value) {
   const parsed = Number(value);
@@ -65,6 +67,8 @@ export function normalizeProduct(product) {
 
   return {
     ...product,
+    type: 'product',
+    cartKey: `product:${product.id}`,
     slug: String(product.id),
     name: product.nombre,
     image: product.url_img || DEFAULT_PRODUCT_IMAGE,
@@ -76,6 +80,26 @@ export function normalizeProduct(product) {
     category: String(categoryId || ''),
     categoryId,
     categoryName: product.categoria?.nombre || '',
+  };
+}
+
+export function normalizeCombo(combo) {
+  if (!combo) {
+    return null;
+  }
+
+  return {
+    ...combo,
+    type: 'combo',
+    cartKey: `combo:${combo.id}`,
+    slug: String(combo.id),
+    name: combo.nombre,
+    image: combo.imagen || DEFAULT_COMBO_IMAGE,
+    description: combo.descripcion || '',
+    price: toNumber(combo.precio),
+    products: Array.isArray(combo.productos)
+      ? combo.productos.map(normalizeProduct)
+      : [],
   };
 }
 
@@ -167,4 +191,25 @@ export async function getOffers(params = {}) {
   const offers = await apiRequest(`/ofertas/?${searchParams.toString()}`);
 
   return Array.isArray(offers) ? offers.map(normalizeOffer) : [];
+}
+
+export async function getCombos(params = {}) {
+  const searchParams = new URLSearchParams({
+    skip: String(params.skip ?? 0),
+    limit: String(params.limit ?? 100),
+  });
+
+  if (params.nombre) {
+    searchParams.set('nombre', params.nombre);
+  }
+
+  const combos = await apiRequest(`/combos/?${searchParams.toString()}`);
+
+  return Array.isArray(combos) ? combos.map(normalizeCombo) : [];
+}
+
+export async function getCombo(comboId) {
+  const combo = await apiRequest(`/combos/${comboId}`);
+
+  return normalizeCombo(combo);
 }

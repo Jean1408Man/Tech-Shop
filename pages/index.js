@@ -1,4 +1,5 @@
 import CategoriesSection from "../components/home/CategoriesSection";
+import CombosSection from "../components/home/CombosSection";
 import FeaturedProductsSection from "../components/home/FeaturedProductsSection";
 import HeroSection from "../components/home/HeroSection";
 import SpecialOffers from "../components/home/SpecialOffers";
@@ -10,6 +11,7 @@ export default function HomePage() {
     categories,
     filteredProducts,
     offers,
+    combos,
     selectedCategory,
     setSelectedCategory,
     isLoading,
@@ -29,6 +31,7 @@ export default function HomePage() {
     <div className="max-w-[1856px] mx-auto">
       <HeroSection />
       <SpecialOffers offers={offers} />
+      <CombosSection combos={combos} />
       <CategoriesSection categories={categories} />
       <FeaturedProductsSection
         products={filteredProducts}
