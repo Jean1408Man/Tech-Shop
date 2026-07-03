@@ -88,7 +88,7 @@ export default function CategoryFilter({
             <button
               key={category.slug}
               onClick={() => onSelectCategory(category.slug)}
-              className={`px-5 py-2.5 rounded-full text-sm transition-all duration-200 whitespace-nowrap cursor-pointer select-none focus:outline-none flex-shrink-0 ${
+              className={`px-5 py-2.5 rounded-full text-sm transition duration-200 whitespace-nowrap cursor-pointer select-none focus:outline-none flex-shrink-0 ${
                 isSelected
                   ? "border-2 border-black font-semibold text-black bg-white shadow-sm"
                   : "border border-gray-200 font-normal text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300"

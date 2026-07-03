@@ -65,6 +65,7 @@ export const products = [
       "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=60",
     description:
       "Un vestido rojo elegante perfecto para cualquier ocasión, confeccionado con materiales de alta calidad.",
+    rating: 4.5,
   },
   {
     id: 2,
@@ -75,6 +76,7 @@ export const products = [
       "https://images.unsplash.com/photo-1520975698519-d8a4a3ba1781?auto=format&fit=crop&w=600&q=60",
     description:
       "Camiseta de algodón suave, ideal para combinar con cualquier atuendo.",
+    rating: 4.2,
   },
   {
     id: 3,
@@ -85,6 +87,7 @@ export const products = [
       "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=60",
     description:
       "Un potente smartphone con cámara de alta resolución y gran autonomía.",
+    rating: 4.8,
   },
   {
     id: 4,
@@ -95,6 +98,7 @@ export const products = [
       "https://images.unsplash.com/photo-1510867759970-401c2d6e9c84?auto=format&fit=crop&w=600&q=60",
     description:
       "Auriculares Bluetooth con cancelación de ruido y sonido envolvente.",
+    rating: 4.6,
   },
   {
     id: 5,
@@ -105,6 +109,7 @@ export const products = [
       "https://images.unsplash.com/photo-1498579167354-54f7d6c7d3b4?auto=format&fit=crop&w=600&q=60",
     description:
       "Completo set de utensilios para tu cocina, fabricados en acero inoxidable.",
+    rating: 4.3,
   },
   {
     id: 6,
@@ -115,6 +120,7 @@ export const products = [
       "https://images.unsplash.com/photo-1493666438817-866a91353ca9?auto=format&fit=crop&w=600&q=60",
     description:
       "Lámpara de diseño vintage que aporta calidez a cualquier espacio.",
+    rating: 4.1,
   },
   {
     id: 7,
@@ -125,6 +131,7 @@ export const products = [
       "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=600&q=60",
     description:
       "Set de maquillaje con una amplia variedad de colores para un acabado perfecto.",
+    rating: 4.7,
   },
   {
     id: 8,
@@ -135,6 +142,7 @@ export const products = [
       "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=600&q=60",
     description:
       "Crema hidratante elaborada con ingredientes naturales que dejan tu piel suave y nutrida.",
+    rating: 4.4,
   },
   {
     id: 9,
@@ -145,6 +153,7 @@ export const products = [
       "https://images.unsplash.com/photo-1551712690-073349a44386?auto=format&fit=crop&w=600&q=60",
     description:
       "Colorido set de bloques para fomentar la creatividad y el aprendizaje en los niños.",
+    rating: 4.9,
   },
   {
     id: 10,
@@ -155,6 +164,7 @@ export const products = [
       "https://images.unsplash.com/photo-1508609349937-5ec4ae374eb1?auto=format&fit=crop&w=600&q=60",
     description:
       "Balón de fútbol fabricado con materiales de alta calidad para un rendimiento óptimo.",
+    rating: 4.6,
   },
   {
     id: 11,
@@ -165,6 +175,7 @@ export const products = [
       "https://images.unsplash.com/photo-1542293787938-c9e299b8803b?auto=format&fit=crop&w=600&q=60",
     description:
       "Sudadera cómoda y transpirable, ideal para entrenamiento o uso diario.",
+    rating: 4.3,
   },
   {
     id: 12,
@@ -174,5 +185,6 @@ export const products = [
     image:
       "https://images.unsplash.com/photo-1535930749574-1399327ce78f?auto=format&fit=crop&w=600&q=60",
     description: "Muñeca de colección con detalles cuidadosamente elaborados.",
+    rating: 4.0,
   },
 ];

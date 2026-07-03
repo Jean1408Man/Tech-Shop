@@ -36,6 +36,12 @@ export default function ProductCard({ product }) {
           <h3 className="text-sm font-semibold leading-tight h-10 overflow-hidden">
             {product.name}
           </h3>
+          <div className="flex items-center mt-1">
+            <span className="text-yellow-400 text-sm">★</span>
+            <span className="text-sm text-gray-600 ml-1">
+              {product.rating.toFixed(1)}
+            </span>
+          </div>
           <p className="mt-1 text-primary font-bold">
             ${product.price.toFixed(2)}
           </p>

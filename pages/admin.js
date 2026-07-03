@@ -11,6 +11,7 @@ export default function AdminPage() {
     category: "",
     image: "",
     description: "",
+    rating: "",
   });
 
   // Cargar productos desde localStorage o usar los iniciales
@@ -42,6 +43,7 @@ export default function AdminPage() {
       category: "",
       image: "",
       description: "",
+      rating: "",
     });
     setIsModalOpen(true);
   };
@@ -54,6 +56,7 @@ export default function AdminPage() {
       category: product.category,
       image: product.image,
       description: product.description,
+      rating: product.rating.toString(),
     });
     setIsModalOpen(true);
   };
@@ -67,6 +70,7 @@ export default function AdminPage() {
       category: "",
       image: "",
       description: "",
+      rating: "",
     });
   };
 
@@ -79,6 +83,7 @@ export default function AdminPage() {
       category: formData.category,
       image: formData.image,
       description: formData.description,
+      rating: parseFloat(formData.rating) || 0,
     };
 
     if (editingProduct) {
@@ -132,6 +137,9 @@ export default function AdminPage() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Precio
                 </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Valoración
+                </th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Acciones
                 </th>
@@ -167,6 +175,10 @@ export default function AdminPage() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     ${product.price.toFixed(2)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <span className="text-yellow-400">★</span>{" "}
+                    {product.rating.toFixed(1)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button
@@ -278,6 +290,22 @@ export default function AdminPage() {
                       onChange={handleChange}
                       required
                       rows="3"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Valoración (1-5)
+                    </label>
+                    <input
+                      type="number"
+                      name="rating"
+                      value={formData.rating}
+                      onChange={handleChange}
+                      required
+                      step="0.1"
+                      min="1"
+                      max="5"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                     />
                   </div>

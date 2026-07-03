@@ -48,7 +48,7 @@ export default function HeroSection() {
           Descubre productos únicos a precios inigualables. Desde ropa hasta
           electrónica, tenemos todo lo que buscas.
         </p>
-        <Link href="/category/fashion" legacyBehavior>
+        <Link href="/#explore" legacyBehavior>
           <a className="mt-4 inline-block bg-primary text-white px-5 py-2 rounded-md shadow hover:bg-primary-dark transition-colors duration-200">
             Explorar ahora
           </a>

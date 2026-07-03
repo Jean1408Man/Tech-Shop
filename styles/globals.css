@@ -1,14 +1,11 @@
-@import "tailwind-animations";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/*
-  Global styles for the Temu clone. Tailwind’s utility classes
-  handle most of the heavy lifting, but you can define additional
-  styles here. The body background and font smoothing improve
-  readability.
-*/
+:root {
+	scroll-behavior: smooth
+}
+
 body {
   @apply bg-gray-100 antialiased;
 }

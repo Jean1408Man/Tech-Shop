@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Loader from "../ui/Loader";
+import TitleTab from "../ui/TitleTab";
 
 /**
  * Special Offers component displaying a carousel of images
@@ -44,8 +45,10 @@ export default function SpecialOffers() {
     );
   };
 
+	if (!loading && !images?.length) return null
+
   return (
-    <section className="relative overflow-hidden max-w-[1856px] w-full h-[512px] mx-auto border-t-2 border-primary-dark">
+    <section className="relative overflow-hidden max-w-[1856px] w-full h-[256px] mx-auto border-t-2 border-primary-dark">
       {loading && (
         <div className="absolute inset-0 grid justify-items-center content-center gap-8 ">
           <h1 className="text-3xl font-bold text-white bg-primary px-4 py-2 rounded-md">
@@ -56,9 +59,9 @@ export default function SpecialOffers() {
       )}
       {images && images.length > 0 && (
         <>
-          <h1 className="absolute top-0 left-1/2 -translate-x-1/2 z-50 text-3xl font-bold text-white bg-primary px-12 py-4 rounded-es-full rounded-ee-full">
+          <TitleTab variant="absolute">
             Ofertas Especiales
-          </h1>
+          </TitleTab>
 
           <div className="relative group w-full h-full overflow-hidden">
             {/* Slides */}
@@ -124,13 +127,6 @@ export default function SpecialOffers() {
             </div>
           </div>
         </>
-      )}
-      {!loading && (!images || images.length === 0) && (
-        <div className="absolute inset-0 grid justify-items-center content-center gap-4">
-          <h1 className="text-3xl font-bold text-white bg-primary px-12 py-4 rounded-md">
-            No hay ofertas que mostrar
-          </h1>
-        </div>
       )}
     </section>
   );
