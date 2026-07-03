@@ -1,7 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { X } from "lucide-react";
+import { ShoppingCart, X } from "lucide-react";
+import { useCart } from "../../context/CartContext";
 
 /**
  * A card component that displays a product's image, name and price. Clicking
@@ -10,6 +11,7 @@ import { X } from "lucide-react";
  */
 export default function ProductCard({ product }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { addToCart } = useCart();
   const price = Number(product.price || 0);
   const basePrice = Number(product.basePrice || price);
 
@@ -21,6 +23,12 @@ export default function ProductCard({ product }) {
 
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const addProductToCart = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    addToCart(product);
   };
 
   return (
@@ -58,6 +66,16 @@ export default function ProductCard({ product }) {
           aria-label="Fast view"
         >
           Vista rápida
+        </button>
+        <button
+          type="button"
+          onClick={addProductToCart}
+          className="absolute bottom-2 left-2 inline-flex h-8 w-8 items-center justify-center rounded-md bg-white text-primary shadow-sm transition-colors hover:bg-primary hover:text-white sm:w-auto sm:px-3"
+          aria-label={`Añadir ${product.name} al carrito`}
+          title="Añadir al carrito"
+        >
+          <ShoppingCart size={15} />
+          <span className="ml-1 hidden text-xs font-semibold sm:inline">Añadir</span>
         </button>
         <Link href={`/product/${product.id}`} legacyBehavior>
           <a className="absolute bottom-2 right-2 bg-primary text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-primary-dark transition-colors shadow-sm">
@@ -101,8 +119,15 @@ export default function ProductCard({ product }) {
                 {product.description}
               </p>
               <div className="flex space-x-2">
+                <button
+                  type="button"
+                  onClick={addProductToCart}
+                  className="flex-1 rounded-md bg-primary py-2 text-white transition-colors hover:bg-primary-dark"
+                >
+                  Añadir
+                </button>
                 <Link href={`/product/${product.id}`} legacyBehavior>
-                  <a className="flex-1 bg-primary text-white text-center py-2 rounded-md hover:bg-primary-dark transition-colors">
+                  <a className="flex-1 rounded-md border border-primary py-2 text-center text-primary transition-colors hover:bg-primary hover:text-white">
                     Ver detalles
                   </a>
                 </Link>

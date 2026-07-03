@@ -1,4 +1,4 @@
-export default function CartSummary({ onClear, total }) {
+export default function CartSummary({ onCheckout, onClear, total }) {
   return (
     <div className="mt-8 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
       <p className="text-xl font-bold">
@@ -13,7 +13,7 @@ export default function CartSummary({ onClear, total }) {
         </button>
         <button
           className="bg-primary text-white px-4 py-2 rounded hover:bg-primary-dark transition-colors duration-200"
-          onClick={() => alert('Implementa tu lógica de compra aquí.')}
+          onClick={onCheckout}
         >
           Finalizar compra
         </button>

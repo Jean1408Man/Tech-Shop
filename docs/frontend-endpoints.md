@@ -27,7 +27,11 @@ const API_BASE_URL = "http://localhost:8000/api/v1";
 - En campos string/texto, el filtro es por coincidencia parcial y no distingue mayusculas/minusculas.
 - En numeros, booleanos y fechas, el filtro es por igualdad. Si el valor no se puede convertir al tipo del campo, la respuesta es una lista vacia.
 - Los filtros no reconocidos se ignoran.
-- En `users`, por seguridad, solo se filtra por `id`, `email`, `full_name` e `is_active`.
+- En `users`, por seguridad, solo se filtra por `id`, `email`, `full_name`, `is_active` y `role`.
+- Los roles de usuario validos son `cliente`, `gestor` y `administrador`.
+- El registro publico siempre crea usuarios con role `cliente`.
+- Solo un usuario `administrador` puede cambiar roles mediante el endpoint dedicado.
+- Actualmente, el cambio de roles es la unica operacion con autorizacion especifica por role; los demas endpoints conservan sus reglas de acceso actuales.
 - Los `Decimal` llegan normalmente como strings en JSON. En frontend conviene tratarlos como string decimal o convertirlos con cuidado.
 - Las fechas son ISO 8601. El backend normaliza fechas con timezone a UTC naive al guardar ofertas.
 - Los `PUT` son parciales: puedes enviar solo los campos que cambian.
@@ -53,6 +57,7 @@ Authorization: Bearer <access_token>
 | PUT | `/api/v1/users/me` | Si | Actualizar usuario autenticado |
 | GET | `/api/v1/users/` | Si | Listar usuarios |
 | GET | `/api/v1/users/{user_id}` | Si | Obtener usuario |
+| PUT | `/api/v1/users/{user_id}/role` | Administrador | Cambiar role de usuario |
 | DELETE | `/api/v1/users/{user_id}` | Si | Eliminar usuario |
 | POST | `/api/v1/categorias/` | No | Crear categoria |
 | GET | `/api/v1/categorias/` | No | Listar categorias |
@@ -122,6 +127,8 @@ Body JSON:
 }
 ```
 
+El registro publico no acepta `role`; el usuario se crea como `cliente`.
+
 Respuesta `201`:
 
 ```json
@@ -129,14 +136,15 @@ Respuesta `201`:
   "id": 1,
   "email": "ana@example.com",
   "full_name": "Ana",
-  "is_active": true
+  "is_active": true,
+  "role": "cliente"
 }
 ```
 
 Errores relevantes:
 
 - `400`: email duplicado u otra regla de servicio.
-- `422`: validacion Pydantic, por ejemplo email invalido.
+- `422`: validacion Pydantic, por ejemplo email invalido o envio de campos no permitidos.
 
 ### POST `/api/v1/auth/login`
 
@@ -168,11 +176,16 @@ Errores relevantes:
 - `400`: credenciales incorrectas.
 - `400`: usuario inactivo.
 
-Usuario demo creado por seed:
+Usuarios demo creados por seed:
 
 ```txt
 email: demo@orbita.local
 password: demo123
+role: administrador
+
+email: cliente@orbita.local
+password: cliente123
+role: cliente
 ```
 
 ## Users
@@ -190,8 +203,15 @@ Authorization: Bearer <access_token>
   "id": 1,
   "email": "ana@example.com",
   "full_name": "Ana",
-  "is_active": true
+  "is_active": true,
+  "role": "cliente"
 }
+```
+
+Tipo recomendado para frontend:
+
+```ts
+type UserRole = "cliente" | "gestor" | "administrador";
 ```
 
 ### GET `/api/v1/users/me`
@@ -223,18 +243,26 @@ Body JSON parcial:
 
 Respuesta `200`: `User`.
 
+Este endpoint no permite cambiar `role`. Si se envia ese campo, devuelve `422`.
+
 ### GET `/api/v1/users/`
 
 Query params:
 
 - `skip`: number, default `0`
 - `limit`: number, default `100`
-- Filtros opcionales: `id`, `email`, `full_name`, `is_active`.
+- Filtros opcionales: `id`, `email`, `full_name`, `is_active`, `role`.
 
 Ejemplo:
 
 ```http
 GET /api/v1/users/?email=ana
+```
+
+Filtrar usuarios gestores:
+
+```http
+GET /api/v1/users/?role=gestor
 ```
 
 Respuesta `200`:
@@ -245,7 +273,8 @@ Respuesta `200`:
     "id": 1,
     "email": "ana@example.com",
     "full_name": "Ana",
-    "is_active": true
+    "is_active": true,
+    "role": "cliente"
   }
 ]
 ```
@@ -257,6 +286,27 @@ Respuesta `200`: `User`.
 Errores relevantes:
 
 - `404`: `User not found.`
+
+### PUT `/api/v1/users/{user_id}/role`
+
+Cambia el role de un usuario. Requiere que el token pertenezca a un usuario
+con role `administrador`.
+
+Body JSON:
+
+```json
+{
+  "role": "gestor"
+}
+```
+
+Respuesta `200`: `User` con el role actualizado.
+
+Errores relevantes:
+
+- `403`: el usuario autenticado no es `administrador`.
+- `404`: `User not found.`
+- `422`: role diferente de `cliente`, `gestor` o `administrador`.
 
 ### DELETE `/api/v1/users/{user_id}`
 
@@ -966,7 +1016,8 @@ type OfertaResumen = {
 1. Registrar: `POST /api/v1/auth/register`.
 2. Login: `POST /api/v1/auth/login` con form data.
 3. Guardar `access_token`.
-4. Para rutas de usuario, enviar `Authorization: Bearer <token>`.
+4. Consultar `GET /api/v1/users/me` para obtener el role actual.
+5. Para rutas de usuario, enviar `Authorization: Bearer <token>`.
 
 ## Scripts Utiles Para Datos Demo
 
@@ -983,4 +1034,5 @@ Esto vacia la base y carga datos demo TechShop:
 - 6 ofertas
 - 6 combos
 - 3 pedidos demo
-- usuario demo `demo@orbita.local` con password `demo123`
+- administrador demo `demo@orbita.local` con password `demo123`
+- cliente demo `cliente@orbita.local` con password `cliente123`
