@@ -42,18 +42,36 @@ export default function ProductCard({ product }) {
             objectFit="cover"
           />
         </div>
-        <div className="p-2">
+        <div className="p-3">
           <h3 className="text-sm font-semibold leading-tight h-10 overflow-hidden">
             {product.name}
           </h3>
-          <p className="mt-1 text-primary font-bold">
-            ${price.toFixed(2)}
-          </p>
-          {product.hasOffer && (
-            <p className="text-xs text-gray-500 line-through">
-              ${basePrice.toFixed(2)}
+          <div className="mt-1 h-10">
+            <p className="text-primary font-bold">
+              ${price.toFixed(2)}
             </p>
-          )}
+            {product.hasOffer && (
+              <p className="text-xs text-gray-500 line-through">
+                ${basePrice.toFixed(2)}
+              </p>
+            )}
+          </div>
+          <div className="mt-3 flex gap-2">
+            <Link href={`/product/${product.id}`} legacyBehavior>
+              <a className="flex-1 rounded-md bg-primary px-3 py-2 text-center text-xs font-semibold text-white transition-colors hover:bg-primary-dark">
+                Ver detalles
+              </a>
+            </Link>
+            <button
+              type="button"
+              onClick={addProductToCart}
+              className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-primary text-primary transition-colors hover:bg-primary hover:text-white"
+              aria-label={`Añadir ${product.name} al carrito`}
+              title="Añadir al carrito"
+            >
+              <ShoppingCart size={16} />
+            </button>
+          </div>
         </div>
         {product.hasOffer && (
           <span className="absolute left-2 top-2 rounded-full bg-primary px-2 py-1 text-xs font-semibold text-white">
@@ -67,21 +85,6 @@ export default function ProductCard({ product }) {
         >
           Vista rápida
         </button>
-        <button
-          type="button"
-          onClick={addProductToCart}
-          className="absolute bottom-2 left-2 inline-flex h-8 w-8 items-center justify-center rounded-md bg-white text-primary shadow-sm transition-colors hover:bg-primary hover:text-white sm:w-auto sm:px-3"
-          aria-label={`Añadir ${product.name} al carrito`}
-          title="Añadir al carrito"
-        >
-          <ShoppingCart size={15} />
-          <span className="ml-1 hidden text-xs font-semibold sm:inline">Añadir</span>
-        </button>
-        <Link href={`/product/${product.id}`} legacyBehavior>
-          <a className="absolute bottom-2 right-2 bg-primary text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-primary-dark transition-colors shadow-sm">
-            Ver detalles
-          </a>
-        </Link>
       </div>
 
       {isModalOpen && (

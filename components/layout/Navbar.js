@@ -2,18 +2,22 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useCart } from "../../context/CartContext";
-import { Search } from "lucide-react";
+import { LayoutDashboard, Search } from "lucide-react";
 import { Dropdown, DropdownList } from "../dropdown/Dropdown";
 import { useAuth } from '../../hooks/useAuth';
 import { useNavbarCategories } from '../../hooks/useCatalog';
 export default function Navbar() {
   const router = useRouter();
   const { cartItems } = useCart();
-  const { user, isAuthenticated, isHydrated, logout } = useAuth();
+  const {
+    canAccessAdmin,
+    isAuthenticated,
+    isHydrated,
+    logout,
+  } = useAuth();
   const categories = useNavbarCategories();
   const [query, setQuery] = useState('');
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-  const displayName = user?.full_name || user?.name || user?.email;
 
   useEffect(() => {
     if (router.pathname === "/search") {
@@ -89,10 +93,16 @@ export default function Navbar() {
         <div className="ml-auto flex items-center space-x-3">
           {isHydrated && isAuthenticated ? (
             <div className="flex items-center space-x-2">
-              {displayName && (
-                <span className="hidden max-w-40 truncate text-sm md:inline">
-                  Hola, {displayName}
-                </span>
+              {canAccessAdmin && (
+                <Link href="/admin" legacyBehavior>
+                  <a
+                    className="inline-flex h-8 items-center gap-1 rounded-md border border-white/60 px-2 text-sm font-semibold transition-colors hover:bg-white hover:text-primary"
+                    title="Abrir panel de administración"
+                  >
+                    <LayoutDashboard size={16} />
+                    <span>Panel</span>
+                  </a>
+                </Link>
               )}
               <button
                 type="button"

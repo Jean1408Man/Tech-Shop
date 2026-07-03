@@ -1,7 +1,10 @@
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 import { CatalogError, CatalogLoading } from "../components/catalog/CatalogFeedback";
+import { useAuth } from "../hooks/useAuth";
 import { useProductAdmin } from "../hooks/useProductAdmin";
 
-export default function AdminPage() {
+function AdminContent() {
   const {
     products,
     categories,
@@ -236,4 +239,30 @@ export default function AdminPage() {
       )}
     </div>
   );
+}
+
+export default function AdminPage() {
+  const router = useRouter();
+  const { canAccessAdmin, isAuthenticated, isHydrated } = useAuth();
+
+  useEffect(() => {
+    if (!isHydrated) {
+      return;
+    }
+
+    if (!isAuthenticated) {
+      router.replace("/login");
+      return;
+    }
+
+    if (!canAccessAdmin) {
+      router.replace("/");
+    }
+  }, [canAccessAdmin, isAuthenticated, isHydrated, router]);
+
+  if (!isHydrated || !isAuthenticated || !canAccessAdmin) {
+    return <CatalogLoading message="Verificando permisos..." />;
+  }
+
+  return <AdminContent />;
 }

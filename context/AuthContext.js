@@ -8,6 +8,8 @@ import {
 export const AuthContext = createContext(null);
 
 const AUTH_STORAGE_KEY = 'temu-auth-session';
+const ADMIN_ROLE = 'administrador';
+const MANAGER_ROLE = 'gestor';
 const EMPTY_SESSION = {
   token: null,
   user: null,
@@ -75,8 +77,40 @@ export function AuthProvider({ children }) {
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
-    setSession(readStoredSession());
-    setIsHydrated(true);
+    let isMounted = true;
+    const storedSession = readStoredSession();
+
+    if (!storedSession.token) {
+      setSession(EMPTY_SESSION);
+      setIsHydrated(true);
+      return undefined;
+    }
+
+    getCurrentUser(storedSession.token)
+      .then((user) => {
+        if (!isMounted) {
+          return;
+        }
+
+        const refreshedSession = buildSession(storedSession.token, user);
+
+        setSession(refreshedSession);
+        saveSession(refreshedSession);
+      })
+      .catch(() => {
+        if (isMounted) {
+          setSession(storedSession);
+        }
+      })
+      .finally(() => {
+        if (isMounted) {
+          setIsHydrated(true);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const createSessionFromLogin = useCallback(async (values) => {
@@ -126,16 +160,21 @@ export function AuthProvider({ children }) {
     saveSession(EMPTY_SESSION);
   }, []);
 
-  const value = useMemo(
-    () => ({
+  const value = useMemo(() => {
+    const role = session.user?.role || null;
+
+    return {
       ...session,
+      role,
+      isAdmin: role === ADMIN_ROLE,
+      isManager: role === MANAGER_ROLE,
+      canAccessAdmin: role === ADMIN_ROLE || role === MANAGER_ROLE,
       isHydrated,
       login,
       register,
       logout,
-    }),
-    [isHydrated, login, logout, register, session]
-  );
+    };
+  }, [isHydrated, login, logout, register, session]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
