@@ -68,6 +68,19 @@ export default function CategoriesSection({ categories = [] }) {
                 <p className="text-white text-sm mb-4 max-w-md">
                   {selectedCategory.description}
                 </p>
+                {selectedCategory.subcategories?.length > 0 && (
+                  <div className="mb-4 flex max-w-lg flex-wrap justify-end gap-2">
+                    {selectedCategory.subcategories.map((subcategory) => (
+                      <Link
+                        key={subcategory.slug}
+                        href={`/category/${subcategory.slug}`}
+                        className="rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-gray-800 transition-colors hover:bg-white hover:text-primary"
+                      >
+                        {subcategory.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
                 <Link
                   href={`/category/${selectedCategory.slug}`}
                   legacyBehavior

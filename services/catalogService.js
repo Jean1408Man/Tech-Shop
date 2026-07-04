@@ -36,7 +36,71 @@ export function normalizeCategory(category) {
     products: Array.isArray(category.productos)
       ? category.productos.map(normalizeProduct)
       : [],
+    parentCategoryId: category.categoria_padre_id || null,
+    subcategories: Array.isArray(category.subcategorias)
+      ? category.subcategorias.map(normalizeCategory)
+      : [],
   };
+}
+
+export function flattenCategories(categories = []) {
+  return categories.flatMap((category) => [
+    category,
+    ...flattenCategories(category.subcategories || []),
+  ]);
+}
+
+export function categoryIncludesProduct(category, product) {
+  if (!category || !product) {
+    return false;
+  }
+
+  const categoryIds = [
+    category.id,
+    ...(category.subcategories || []).map((subcategory) => subcategory.id),
+  ].map(String);
+
+  return categoryIds.includes(String(product.categoryId || product.category));
+}
+
+function buildCategoryHierarchy(categories) {
+  const byId = new Map();
+
+  const collect = (category) => {
+    const existing = byId.get(String(category.id));
+    const merged = existing
+      ? {
+          ...existing,
+          ...category,
+          products: category.products?.length ? category.products : existing.products,
+          subcategories: [
+            ...(existing.subcategories || []),
+            ...(category.subcategories || []),
+          ],
+        }
+      : category;
+
+    byId.set(String(category.id), merged);
+    (category.subcategories || []).forEach(collect);
+  };
+
+  categories.forEach(collect);
+
+  const allCategories = Array.from(byId.values());
+
+  return allCategories
+    .filter(
+      (category) =>
+        !category.parentCategoryId ||
+        !byId.has(String(category.parentCategoryId))
+    )
+    .map((category) => ({
+      ...category,
+      subcategories: allCategories.filter(
+        (candidate) =>
+          String(candidate.parentCategoryId || '') === String(category.id)
+      ),
+    }));
 }
 
 export function normalizeOffer(offer) {
@@ -120,7 +184,9 @@ export async function getCategories(params = {}) {
   });
   const categories = await apiRequest(`/categorias/?${searchParams.toString()}`);
 
-  return Array.isArray(categories) ? categories.map(normalizeCategory) : [];
+  return Array.isArray(categories)
+    ? buildCategoryHierarchy(categories.map(normalizeCategory))
+    : [];
 }
 
 export async function getCategory(categoryId) {

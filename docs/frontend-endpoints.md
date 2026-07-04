@@ -62,6 +62,7 @@ Authorization: Bearer <access_token>
 | POST | `/api/v1/categorias/` | No | Crear categoria |
 | GET | `/api/v1/categorias/` | No | Listar categorias |
 | GET | `/api/v1/categorias/{categoria_id}` | No | Obtener categoria |
+| GET | `/api/v1/categorias/{categoria_id}/productos` | No | Productos de categoria y subcategorias |
 | PUT | `/api/v1/categorias/{categoria_id}` | No | Actualizar categoria |
 | DELETE | `/api/v1/categorias/{categoria_id}` | No | Eliminar categoria |
 | POST | `/api/v1/productos/` | No | Crear producto |
@@ -327,6 +328,7 @@ Errores relevantes:
   "nombre": "Smartphones",
   "url_img": "https://images.unsplash.com/...",
   "descripcion": "Telefonos 5G, equipos compactos y modelos premium.",
+  "categoria_padre_id": null,
   "productos": [
     {
       "id": 1,
@@ -335,6 +337,16 @@ Errores relevantes:
       "precio_base": "699.00",
       "url_img": "https://images.unsplash.com/...",
       "categoria_id": 1
+    }
+  ],
+  "subcategorias": [
+    {
+      "id": 2,
+      "nombre": "Android",
+      "url_img": null,
+      "descripcion": "Telefonos con Android.",
+      "categoria_padre_id": 1,
+      "productos": []
     }
   ]
 }
@@ -348,11 +360,26 @@ Body JSON:
 {
   "nombre": "Smartphones",
   "url_img": "https://images.unsplash.com/...",
-  "descripcion": "Telefonos 5G, equipos compactos y modelos premium."
+  "descripcion": "Telefonos 5G, equipos compactos y modelos premium.",
+  "categoria_padre_id": null
 }
 ```
 
 Respuesta `201`: `Categoria`.
+
+Para crear una subcategoria desde el panel administrativo se usa el mismo endpoint,
+enviando el ID de una categoria padre:
+
+```json
+{
+  "nombre": "Android",
+  "descripcion": "Telefonos con Android.",
+  "categoria_padre_id": 1
+}
+```
+
+Solo una categoria con `categoria_padre_id: null` puede ser padre. Intentar crear
+un tercer nivel devuelve `400`: `Una subcategoria no puede tener subcategorias.`
 
 ### GET `/api/v1/categorias/`
 
@@ -360,7 +387,7 @@ Query params:
 
 - `skip`: number, default `0`
 - `limit`: number, default `100`
-- Filtros opcionales: `id`, `nombre`, `url_img`, `descripcion`.
+- Filtros opcionales: `id`, `nombre`, `url_img`, `descripcion`, `categoria_padre_id`.
 
 Ejemplo:
 
@@ -374,6 +401,24 @@ Respuesta `200`: `Categoria[]`.
 
 Respuesta `200`: `Categoria`.
 
+`subcategorias` contiene las hijas directas de la categoria y sus productos.
+
+Errores relevantes:
+
+- `404`: `Categoria no encontrada.`
+
+### GET `/api/v1/categorias/{categoria_id}/productos`
+
+Devuelve los productos asignados directamente a la categoria. Si es una categoria
+padre, incluye tambien los productos de todas sus subcategorias.
+
+Acepta `skip`, `limit` y los mismos filtros escalares de `GET /productos/`, por
+ejemplo:
+
+```http
+GET /api/v1/categorias/1/productos?nombre=pro
+```
+
 Errores relevantes:
 
 - `404`: `Categoria no encontrada.`
@@ -386,15 +431,20 @@ Body JSON parcial:
 {
   "nombre": "Telefonos",
   "url_img": "https://images.unsplash.com/...",
-  "descripcion": "Equipos moviles y accesorios principales."
+  "descripcion": "Equipos moviles y accesorios principales.",
+  "categoria_padre_id": 1
 }
 ```
+
+Enviar `categoria_padre_id: null` convierte una subcategoria en categoria padre,
+siempre que la operacion respete la jerarquia de dos niveles.
 
 Respuesta `200`: `Categoria`.
 
 Errores relevantes:
 
 - `404`: `Categoria no encontrada.`
+- `400`: categoria padre inexistente, ciclos o intento de crear un tercer nivel.
 
 ### DELETE `/api/v1/categorias/{categoria_id}`
 
@@ -404,6 +454,7 @@ Errores relevantes:
 
 - `404`: `Categoria no encontrada.`
 - `400`: `No se puede eliminar una categoria con productos asociados.`
+- `400`: `No se puede eliminar una categoria con subcategorias asociadas.`
 
 ## Productos
 
@@ -476,9 +527,14 @@ Ejemplo:
 ```http
 GET /api/v1/productos/?nombre=smart
 GET /api/v1/productos/?precio_base=699.00
+GET /api/v1/productos/?categoria_id=1
 ```
 
 Respuesta `200`: `Producto[]`.
+
+El filtro `categoria_id` incluye automaticamente los productos de las
+subcategorias cuando el ID corresponde a una categoria padre. Para una
+subcategoria devuelve solamente sus productos.
 
 ### GET `/api/v1/productos/{producto_id}`
 
@@ -1046,6 +1102,7 @@ type CategoriaResumen = {
   nombre: string;
   url_img: string | null;
   descripcion: string | null;
+  categoria_padre_id: number | null;
 };
 ```
 
@@ -1103,7 +1160,7 @@ docker compose exec web python -m app.cli.seed_sample_data --reset --yes
 
 Esto vacia la base y carga datos demo TechShop:
 
-- 8 categorias
+- 11 categorias: 4 padres y 7 subcategorias
 - 36 productos
 - 6 ofertas
 - 6 combos

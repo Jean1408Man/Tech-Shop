@@ -22,6 +22,22 @@ function getOptionLabel(source, item) {
   return item.nombre || item.email || `#${item.id}`;
 }
 
+function flattenCategories(categories = []) {
+  const byId = new Map();
+
+  const visit = (category) => {
+    if (!category || byId.has(String(category.id))) {
+      return;
+    }
+
+    byId.set(String(category.id), category);
+    (category.subcategorias || []).forEach(visit);
+  };
+
+  categories.forEach(visit);
+  return Array.from(byId.values());
+}
+
 function RelationPicker({ field, options, value, onChange, disabled }) {
   const selectedValues = value || [];
 
@@ -238,6 +254,10 @@ export default function AdminEntityForm({
   const isEditing = Boolean(item);
   const config = ENTITY_CONFIG[entityKey];
   const fields = FORM_FIELDS[entityKey];
+  const allCategories = useMemo(
+    () => flattenCategories(entities.categorias),
+    [entities.categorias]
+  );
 
   useEffect(() => {
     setValues(getInitialFormValues(entityKey, item));
@@ -253,7 +273,40 @@ export default function AdminEntityForm({
   );
 
   const setFieldValue = (name, value) => {
-    setValues((current) => ({ ...current, [name]: value }));
+    setValues((current) => ({
+      ...current,
+      [name]: value,
+      ...(entityKey === 'productos' && name === 'categoria_id'
+        ? { subcategoria_id: '' }
+        : {}),
+    }));
+  };
+
+  const getFieldOptions = (field) => {
+    const sourceOptions =
+      field.source === 'categorias'
+        ? allCategories
+        : entities[field.source] || [];
+
+    return sourceOptions.filter((option) => {
+      if (field.rootCategoriesOnly && option.categoria_padre_id) {
+        return false;
+      }
+
+      if (field.excludeCurrent && String(option.id) === String(item?.id)) {
+        return false;
+      }
+
+      if (
+        field.childOfField &&
+        String(option.categoria_padre_id || '') !==
+          String(values[field.childOfField] || '')
+      ) {
+        return false;
+      }
+
+      return true;
+    });
   };
 
   const isFieldDisabled = (field) => {
@@ -262,6 +315,22 @@ export default function AdminEntityForm({
     }
 
     if (entityKey !== 'usuarios') {
+      if (
+        entityKey === 'productos' &&
+        field.name === 'subcategoria_id' &&
+        !values.categoria_id
+      ) {
+        return true;
+      }
+
+      if (
+        entityKey === 'categorias' &&
+        field.name === 'categoria_padre_id' &&
+        item?.subcategorias?.length
+      ) {
+        return true;
+      }
+
       return false;
     }
 
@@ -425,6 +494,8 @@ export default function AdminEntityForm({
               }
 
               if (field.type === 'select') {
+                const options = getFieldOptions(field);
+
                 return (
                   <label key={field.name} className={`block ${className}`}>
                     <span className="text-sm font-semibold text-gray-700">{field.label}</span>
@@ -435,13 +506,24 @@ export default function AdminEntityForm({
                       required={required}
                       disabled={disabled}
                     >
-                      <option value="">Seleccionar</option>
-                      {(entities[field.source] || []).map((option) => (
+                      <option value="">
+                        {field.emptyLabel || 'Seleccionar'}
+                      </option>
+                      {options.map((option) => (
                         <option key={option.id} value={option.id}>
                           {getOptionLabel(field.source, option)}
                         </option>
                       ))}
                     </select>
+                    {field.helpText && (
+                      <span className="mt-1 block text-xs text-gray-500">
+                        {entityKey === 'categorias' &&
+                        field.name === 'categoria_padre_id' &&
+                        item?.subcategorias?.length
+                          ? 'Esta categoría ya tiene subcategorías y debe permanecer como categoría principal.'
+                          : field.helpText}
+                      </span>
+                    )}
                   </label>
                 );
               }

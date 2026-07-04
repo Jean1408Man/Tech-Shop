@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import {
   deleteProduct,
+  categoryIncludesProduct,
+  flattenCategories,
   getCategories,
   getCombo,
   getCombos,
@@ -86,8 +88,14 @@ export function useHomeCatalog() {
       return catalog.products.slice(0, 8);
     }
 
-    return catalog.products.filter((product) => product.category === selectedCategory);
-  }, [catalog.products, selectedCategory]);
+    const category = flattenCategories(catalog.categories).find(
+      (item) => item.slug === selectedCategory
+    );
+
+    return catalog.products.filter((product) =>
+      categoryIncludesProduct(category, product)
+    );
+  }, [catalog.categories, catalog.products, selectedCategory]);
 
   return {
     ...catalog,
@@ -128,18 +136,35 @@ export function useCategoryPage() {
   const { slug } = router.query;
   const catalog = useCatalog();
 
+  const allCategories = useMemo(
+    () => flattenCategories(catalog.categories),
+    [catalog.categories]
+  );
   const category = useMemo(
-    () => catalog.categories.find((item) => item.slug === String(slug)),
-    [catalog.categories, slug]
+    () => allCategories.find((item) => item.slug === String(slug)),
+    [allCategories, slug]
+  );
+  const parentCategory = useMemo(
+    () =>
+      category?.parentCategoryId
+        ? allCategories.find(
+            (item) => String(item.id) === String(category.parentCategoryId)
+          )
+        : null,
+    [allCategories, category]
   );
   const products = useMemo(
-    () => catalog.products.filter((product) => product.category === String(slug)),
-    [catalog.products, slug]
+    () =>
+      catalog.products.filter((product) =>
+        categoryIncludesProduct(category, product)
+      ),
+    [catalog.products, category]
   );
 
   return {
     ...catalog,
     category,
+    parentCategory,
     products,
     isReady: router.isReady,
   };

@@ -16,7 +16,7 @@ export const ENTITY_CONFIG = {
   categorias: {
     label: 'Categorías',
     singular: 'Categoría',
-    description: 'Agrupaciones visibles del catálogo.',
+    description: 'Categorías principales y subcategorías visibles del catálogo.',
   },
   ofertas: {
     label: 'Ofertas',
@@ -43,6 +43,16 @@ export const ENTITY_CONFIG = {
 export const FORM_FIELDS = {
   categorias: [
     { name: 'nombre', label: 'Nombre', type: 'text', required: true },
+    {
+      name: 'categoria_padre_id',
+      label: 'Categoría padre (opcional)',
+      type: 'select',
+      source: 'categorias',
+      rootCategoriesOnly: true,
+      excludeCurrent: true,
+      emptyLabel: 'Ninguna · categoría principal',
+      helpText: 'Selecciona una categoría principal solo si estás creando una subcategoría.',
+    },
     { name: 'url_img', label: 'URL de imagen', type: 'url' },
     {
       name: 'descripcion',
@@ -63,10 +73,20 @@ export const FORM_FIELDS = {
     },
     {
       name: 'categoria_id',
-      label: 'Categoría',
+      label: 'Categoría principal',
       type: 'select',
       source: 'categorias',
+      rootCategoriesOnly: true,
       required: true,
+    },
+    {
+      name: 'subcategoria_id',
+      label: 'Subcategoría (opcional)',
+      type: 'select',
+      source: 'categorias',
+      childOfField: 'categoria_id',
+      emptyLabel: 'Ninguna · usar categoría principal',
+      helpText: 'Si la eliges, el producto quedará asignado a esta subcategoría.',
     },
     { name: 'url_img', label: 'URL de imagen', type: 'url' },
     {
@@ -194,15 +214,27 @@ export function getInitialFormValues(entityKey, item = null) {
         nombre: item?.nombre || '',
         url_img: item?.url_img || '',
         descripcion: item?.descripcion || '',
+        categoria_padre_id: item?.categoria_padre_id
+          ? String(item.categoria_padre_id)
+          : '',
       };
-    case 'productos':
+    case 'productos': {
+      const selectedCategory = item?.categoria;
+      const parentCategoryId = selectedCategory?.categoria_padre_id;
+
       return {
         nombre: item?.nombre || '',
         descripcion: item?.descripcion || '',
         precio_base: item?.precio_base || '',
         url_img: item?.url_img || '',
-        categoria_id: item?.categoria_id ? String(item.categoria_id) : '',
+        categoria_id: parentCategoryId
+          ? String(parentCategoryId)
+          : item?.categoria_id
+            ? String(item.categoria_id)
+            : '',
+        subcategoria_id: parentCategoryId ? String(item.categoria_id) : '',
       };
+    }
     case 'ofertas':
       return {
         nombre: item?.nombre || '',
@@ -257,6 +289,9 @@ export function toEntityPayload(entityKey, values, isEditing = false) {
         nombre: values.nombre,
         url_img: values.url_img,
         descripcion: values.descripcion,
+        categoria_padre_id: values.categoria_padre_id
+          ? Number(values.categoria_padre_id)
+          : null,
       };
     case 'productos':
       return {
@@ -264,7 +299,7 @@ export function toEntityPayload(entityKey, values, isEditing = false) {
         descripcion: values.descripcion,
         precio_base: String(values.precio_base),
         url_img: values.url_img,
-        categoria_id: Number(values.categoria_id),
+        categoria_id: Number(values.subcategoria_id || values.categoria_id),
       };
     case 'ofertas':
       return {

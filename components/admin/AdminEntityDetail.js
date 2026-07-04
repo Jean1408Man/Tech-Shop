@@ -131,11 +131,36 @@ function CategoryDetail({ item }) {
   return (
     <div className="space-y-6">
       <EntityHero image={item.url_img} name={item.nombre} description={item.descripcion} />
-      <dl className="grid gap-4 sm:grid-cols-2">
+      <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <DetailField label="ID" value={item.id} />
+        <DetailField
+          label="Tipo"
+          value={item.categoria_padre_id ? 'Subcategoría' : 'Categoría principal'}
+        />
+        <DetailField
+          label="Categoría padre"
+          value={item.categoria_padre_id ? `#${item.categoria_padre_id}` : '—'}
+        />
         <DetailField label="Productos" value={item.productos?.length || 0} />
       </dl>
-      <DetailSection title="Productos de la categoría">
+      {item.subcategorias?.length > 0 && (
+        <DetailSection title="Subcategorías">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {item.subcategorias.map((subcategory) => (
+              <div
+                key={subcategory.id}
+                className="rounded-md border border-gray-200 bg-gray-50 px-4 py-3"
+              >
+                <p className="font-semibold text-gray-900">{subcategory.nombre}</p>
+                <p className="mt-1 text-xs text-gray-500">
+                  {subcategory.productos?.length || 0} productos · ID {subcategory.id}
+                </p>
+              </div>
+            ))}
+          </div>
+        </DetailSection>
+      )}
+      <DetailSection title="Productos asignados directamente">
         <RelatedProducts products={item.productos} />
       </DetailSection>
     </div>

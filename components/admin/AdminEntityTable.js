@@ -121,22 +121,43 @@ function ProductRows({ items, onDelete, onEdit, onView }) {
 }
 
 function CategoryRows({ items, onDelete, onEdit, onView }) {
-  return items.map((category) => (
-    <tr key={category.id} className="border-t border-gray-100 hover:bg-gray-50">
-      <td className={CELL_CLASS}>
-        <NameCell
-          image={category.url_img}
-          name={category.nombre}
-          secondary={category.descripcion}
-        />
-      </td>
-      <td className={CELL_CLASS}>{category.productos?.length || 0}</td>
-      <td className={CELL_CLASS}>#{category.id}</td>
-      <td className={CELL_CLASS}>
-        <Actions item={category} onDelete={onDelete} onEdit={onEdit} onView={onView} />
-      </td>
-    </tr>
-  ));
+  const categoriesById = new Map(
+    items.map((category) => [String(category.id), category])
+  );
+
+  return items.map((category) => {
+    const parent = categoriesById.get(String(category.categoria_padre_id));
+
+    return (
+      <tr key={category.id} className="border-t border-gray-100 hover:bg-gray-50">
+        <td className={CELL_CLASS}>
+          <NameCell
+            image={category.url_img}
+            name={category.nombre}
+            secondary={category.descripcion}
+          />
+        </td>
+        <td className={CELL_CLASS}>
+          {category.categoria_padre_id ? (
+            <div>
+              <p className="font-semibold text-gray-800">Subcategoría</p>
+              <p className="text-xs text-gray-500">
+                de {parent?.nombre || `#${category.categoria_padre_id}`}
+              </p>
+            </div>
+          ) : (
+            <span className="font-semibold text-primary">Principal</span>
+          )}
+        </td>
+        <td className={CELL_CLASS}>{category.productos?.length || 0}</td>
+        <td className={CELL_CLASS}>{category.subcategorias?.length || 0}</td>
+        <td className={CELL_CLASS}>#{category.id}</td>
+        <td className={CELL_CLASS}>
+          <Actions item={category} onDelete={onDelete} onEdit={onEdit} onView={onView} />
+        </td>
+      </tr>
+    );
+  });
 }
 
 function OfferRows({ items, onDelete, onEdit, onView }) {
@@ -234,7 +255,7 @@ const TABLES = {
     Rows: ProductRows,
   },
   categorias: {
-    headers: ['Categoría', 'Productos', 'ID', 'Acciones'],
+    headers: ['Categoría', 'Tipo', 'Productos', 'Subcategorías', 'ID', 'Acciones'],
     Rows: CategoryRows,
   },
   ofertas: {
