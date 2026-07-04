@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-export default function CartSummary({ onClear, subtotal }) {
+export default function CartSummary({ onCheckout, onClear, subtotal }) {
   const discount = 0;
   const shipping = subtotal >= 50 ? 0 : 5.99;
   const total = subtotal - discount + shipping;
@@ -43,7 +43,7 @@ export default function CartSummary({ onClear, subtotal }) {
       <div className="mt-6 space-y-4">
         <button
           className="w-full bg-primary text-white py-3 rounded-full hover:bg-primary-dark transition-all duration-300 shadow-sm hover:shadow-md font-semibold"
-          onClick={() => alert("Implementa tu lógica de compra aquí.")}
+          onClick={onCheckout}
         >
           Finalizar compra
         </button>

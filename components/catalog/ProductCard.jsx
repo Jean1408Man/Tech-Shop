@@ -12,6 +12,8 @@ import { useCart } from "../../context/CartContext";
 export default function ProductCard({ product, className }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { cartItems, addToCart, updateQuantity } = useCart();
+  const price = Number(product.price || 0);
+  const basePrice = Number(product.basePrice || price);
 
   // Check if product is in cart
   const cartItem = cartItems.find((item) => item.id === product.id);
@@ -65,9 +67,16 @@ export default function ProductCard({ product, className }) {
               {product.rating.toFixed(1)}
             </span>
           </div>
-          <p className="text-primary font-bold text-sm">
-            ${product.price.toFixed(2)}
-          </p>
+          <div className="flex gap-2 items-end">
+            <p className="text-primary font-bold text-sm">
+              ${price.toFixed(2)}
+            </p>
+            {product.hasOffer && (
+              <p className="text-xs text-gray-500 line-through">
+                ${basePrice.toFixed(2)}
+              </p>
+            )}
+          </div>
           <div className="flex justify-end items-center gap-2">
             {quantityInCart > 0 ? (
               <div className="flex items-center justify-center gap-2 bg-primary/10 rounded-full py-1 px-2">
@@ -191,13 +200,15 @@ export default function ProductCard({ product, className }) {
                   </div>
                 </div>
 
-                <div>
-                  <p className="text-2xl font-bold text-primary">
-                    ${product.price.toFixed(2)}
+                <div className="flex gap-2 items-end">
+                  <p className="text-primary font-bold text-sm">
+                    ${price.toFixed(2)}
                   </p>
-                  <p className="text-xs text-gray-400 mt-1">
-                    Impuestos incluidos
-                  </p>
+                  {product.hasOffer && (
+                    <p className="text-xs text-gray-500 line-through">
+                      ${basePrice.toFixed(2)}
+                    </p>
+                  )}
                 </div>
 
                 <div className="border-t border-gray-100 pt-3">

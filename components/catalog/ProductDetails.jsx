@@ -15,6 +15,9 @@ export default function ProductDetails({ product }) {
   const cartItem = cartItems.find((item) => item.id === product.id);
   const quantityInCart = cartItem ? cartItem.quantity : 0;
 
+  const price = Number(product.price || 0);
+  const basePrice = Number(product.basePrice || price);
+
   // Mock related products - in a real app these would come from an API
   const relatedProducts = [
     { id: 1, name: "Producto similar 1", price: 29.99, image: product.image },
@@ -53,11 +56,15 @@ export default function ProductDetails({ product }) {
             </div>
           </div>
 
-          <div>
-            <p className="text-3xl font-bold text-primary">
-              ${product.price.toFixed(2)}
+          <div className="flex gap-2 items-end">
+            <p className="text-primary font-bold text-sm">
+              ${price.toFixed(2)}
             </p>
-            <p className="text-xs text-gray-400 mt-1">Impuestos incluidos</p>
+            {product.hasOffer && (
+              <p className="text-xs text-gray-500 line-through">
+                ${basePrice.toFixed(2)}
+              </p>
+            )}
           </div>
 
           <div className="border-t border-gray-100 pt-4">

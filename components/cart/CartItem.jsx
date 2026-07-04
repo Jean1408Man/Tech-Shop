@@ -3,6 +3,8 @@ import { Minus, Plus, Trash2 } from "lucide-react";
 import PropTypes from "prop-types";
 
 export default function CartItem({ item, onRemove, onUpdateQuantity }) {
+  const cartKey = item.cartKey || `${item.type || "product"}:${item.id}`;
+
   return (
     <li className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 p-4">
       <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -15,9 +17,16 @@ export default function CartItem({ item, onRemove, onUpdateQuantity }) {
           />
         </div>
         <div className="flex-1 w-full">
-          <h2 className="text-sm font-semibold text-gray-900 leading-tight">
-            {item.name}
-          </h2>
+          <div className="flex gap-2">
+            <h2 className="text-sm font-semibold text-gray-900 leading-tight">
+              {item.name}
+            </h2>
+            {item.type === "combo" && (
+              <p className="mt-1 text-xs font-semibold uppercase text-primary">
+                Combo
+              </p>
+            )}
+          </div>
           {item.description && (
             <p className="text-sm text-gray-600 leading-relaxed text-justify mt-1">
               {item.description}
@@ -29,7 +38,7 @@ export default function CartItem({ item, onRemove, onUpdateQuantity }) {
           <div className="flex items-center mt-3 gap-2">
             <div className="flex items-center justify-center gap-2 bg-primary/10 rounded-full py-1 px-2">
               <button
-                onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
+                onClick={() => onUpdateQuantity(cartKey, item.quantity - 1)}
                 className="w-6 h-6 flex items-center justify-center rounded-full bg-white hover:bg-gray-100 transition-colors shadow-sm"
                 aria-label="Disminuir cantidad"
               >
@@ -39,7 +48,7 @@ export default function CartItem({ item, onRemove, onUpdateQuantity }) {
                 {item.quantity}
               </span>
               <button
-                onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
+                onClick={() => onUpdateQuantity(cartKey, item.quantity + 1)}
                 className="w-6 h-6 flex items-center justify-center rounded-full bg-white hover:bg-gray-100 transition-colors shadow-sm"
                 aria-label="Aumentar cantidad"
               >
@@ -47,7 +56,7 @@ export default function CartItem({ item, onRemove, onUpdateQuantity }) {
               </button>
             </div>
             <button
-              onClick={() => onRemove(item.id)}
+              onClick={() => onRemove(cartKey)}
               className="ml-2 flex items-center gap-1 text-red-500 hover:text-red-700 text-sm font-medium transition-colors"
               aria-label="Eliminar producto"
             >
