@@ -65,7 +65,7 @@ export default function CategoryFilter({
     <div className="relative w-full my-6 flex items-center">
       {/* Left Fade + Arrow */}
       {showLeftArrow && (
-        <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-l from-transparent to-white flex items-center justify-start pointer-events-none z-10">
+        <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-l from-transparent to-gray-100 flex items-center justify-start pointer-events-none z-10">
           <button
             onClick={() => handleScroll("left")}
             className="pointer-events-auto w-9 h-9 rounded-full bg-white border border-gray-200 shadow-md flex items-center justify-center hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all cursor-pointer focus:outline-none"
@@ -102,7 +102,7 @@ export default function CategoryFilter({
 
       {/* Right Fade + Arrow */}
       {showRightArrow && (
-        <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-r from-transparent to-white flex items-center justify-end pointer-events-none z-10">
+        <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-r from-transparent to-gray-100 flex items-center justify-end pointer-events-none z-10">
           <button
             onClick={() => handleScroll("right")}
             className="pointer-events-auto w-9 h-9 rounded-full bg-white border border-gray-200 shadow-md flex items-center justify-center hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all cursor-pointer focus:outline-none mr-1"

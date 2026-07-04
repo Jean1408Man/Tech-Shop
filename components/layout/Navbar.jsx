@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useCart } from "../../context/CartContext";
 import { categories } from "../../data/products";
-import { Search } from "lucide-react";
+import { Search, ShoppingCart } from "lucide-react";
 import { Dropdown, DropdownList } from "../dropdown/Dropdown";
 import { useAuth } from "../../hooks/useAuth";
 export default function Navbar() {
@@ -65,19 +65,27 @@ export default function Navbar() {
             </div>
           ) : (
             <div className="flex items-center space-x-2 text-sm font-semibold">
-              <Link href="/login" legacyBehavior>
-                <a className="hover:underline">Entrar</a>
+              <Link
+                href="/login"
+                className="rounded-md px-3 py-1 hover:bg-black/5"
+              >
+                Entrar
               </Link>
-              <Link href="/register" legacyBehavior>
-                <a className="rounded-md bg-white px-3 py-1 text-primary hover:bg-gray-100">
-                  Crear cuenta
-                </a>
+              <Link
+                href="/register"
+                className="rounded-md bg-white px-3 py-1 text-primary hover:bg-gray-100"
+              >
+                Crear cuenta
               </Link>
             </div>
           )}
           <Link href="/cart" legacyBehavior>
             <a className="relative" aria-label="Ver carrito">
-              <span className="text-2xl">🛒</span>
+              <ShoppingCart
+                size={24}
+                className="fill-current text-white hover:text-gray-400 hover:scale-110 transition-all"
+                style={{ transform: "rotateY(180deg)" }}
+              />
               {totalItems > 0 && (
                 <span className="absolute -top-1 -right-2 bg-white text-primary rounded-full text-xs px-1 font-bold">
                   {totalItems}

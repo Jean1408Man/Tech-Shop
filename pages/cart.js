@@ -1,9 +1,12 @@
-import CartView from "../components/cart/CartView";
+import CartView from "../components/cart/CartView.jsx";
+import TitleTab from "../components/ui/TitleTab.jsx";
+import Breadcrumb from "../components/ui/Breadcrumb.jsx";
 
 export default function CartPage() {
   return (
-    <div className="max-w-[1856px] mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-4">Tu carrito</h1>
+    <div className="max-w-[1856px] mx-auto py-8 px-4 border-t-2 border-primary-dark">
+      <TitleTab>Tu carrito</TitleTab>
+      <Breadcrumb items={[{ label: "Carrito" }]} />
       <CartView />
     </div>
   );
