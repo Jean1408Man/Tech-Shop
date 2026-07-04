@@ -4,11 +4,11 @@ import { useCart } from "../../context/CartContext";
 import { categories } from "../../data/products";
 import { Search } from "lucide-react";
 import { Dropdown, DropdownList } from "../dropdown/Dropdown";
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from "../../hooks/useAuth";
 export default function Navbar() {
   const { cartItems } = useCart();
   const { user, isAuthenticated, isHydrated, logout } = useAuth();
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const displayName = user?.name || user?.email;
 
@@ -36,7 +36,7 @@ export default function Navbar() {
         </div>
 
         {/* Search bar */}
-        <div className="flex-1 flex items-center gap-2 mx-4 max-w-2xl rounded-full bg-white overflow-hidden py-1.5 px-4">
+        <div className="flex-1 flex items-center gap-2 mx-auto max-w-2xl rounded-full bg-white overflow-hidden py-1.5 px-4">
           <input
             type="search"
             value={query}
@@ -47,7 +47,7 @@ export default function Navbar() {
           <Search size={16} className="text-gray-800" />
         </div>
         {/* Cart icon */}
-        <div className="ml-auto flex items-center space-x-3">
+        <div className=" flex items-center space-x-3">
           {isHydrated && isAuthenticated ? (
             <div className="flex items-center space-x-2">
               {displayName && (

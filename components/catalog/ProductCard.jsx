@@ -8,7 +8,7 @@ import { X } from "lucide-react";
  * anywhere on the card navigates to the product detail page. Cards adjust
  * responsively via Tailwind's grid utilities defined on parent containers.
  */
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, className }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = (e) => {
@@ -23,7 +23,9 @@ export default function ProductCard({ product }) {
 
   return (
     <>
-      <div className="bg-white rounded-lg overflow-hidden shadow hover:shadow-md transition-shadow duration-200 relative">
+      <div
+        className={`bg-white rounded-lg overflow-hidden shadow hover:shadow-md transition-shadow duration-200 relative ${className}`}
+      >
         <div className="relative h-40 sm:h-48">
           <Image
             src={product.image}
@@ -36,6 +38,7 @@ export default function ProductCard({ product }) {
           <h3 className="text-sm font-semibold leading-tight h-10 overflow-hidden">
             {product.name}
           </h3>
+          <p className="text-xs text-gray-500">{product.description}</p>
           <div className="flex items-center mt-1">
             <span className="text-yellow-400 text-sm">★</span>
             <span className="text-sm text-gray-600 ml-1">
