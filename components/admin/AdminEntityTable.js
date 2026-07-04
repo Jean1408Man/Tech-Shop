@@ -1,4 +1,4 @@
-import { Pencil, Trash2 } from 'lucide-react';
+import { Eye, Pencil, Trash2 } from 'lucide-react';
 
 function formatCurrency(value) {
   const amount = Number(value);
@@ -45,9 +45,18 @@ function NameCell({ image, name, secondary }) {
   );
 }
 
-function Actions({ item, onDelete, onEdit }) {
+function Actions({ item, onDelete, onEdit, onView }) {
   return (
     <div className="flex justify-end gap-1">
+      <button
+        type="button"
+        onClick={() => onView(item)}
+        className="inline-flex h-9 w-9 items-center justify-center rounded-md text-gray-600 hover:bg-gray-100 hover:text-primary"
+        aria-label={`Ver detalle de ${item.nombre || item.email || item.id}`}
+        title="Ver detalle"
+      >
+        <Eye size={16} />
+      </button>
       <button
         type="button"
         onClick={() => onEdit(item)}
@@ -74,7 +83,7 @@ const HEADER_CLASS =
   'whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase text-gray-500';
 const CELL_CLASS = 'whitespace-nowrap px-4 py-3 text-sm text-gray-700';
 
-function ProductRows({ items, onDelete, onEdit }) {
+function ProductRows({ items, onDelete, onEdit, onView }) {
   return items.map((product) => {
     const basePrice = Number(product.precio_base || 0);
     const discount = Number(product.oferta_actual?.monto_descuento || 0);
@@ -104,14 +113,14 @@ function ProductRows({ items, onDelete, onEdit }) {
           )}
         </td>
         <td className={CELL_CLASS}>
-          <Actions item={product} onDelete={onDelete} onEdit={onEdit} />
+          <Actions item={product} onDelete={onDelete} onEdit={onEdit} onView={onView} />
         </td>
       </tr>
     );
   });
 }
 
-function CategoryRows({ items, onDelete, onEdit }) {
+function CategoryRows({ items, onDelete, onEdit, onView }) {
   return items.map((category) => (
     <tr key={category.id} className="border-t border-gray-100 hover:bg-gray-50">
       <td className={CELL_CLASS}>
@@ -124,13 +133,13 @@ function CategoryRows({ items, onDelete, onEdit }) {
       <td className={CELL_CLASS}>{category.productos?.length || 0}</td>
       <td className={CELL_CLASS}>#{category.id}</td>
       <td className={CELL_CLASS}>
-        <Actions item={category} onDelete={onDelete} onEdit={onEdit} />
+        <Actions item={category} onDelete={onDelete} onEdit={onEdit} onView={onView} />
       </td>
     </tr>
   ));
 }
 
-function OfferRows({ items, onDelete, onEdit }) {
+function OfferRows({ items, onDelete, onEdit, onView }) {
   return items.map((offer) => (
     <tr key={offer.id} className="border-t border-gray-100 hover:bg-gray-50">
       <td className={CELL_CLASS}>
@@ -145,13 +154,13 @@ function OfferRows({ items, onDelete, onEdit }) {
       </td>
       <td className={CELL_CLASS}>{offer.productos?.length || 0}</td>
       <td className={CELL_CLASS}>
-        <Actions item={offer} onDelete={onDelete} onEdit={onEdit} />
+        <Actions item={offer} onDelete={onDelete} onEdit={onEdit} onView={onView} />
       </td>
     </tr>
   ));
 }
 
-function ComboRows({ items, onDelete, onEdit }) {
+function ComboRows({ items, onDelete, onEdit, onView }) {
   return items.map((combo) => (
     <tr key={combo.id} className="border-t border-gray-100 hover:bg-gray-50">
       <td className={CELL_CLASS}>
@@ -160,13 +169,13 @@ function ComboRows({ items, onDelete, onEdit }) {
       <td className={`${CELL_CLASS} font-semibold`}>{formatCurrency(combo.precio)}</td>
       <td className={CELL_CLASS}>{combo.productos?.length || 0}</td>
       <td className={CELL_CLASS}>
-        <Actions item={combo} onDelete={onDelete} onEdit={onEdit} />
+        <Actions item={combo} onDelete={onDelete} onEdit={onEdit} onView={onView} />
       </td>
     </tr>
   ));
 }
 
-function OrderRows({ items, onDelete, onEdit }) {
+function OrderRows({ items, onDelete, onEdit, onView }) {
   return items.map((order) => (
     <tr key={order.id} className="border-t border-gray-100 hover:bg-gray-50">
       <td className={CELL_CLASS}>
@@ -186,13 +195,13 @@ function OrderRows({ items, onDelete, onEdit }) {
         {formatCurrency(order.total)}
       </td>
       <td className={CELL_CLASS}>
-        <Actions item={order} onDelete={onDelete} onEdit={onEdit} />
+        <Actions item={order} onDelete={onDelete} onEdit={onEdit} onView={onView} />
       </td>
     </tr>
   ));
 }
 
-function UserRows({ items, onDelete, onEdit }) {
+function UserRows({ items, onDelete, onEdit, onView }) {
   return items.map((user) => (
     <tr key={user.id} className="border-t border-gray-100 hover:bg-gray-50">
       <td className={CELL_CLASS}>
@@ -213,7 +222,7 @@ function UserRows({ items, onDelete, onEdit }) {
       </td>
       <td className={CELL_CLASS}>#{user.id}</td>
       <td className={CELL_CLASS}>
-        <Actions item={user} onDelete={onDelete} onEdit={onEdit} />
+        <Actions item={user} onDelete={onDelete} onEdit={onEdit} onView={onView} />
       </td>
     </tr>
   ));
@@ -246,7 +255,13 @@ const TABLES = {
   },
 };
 
-export default function AdminEntityTable({ entityKey, items, onDelete, onEdit }) {
+export default function AdminEntityTable({
+  entityKey,
+  items,
+  onDelete,
+  onEdit,
+  onView,
+}) {
   const { headers, Rows } = TABLES[entityKey];
 
   if (!items.length) {
@@ -273,7 +288,7 @@ export default function AdminEntityTable({ entityKey, items, onDelete, onEdit })
           </tr>
         </thead>
         <tbody className="bg-white">
-          <Rows items={items} onDelete={onDelete} onEdit={onEdit} />
+          <Rows items={items} onDelete={onDelete} onEdit={onEdit} onView={onView} />
         </tbody>
       </table>
     </div>

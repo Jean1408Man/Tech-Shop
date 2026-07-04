@@ -11,6 +11,7 @@ import {
 import { useAuth } from '../../hooks/useAuth';
 import { useAdminDashboard } from '../../hooks/useAdminDashboard';
 import AdminEntityForm from './AdminEntityForm';
+import AdminEntityDetail from './AdminEntityDetail';
 import AdminEntityTable from './AdminEntityTable';
 import AdminSidebar from './AdminSidebar';
 import {
@@ -71,11 +72,15 @@ export default function AdminDashboard() {
     entities,
     isLoading,
     isSaving,
+    isDetailLoading,
+    isExporting,
     error,
     notice,
     reload,
     saveEntity,
     removeEntity,
+    loadEntityDetail,
+    exportOrderPdf,
     clearMessages,
   } = useAdminDashboard({ token, user, isAdmin });
   const [activeEntity, setActiveEntity] = useState('productos');
@@ -84,6 +89,8 @@ export default function AdminDashboard() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [deletingItem, setDeletingItem] = useState(null);
+  const [detailItem, setDetailItem] = useState(null);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
   const config = ENTITY_CONFIG[activeEntity];
   const activeItems = entities[activeEntity] || [];
   const filteredItems = useMemo(
@@ -103,6 +110,8 @@ export default function AdminDashboard() {
     setSearchQuery('');
     setEditingItem(null);
     setIsFormOpen(false);
+    setDetailItem(null);
+    setIsDetailOpen(false);
     clearMessages();
   };
 
@@ -116,6 +125,24 @@ export default function AdminDashboard() {
     setEditingItem(item);
     setIsFormOpen(true);
     clearMessages();
+  };
+
+  const openDetail = async (item) => {
+    setDetailItem(item);
+    setIsDetailOpen(true);
+    clearMessages();
+
+    const detailedItem = await loadEntityDetail(activeEntity, item.id);
+
+    if (detailedItem) {
+      setDetailItem(detailedItem);
+    }
+  };
+
+  const editFromDetail = (item) => {
+    setIsDetailOpen(false);
+    setDetailItem(null);
+    openEditForm(item);
   };
 
   const handleSave = (payload, item) => saveEntity(activeEntity, payload, item);
@@ -224,6 +251,7 @@ export default function AdminDashboard() {
                 items={filteredItems}
                 onDelete={setDeletingItem}
                 onEdit={openEditForm}
+                onView={openDetail}
               />
             )}
           </section>
@@ -241,6 +269,22 @@ export default function AdminDashboard() {
           onClose={() => setIsFormOpen(false)}
           onSave={handleSave}
           user={user}
+        />
+      )}
+
+      {isDetailOpen && (
+        <AdminEntityDetail
+          entityKey={activeEntity}
+          error={error}
+          isExporting={isExporting}
+          isLoading={isDetailLoading}
+          item={detailItem}
+          onClose={() => {
+            setIsDetailOpen(false);
+            setDetailItem(null);
+          }}
+          onEdit={editFromDetail}
+          onExportPdf={exportOrderPdf}
         />
       )}
 

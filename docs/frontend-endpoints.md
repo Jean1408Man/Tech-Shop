@@ -31,13 +31,13 @@ const API_BASE_URL = "http://localhost:8000/api/v1";
 - Los roles de usuario validos son `cliente`, `gestor` y `administrador`.
 - El registro publico siempre crea usuarios con role `cliente`.
 - Solo un usuario `administrador` puede cambiar roles mediante el endpoint dedicado.
-- Actualmente, el cambio de roles es la unica operacion con autorizacion especifica por role; los demas endpoints conservan sus reglas de acceso actuales.
+- Actualmente, el cambio de roles y la exportacion PDF de pedidos tienen autorizacion especifica por role; los demas endpoints conservan sus reglas de acceso actuales.
 - Los `Decimal` llegan normalmente como strings en JSON. En frontend conviene tratarlos como string decimal o convertirlos con cuidado.
 - Las fechas son ISO 8601. El backend normaliza fechas con timezone a UTC naive al guardar ofertas.
 - Los `PUT` son parciales: puedes enviar solo los campos que cambian.
 - En la mayoria de entidades, enviar `null` en campos escalares no borra el valor; normalmente se ignora. Para relaciones como `producto_ids`, `productos` o `combos`, enviar listas vacias reemplaza la coleccion.
 - Los `DELETE` devuelven el objeto eliminado.
-- Los endpoints de `users` requieren token Bearer. Catalogo, combos, ofertas y pedidos no requieren auth actualmente.
+- Los endpoints de `users` requieren token Bearer. Catalogo, combos, ofertas y pedidos no requieren auth actualmente, excepto la exportacion PDF de pedidos.
 
 Header para endpoints protegidos:
 
@@ -82,6 +82,7 @@ Authorization: Bearer <access_token>
 | POST | `/api/v1/pedidos/` | No | Crear pedido |
 | GET | `/api/v1/pedidos/` | No | Listar pedidos |
 | GET | `/api/v1/pedidos/{pedido_id}` | No | Obtener pedido |
+| GET | `/api/v1/pedidos/{pedido_id}/pdf` | Gestor/admin | Descargar pedido en PDF |
 | PUT | `/api/v1/pedidos/{pedido_id}` | No | Actualizar pedido |
 | DELETE | `/api/v1/pedidos/{pedido_id}` | No | Eliminar pedido |
 
@@ -886,6 +887,78 @@ Errores relevantes:
 
 - `404`: `Pedido no encontrado.`
 
+### GET `/api/v1/pedidos/{pedido_id}/pdf`
+
+Genera y descarga el comprobante del pedido como PDF. Requiere un token Bearer
+de un usuario con role `gestor` o `administrador`.
+
+```http
+GET /api/v1/pedidos/15/pdf
+Authorization: Bearer <access_token>
+```
+
+Respuesta `200` binaria:
+
+```http
+Content-Type: application/pdf
+Content-Disposition: attachment; filename="pedido-15.pdf"
+Cache-Control: private, no-store
+```
+
+La respuesta no es JSON. Contiene directamente los bytes del PDF. El documento
+incluye numero y fecha del pedido, cliente, telefono, productos, combos,
+ofertas, descuentos, subtotales y total.
+
+Errores relevantes:
+
+- `401`: no se envio token Bearer.
+- `403`: el usuario tiene role `cliente` u otro role no autorizado.
+- `404`: `Pedido no encontrado.`
+
+Implementacion recomendada en frontend:
+
+```ts
+async function descargarPedidoPdf(
+  pedidoId: number,
+  accessToken: string,
+): Promise<void> {
+  const response = await fetch(
+    `${API_BASE_URL}/pedidos/${pedidoId}/pdf`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => null);
+    throw new Error(error?.detail ?? "No se pudo descargar el pedido");
+  }
+
+  const blob = await response.blob();
+  const disposition = response.headers.get("Content-Disposition");
+  const filename =
+    disposition?.match(/filename="?([^";]+)"?/i)?.[1] ??
+    `pedido-${pedidoId}.pdf`;
+  const objectUrl = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = objectUrl;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(objectUrl), 0);
+}
+```
+
+El backend expone `Content-Disposition` mediante CORS, por lo que el frontend
+puede leer el nombre sugerido. Como la autenticacion usa el header
+`Authorization`, se debe usar `fetch`; un enlace HTML directo no puede adjuntar
+el token Bearer. La interfaz solo debe mostrar esta accion cuando el role actual
+sea `gestor` o `administrador`.
+
 ### PUT `/api/v1/pedidos/{pedido_id}`
 
 Body JSON parcial:
@@ -1010,6 +1083,7 @@ type OfertaResumen = {
 3. Para combos, guarda `combo_id` y `cantidad`.
 4. Al confirmar, envia `POST /api/v1/pedidos/`.
 5. Usa la respuesta del pedido como resumen final, porque el backend recalcula descuentos, subtotales y total.
+6. Para `gestor` y `administrador`, muestra la accion de descarga y usa `GET /api/v1/pedidos/{pedido_id}/pdf` como `Blob`.
 
 ### Auth basica
 

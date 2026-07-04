@@ -1,7 +1,7 @@
 const API_PREFIX = '/api/v1';
 const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || `http://localhost:8000${API_PREFIX}`;
 
-function getApiBaseUrl() {
+export function getApiBaseUrl() {
   const baseUrl = API_BASE_URL.replace(/\/$/, '');
 
   return baseUrl.endsWith(API_PREFIX) ? baseUrl : `${baseUrl}${API_PREFIX}`;

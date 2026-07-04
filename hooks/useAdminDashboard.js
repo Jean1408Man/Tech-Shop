@@ -3,6 +3,8 @@ import { ENTITY_CONFIG, ENTITY_KEYS } from '../components/admin/adminConfig';
 import {
   createAdminEntity,
   deleteAdminEntity,
+  downloadOrderPdf,
+  getAdminEntity,
   listAdminEntity,
   updateAdminEntity,
 } from '../services/adminService';
@@ -17,6 +19,8 @@ export function useAdminDashboard({ token, user, isAdmin }) {
   const [entities, setEntities] = useState(EMPTY_ENTITIES);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [isDetailLoading, setIsDetailLoading] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
 
@@ -121,15 +125,55 @@ export function useAdminDashboard({ token, user, isAdmin }) {
     [loadAll, token]
   );
 
+  const loadEntityDetail = useCallback(
+    async (entityKey, entityId) => {
+      setIsDetailLoading(true);
+      setError('');
+
+      try {
+        return await getAdminEntity(entityKey, entityId, token);
+      } catch (detailError) {
+        setError(getErrorMessage(detailError));
+        return null;
+      } finally {
+        setIsDetailLoading(false);
+      }
+    },
+    [token]
+  );
+
+  const exportOrderPdf = useCallback(
+    async (orderId) => {
+      setIsExporting(true);
+      setError('');
+
+      try {
+        await downloadOrderPdf(orderId, token);
+        setNotice(`Se descargó el PDF del pedido #${orderId}.`);
+        return true;
+      } catch (exportError) {
+        setError(getErrorMessage(exportError));
+        return false;
+      } finally {
+        setIsExporting(false);
+      }
+    },
+    [token]
+  );
+
   return {
     entities,
     isLoading,
     isSaving,
+    isDetailLoading,
+    isExporting,
     error,
     notice,
     reload: loadAll,
     saveEntity,
     removeEntity,
+    loadEntityDetail,
+    exportOrderPdf,
     clearMessages: () => {
       setError('');
       setNotice('');

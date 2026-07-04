@@ -1,4 +1,4 @@
-import { apiRequest } from './apiClient';
+import { apiRequest, getApiBaseUrl } from './apiClient';
 
 const ENTITY_PATHS = {
   categorias: '/categorias',
@@ -37,6 +37,38 @@ export function listAdminEntity(entityKey, token) {
   return apiRequest(`${path}/?${searchParams.toString()}`, {
     headers: getAuthHeaders(token),
   });
+}
+
+export function getAdminEntity(entityKey, entityId, token) {
+  return apiRequest(`${getPath(entityKey)}/${entityId}`, {
+    headers: getAuthHeaders(token),
+  });
+}
+
+export async function downloadOrderPdf(orderId, token) {
+  const response = await fetch(`${getApiBaseUrl()}/pedidos/${orderId}/pdf`, {
+    headers: getAuthHeaders(token),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => null);
+
+    throw new Error(error?.detail || 'No se pudo descargar el pedido.');
+  }
+
+  const blob = await response.blob();
+  const disposition = response.headers.get('Content-Disposition');
+  const filename =
+    disposition?.match(/filename="?([^";]+)"?/i)?.[1] || `pedido-${orderId}.pdf`;
+  const objectUrl = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+
+  link.href = objectUrl;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(objectUrl), 0);
 }
 
 async function createUser(payload, token, { isAdmin = false } = {}) {
