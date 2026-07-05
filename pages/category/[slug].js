@@ -30,7 +30,7 @@ export default function CategoryPage() {
     return <CatalogError message={error} onRetry={reload} />;
   }
 
-  if (!category) {
+  if (!category && !isLoading) {
     return (
       <div className="max-w-[1856px] mx-auto px-4 py-8">
         <BackButton fallbackHref="/" />
@@ -53,9 +53,9 @@ export default function CategoryPage() {
         <BackButton fallbackHref="/" />
         {/* Breadcrumb */}
         <Breadcrumb items={breadcrumbItems} />
-        {category.subcategories?.length > 0 && (
+        {category?.subcategories?.length > 0 && (
           <nav className="mb-6 flex flex-wrap gap-2" aria-label="Subcategorías">
-            {category.subcategories.map((subcategory) => (
+            {category?.subcategories?.map((subcategory) => (
               <Link
                 key={subcategory.slug}
                 href={`/category/${subcategory.slug}`}

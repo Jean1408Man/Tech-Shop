@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/router";
 import {
   deleteProduct,
   categoryIncludesProduct,
@@ -8,10 +8,9 @@ import {
   getCombo,
   getCombos,
   getOffers,
-  getProduct,
   getProducts,
   searchProducts,
-} from '../services/catalogService';
+} from "../services/catalogService";
 
 const INITIAL_CATALOG_STATE = {
   categories: [],
@@ -19,29 +18,32 @@ const INITIAL_CATALOG_STATE = {
   offers: [],
   combos: [],
   isLoading: true,
-  error: '',
+  error: "",
 };
 
 function getErrorMessage(error) {
-  return error?.message || 'No pudimos cargar los datos del catalogo.';
+  return error?.message || "No pudimos cargar los datos del catalogo.";
 }
 
 function getQueryValue(value) {
   if (Array.isArray(value)) {
-    return value[0] || '';
+    return value[0] || "";
   }
 
-  return value || '';
+  return value || "";
 }
 
-export function useCatalog({ includeOffers = false, includeCombos = false } = {}) {
+export function useCatalog({
+  includeOffers = false,
+  includeCombos = false,
+} = {}) {
   const [state, setState] = useState(INITIAL_CATALOG_STATE);
 
   const loadCatalog = useCallback(async () => {
     setState((current) => ({
       ...current,
       isLoading: true,
-      error: '',
+      error: "",
     }));
 
     try {
@@ -58,7 +60,7 @@ export function useCatalog({ includeOffers = false, includeCombos = false } = {}
         offers,
         combos,
         isLoading: false,
-        error: '',
+        error: "",
       });
     } catch (error) {
       setState((current) => ({
@@ -81,19 +83,19 @@ export function useCatalog({ includeOffers = false, includeCombos = false } = {}
 
 export function useHomeCatalog() {
   const catalog = useCatalog({ includeOffers: true, includeCombos: true });
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
   const filteredProducts = useMemo(() => {
-    if (selectedCategory === 'all') {
+    if (selectedCategory === "all") {
       return catalog.products.slice(0, 8);
     }
 
     const category = flattenCategories(catalog.categories).find(
-      (item) => item.slug === selectedCategory
+      (item) => item.slug === selectedCategory,
     );
 
     return catalog.products.filter((product) =>
-      categoryIncludesProduct(category, product)
+      categoryIncludesProduct(category, product),
     );
   }, [catalog.categories, catalog.products, selectedCategory]);
 
@@ -138,27 +140,27 @@ export function useCategoryPage() {
 
   const allCategories = useMemo(
     () => flattenCategories(catalog.categories),
-    [catalog.categories]
+    [catalog.categories],
   );
   const category = useMemo(
     () => allCategories.find((item) => item.slug === String(slug)),
-    [allCategories, slug]
+    [allCategories, slug],
   );
   const parentCategory = useMemo(
     () =>
       category?.parentCategoryId
         ? allCategories.find(
-            (item) => String(item.id) === String(category.parentCategoryId)
+            (item) => String(item.id) === String(category.parentCategoryId),
           )
         : null,
-    [allCategories, category]
+    [allCategories, category],
   );
   const products = useMemo(
     () =>
       catalog.products.filter((product) =>
-        categoryIncludesProduct(category, product)
+        categoryIncludesProduct(category, product),
       ),
-    [catalog.products, category]
+    [catalog.products, category],
   );
 
   return {
@@ -170,51 +172,14 @@ export function useCategoryPage() {
   };
 }
 
-export function useProductPage() {
-  const router = useRouter();
-  const { id } = router.query;
-  const [product, setProduct] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  const loadProduct = useCallback(async () => {
-    if (!router.isReady || !id) {
-      return;
-    }
-
-    setIsLoading(true);
-    setError('');
-
-    try {
-      setProduct(await getProduct(id));
-    } catch (loadError) {
-      setProduct(null);
-      setError(getErrorMessage(loadError));
-    } finally {
-      setIsLoading(false);
-    }
-  }, [id, router.isReady]);
-
-  useEffect(() => {
-    loadProduct();
-  }, [loadProduct]);
-
-  return {
-    product,
-    isLoading: !router.isReady || isLoading,
-    error,
-    reload: loadProduct,
-  };
-}
-
 export function useCombosPage() {
   const [combos, setCombos] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const loadCombos = useCallback(async () => {
     setIsLoading(true);
-    setError('');
+    setError("");
 
     try {
       setCombos(await getCombos());
@@ -243,7 +208,7 @@ export function useComboPage() {
   const { id } = router.query;
   const [combo, setCombo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const loadCombo = useCallback(async () => {
     if (!router.isReady || !id) {
@@ -251,7 +216,7 @@ export function useComboPage() {
     }
 
     setIsLoading(true);
-    setError('');
+    setError("");
 
     try {
       setCombo(await getCombo(id));
@@ -280,7 +245,7 @@ export function useProductSearch() {
   const query = getQueryValue(router.query.q).trim();
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const loadProducts = useCallback(async () => {
     if (!router.isReady) {
@@ -290,12 +255,12 @@ export function useProductSearch() {
     if (!query) {
       setProducts([]);
       setIsLoading(false);
-      setError('');
+      setError("");
       return;
     }
 
     setIsLoading(true);
-    setError('');
+    setError("");
 
     try {
       setProducts(await searchProducts(query));

@@ -2,7 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { X, Star, Minus, Plus } from "lucide-react";
-import { useCart } from "../../context/CartContext";
+import PropTypes from "prop-types";
+import { useCart, getCartItemKey } from "../../context/CartContext";
 
 /**
  * A card component that displays a product's image, name and price. Clicking
@@ -16,7 +17,9 @@ export default function ProductCard({ product, className }) {
   const basePrice = Number(product.basePrice || price);
 
   // Check if product is in cart
-  const cartItem = cartItems.find((item) => item.id === product.id);
+  const cartKey =
+    product.cartKey || `${product.type || "product"}:${product.id}`;
+  const cartItem = cartItems.find((item) => getCartItemKey(item) === cartKey);
   const quantityInCart = cartItem ? cartItem.quantity : 0;
 
   const openModal = (e) => {
@@ -84,7 +87,7 @@ export default function ProductCard({ product, className }) {
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    updateQuantity(product.id, quantityInCart - 1);
+                    updateQuantity(cartKey, quantityInCart - 1);
                   }}
                   className="w-6 h-6 flex items-center justify-center rounded-full bg-white hover:bg-gray-100 transition-colors shadow-sm"
                   aria-label="Disminuir cantidad"
@@ -98,7 +101,7 @@ export default function ProductCard({ product, className }) {
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    updateQuantity(product.id, quantityInCart + 1);
+                    updateQuantity(cartKey, quantityInCart + 1);
                   }}
                   className="w-6 h-6 flex items-center justify-center rounded-full bg-white hover:bg-gray-100 transition-colors shadow-sm"
                   aria-label="Aumentar cantidad"
@@ -258,3 +261,19 @@ export default function ProductCard({ product, className }) {
     </>
   );
 }
+
+ProductCard.propTypes = {
+  product: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    rating: PropTypes.number.isRequired,
+    description: PropTypes.string.isRequired,
+    cartKey: PropTypes.string,
+    type: PropTypes.string,
+    basePrice: PropTypes.number,
+    hasOffer: PropTypes.bool,
+  }).isRequired,
+  className: PropTypes.string,
+};

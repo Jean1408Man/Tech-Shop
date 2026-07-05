@@ -31,7 +31,7 @@ export default function ProductPage() {
   }
 
   return (
-    <div className="max-w-[1856px] mx-auto px-4 pb-8">
+    <div className="max-w-[1856px] mx-auto px-4 py-8">
       <SpecialOffers />
       <BackButton fallbackHref="/" />
       <Breadcrumb items={breadcrumbItems} />

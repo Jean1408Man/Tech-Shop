@@ -5,8 +5,8 @@ import CartItem from "./CartItem.jsx";
 import CartSummary from "./CartSummary.jsx";
 import EmptyCart from "./EmptyCart.jsx";
 import { createOrder } from "../../services/orderService.js";
-import OrderConfirmation from "./OrderConfirmation.js";
-import CheckoutForm from "./CheckoutForm.js";
+import OrderConfirmation from "./OrderConfirmation.jsx";
+import CheckoutForm from "./CheckoutForm.jsx";
 
 function getCartItemKey(item) {
   return item.cartKey || `${item.type || "product"}:${item.id}`;

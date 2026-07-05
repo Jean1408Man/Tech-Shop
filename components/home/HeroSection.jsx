@@ -41,10 +41,10 @@ export default function HeroSection() {
         <Image src={figure9} alt="Figure 9" />
       </div>
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-        <h1 className="text-3xl md:text-5xl font-bold text-white">
+        <h1 className="text-3xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-primary-dark to-primary">
           Compra como un multimillonario
         </h1>
-        <p className="text-white mt-2 max-w-2xl">
+        <p className="text-gray-700 mt-2 max-w-2xl">
           Descubre productos únicos a precios inigualables. Desde ropa hasta
           electrónica, tenemos todo lo que buscas.
         </p>

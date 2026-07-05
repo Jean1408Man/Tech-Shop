@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCart } from "../../context/CartContext";
+import { useCart, getCartItemKey } from "../../context/CartContext";
 import PropTypes from "prop-types";
 import Link from "next/link";
 import { Star, Minus, Plus } from "lucide-react";
@@ -12,7 +12,9 @@ export default function ProductDetails({ product }) {
   if (!product) return null;
 
   // Check if product is in cart
-  const cartItem = cartItems.find((item) => item.id === product.id);
+  const cartKey =
+    product.cartKey || `${product.type || "product"}:${product.id}`;
+  const cartItem = cartItems.find((item) => getCartItemKey(item) === cartKey);
   const quantityInCart = cartItem ? cartItem.quantity : 0;
 
   const price = Number(product.price || 0);
@@ -51,7 +53,7 @@ export default function ProductDetails({ product }) {
                 ))}
               </div>
               <span className="text-sm text-gray-500 font-medium">
-                {product.rating.toFixed(1)}
+                {(product.rating || 0).toFixed(1)}
               </span>
             </div>
           </div>
@@ -114,7 +116,7 @@ export default function ProductDetails({ product }) {
         {quantityInCart > 0 ? (
           <div className="flex-1 flex items-center justify-center gap-4 bg-primary/10 rounded-full py-2 px-4">
             <button
-              onClick={() => updateQuantity(product.id, quantityInCart - 1)}
+              onClick={() => updateQuantity(cartKey, quantityInCart - 1)}
               className="w-10 h-10 flex items-center justify-center rounded-full bg-white hover:bg-gray-100 transition-colors shadow-sm"
               aria-label="Disminuir cantidad"
             >
@@ -124,7 +126,7 @@ export default function ProductDetails({ product }) {
               {quantityInCart}
             </span>
             <button
-              onClick={() => updateQuantity(product.id, quantityInCart + 1)}
+              onClick={() => updateQuantity(cartKey, quantityInCart + 1)}
               className="w-10 h-10 flex items-center justify-center rounded-full bg-white hover:bg-gray-100 transition-colors shadow-sm"
               aria-label="Aumentar cantidad"
             >
@@ -217,5 +219,9 @@ ProductDetails.propTypes = {
     price: PropTypes.number.isRequired,
     rating: PropTypes.number.isRequired,
     description: PropTypes.string.isRequired,
+    cartKey: PropTypes.string,
+    type: PropTypes.string,
+    basePrice: PropTypes.number,
+    hasOffer: PropTypes.bool,
   }).isRequired,
 };

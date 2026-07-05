@@ -1,13 +1,13 @@
-import { apiRequest } from './apiClient';
+import { apiRequest } from "./apiClient";
 
 const DEFAULT_CATEGORY_IMAGE =
-  'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?auto=format&fit=crop&w=900&q=70';
+  "https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?auto=format&fit=crop&w=900&q=70";
 const DEFAULT_PRODUCT_IMAGE =
-  'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=70';
+  "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=70";
 const DEFAULT_OFFER_IMAGE =
-  'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=1200&q=70';
+  "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=1200&q=70";
 const DEFAULT_COMBO_IMAGE =
-  'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=70';
+  "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=70";
 
 function toNumber(value) {
   const parsed = Number(value);
@@ -32,7 +32,7 @@ export function normalizeCategory(category) {
     slug: String(category.id),
     name: category.nombre,
     image: category.url_img || DEFAULT_CATEGORY_IMAGE,
-    description: category.descripcion || '',
+    description: category.descripcion || "",
     products: Array.isArray(category.productos)
       ? category.productos.map(normalizeProduct)
       : [],
@@ -60,7 +60,13 @@ export function categoryIncludesProduct(category, product) {
     ...(category.subcategories || []).map((subcategory) => subcategory.id),
   ].map(String);
 
-  return categoryIds.includes(String(product.categoryId || product.category));
+  const productCategoryId =
+    product.categoryId ||
+    (typeof product.category === "object"
+      ? product.category?.slug
+      : product.category);
+
+  return categoryIds.includes(String(productCategoryId));
 }
 
 function buildCategoryHierarchy(categories) {
@@ -72,7 +78,9 @@ function buildCategoryHierarchy(categories) {
       ? {
           ...existing,
           ...category,
-          products: category.products?.length ? category.products : existing.products,
+          products: category.products?.length
+            ? category.products
+            : existing.products,
           subcategories: [
             ...(existing.subcategories || []),
             ...(category.subcategories || []),
@@ -92,13 +100,13 @@ function buildCategoryHierarchy(categories) {
     .filter(
       (category) =>
         !category.parentCategoryId ||
-        !byId.has(String(category.parentCategoryId))
+        !byId.has(String(category.parentCategoryId)),
     )
     .map((category) => ({
       ...category,
       subcategories: allCategories.filter(
         (candidate) =>
-          String(candidate.parentCategoryId || '') === String(category.id)
+          String(candidate.parentCategoryId || "") === String(category.id),
       ),
     }));
 }
@@ -112,7 +120,7 @@ export function normalizeOffer(offer) {
     ...offer,
     name: offer.nombre,
     image: offer.imagen || DEFAULT_OFFER_IMAGE,
-    description: offer.descripcion || '',
+    description: offer.descripcion || "",
     discount: toNumber(offer.monto_descuento),
     products: Array.isArray(offer.productos)
       ? offer.productos.map(normalizeProduct)
@@ -131,19 +139,22 @@ export function normalizeProduct(product) {
 
   return {
     ...product,
-    type: 'product',
+    type: "product",
     cartKey: `product:${product.id}`,
     slug: String(product.id),
     name: product.nombre,
     image: product.url_img || DEFAULT_PRODUCT_IMAGE,
-    description: product.descripcion || '',
+    description: product.descripcion || "",
     price: getDiscountedPrice(product),
     basePrice,
     hasOffer: Boolean(offer),
     offer,
-    category: String(categoryId || ''),
+    category: {
+      name: product.categoria?.nombre || "",
+      slug: String(categoryId || ""),
+    },
     categoryId,
-    categoryName: product.categoria?.nombre || '',
+    categoryName: product.categoria?.nombre || "",
   };
 }
 
@@ -154,12 +165,12 @@ export function normalizeCombo(combo) {
 
   return {
     ...combo,
-    type: 'combo',
+    type: "combo",
     cartKey: `combo:${combo.id}`,
     slug: String(combo.id),
     name: combo.nombre,
     image: combo.imagen || DEFAULT_COMBO_IMAGE,
-    description: combo.descripcion || '',
+    description: combo.descripcion || "",
     price: toNumber(combo.precio),
     products: Array.isArray(combo.productos)
       ? combo.productos.map(normalizeProduct)
@@ -182,7 +193,9 @@ export async function getCategories(params = {}) {
     skip: String(params.skip ?? 0),
     limit: String(params.limit ?? 100),
   });
-  const categories = await apiRequest(`/categorias/?${searchParams.toString()}`);
+  const categories = await apiRequest(
+    `/categorias/?${searchParams.toString()}`,
+  );
 
   return Array.isArray(categories)
     ? buildCategoryHierarchy(categories.map(normalizeCategory))
@@ -202,7 +215,7 @@ export async function getProducts(params = {}) {
   });
 
   if (params.nombre) {
-    searchParams.set('nombre', params.nombre);
+    searchParams.set("nombre", params.nombre);
   }
 
   const products = await apiRequest(`/productos/?${searchParams.toString()}`);
@@ -224,8 +237,8 @@ export async function getProduct(productId) {
 }
 
 export async function createProduct(values) {
-  const product = await apiRequest('/productos/', {
-    method: 'POST',
+  const product = await apiRequest("/productos/", {
+    method: "POST",
     body: toProductPayload(values),
   });
 
@@ -234,7 +247,7 @@ export async function createProduct(values) {
 
 export async function updateProduct(productId, values) {
   const product = await apiRequest(`/productos/${productId}`, {
-    method: 'PUT',
+    method: "PUT",
     body: toProductPayload(values),
   });
 
@@ -243,7 +256,7 @@ export async function updateProduct(productId, values) {
 
 export async function deleteProduct(productId) {
   const product = await apiRequest(`/productos/${productId}`, {
-    method: 'DELETE',
+    method: "DELETE",
   });
 
   return normalizeProduct(product);
@@ -266,7 +279,7 @@ export async function getCombos(params = {}) {
   });
 
   if (params.nombre) {
-    searchParams.set('nombre', params.nombre);
+    searchParams.set("nombre", params.nombre);
   }
 
   const combos = await apiRequest(`/combos/?${searchParams.toString()}`);
