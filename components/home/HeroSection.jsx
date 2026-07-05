@@ -12,7 +12,7 @@ import figure9 from "../../images/figure9.svg";
 
 export default function HeroSection() {
   return (
-    <section className="relative h-64 md:h-96 w-full max-w-[1856px] mx-auto bg-black/10">
+    <section className="relative h-64 md:h-96 w-full max-w-[1856px] mx-auto">
       <div className="absolute top-0 left-0 scale-75 md:scale-100 origin-center">
         <Image src={figure1} alt="Figure 1" />
       </div>

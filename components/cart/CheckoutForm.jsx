@@ -1,17 +1,17 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function CheckoutForm({
-  defaultName = '',
-  error = '',
+  defaultName = "",
+  error = "",
   isSubmitting = false,
   onCancel,
   onSubmit,
 }) {
   const [values, setValues] = useState({
     nombre: defaultName,
-    telefono: '',
+    telefono: "",
   });
-  const [validationError, setValidationError] = useState('');
+  const [validationError, setValidationError] = useState("");
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -31,22 +31,19 @@ export default function CheckoutForm({
     };
 
     if (!payload.nombre || !payload.telefono) {
-      setValidationError('Completa nombre y teléfono para crear el pedido.');
+      setValidationError("Completa nombre y teléfono para crear el pedido.");
       return;
     }
 
-    setValidationError('');
+    setValidationError("");
     onSubmit(payload);
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="mt-8 rounded-lg bg-white p-4 shadow sm:p-6"
-    >
+    <form onSubmit={handleSubmit} className="rounded-xl bg-white shadow-sm p-6">
       <h2 className="text-xl font-bold">Datos para el pedido</h2>
       <p className="mt-1 text-sm text-gray-600">
-        El backend calculará total, descuentos y subtotales al confirmar.
+        Se calcularán total, descuentos y subtotales al confirmar.
       </p>
 
       {(validationError || error) && (
@@ -55,7 +52,7 @@ export default function CheckoutForm({
         </div>
       )}
 
-      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+      <div className="mt-4 grid gap-4">
         <label className="block">
           <span className="text-sm font-semibold text-gray-700">Nombre</span>
           <input
@@ -78,6 +75,7 @@ export default function CheckoutForm({
             onChange={handleChange}
             className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 focus:border-primary focus:outline-none"
             autoComplete="tel"
+            pattern="[0-9]{8}"
             disabled={isSubmitting}
           />
         </label>
@@ -87,17 +85,17 @@ export default function CheckoutForm({
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-md border border-gray-300 px-4 py-2 font-semibold text-gray-700 hover:bg-gray-50"
+          className="rounded-full border border-gray-300 px-4 py-2 font-semibold text-gray-700 hover:bg-gray-50 shadow-sm"
           disabled={isSubmitting}
         >
           Cancelar
         </button>
         <button
           type="submit"
-          className="rounded-md bg-primary px-4 py-2 font-semibold text-white transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-70"
+          className="rounded-full bg-primary px-4 py-2 font-semibold text-white transition-colors hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-70 shadow-sm"
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Creando pedido...' : 'Confirmar pedido'}
+          {isSubmitting ? "Creando pedido..." : "Confirmar pedido"}
         </button>
       </div>
     </form>

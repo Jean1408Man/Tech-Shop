@@ -98,22 +98,22 @@ export default function CartView() {
           />
         ))}
       </div>
-      <div className="lg:col-span-1">
+      <div className="lg:col-span-1 space-y-4">
         <CartSummary
           onCheckout={handleOpenCheckout}
           onClear={clearCart}
           subtotal={total}
         />
+        {isCheckoutOpen && (
+          <CheckoutForm
+            defaultName={defaultCustomerName}
+            error={checkoutError}
+            isSubmitting={isSubmitting}
+            onCancel={() => setIsCheckoutOpen(false)}
+            onSubmit={handleCreateOrder}
+          />
+        )}
       </div>
-      {isCheckoutOpen && (
-        <CheckoutForm
-          defaultName={defaultCustomerName}
-          error={checkoutError}
-          isSubmitting={isSubmitting}
-          onCancel={() => setIsCheckoutOpen(false)}
-          onSubmit={handleCreateOrder}
-        />
-      )}
     </div>
   );
 }

@@ -49,7 +49,7 @@ export default function CartSummary({ onCheckout, onClear, subtotal }) {
         </button>
         <button
           onClick={onClear}
-          className="w-full bg-gray-200 text-gray-800 py-2 rounded-full hover:bg-gray-300 transition-all duration-200 shadow-sm"
+          className="w-full border border-gray-300 px-4 py-2 font-semibold text-gray-700 hover:bg-gray-50 rounded-full transition-all duration-200 shadow-sm"
         >
           Vaciar carrito
         </button>
