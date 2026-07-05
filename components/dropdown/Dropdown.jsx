@@ -26,18 +26,33 @@ export function DropdownList({ list }) {
   return (
     <div
       className={
-        "absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded-md shadow-xl z-50 py-2 " +
+        "absolute left-0 mt-2 w-64 bg-white border border-gray-200 rounded-md shadow-xl z-50 py-2 " +
         style.body
       }
     >
+      {list.length === 0 && (
+        <span className="block px-4 py-2 text-sm text-gray-500">
+          Sin categorias
+        </span>
+      )}
       {list.map((item) => (
-        <Link
-          key={item.slug}
-          href={`/category/${item.slug}`}
-          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary transition-colors"
-        >
-          {item.name}
-        </Link>
+        <div key={item.slug} className="border-b border-gray-100 last:border-b-0">
+          <Link
+            href={`/category/${item.slug}`}
+            className="block px-4 py-2 text-sm font-semibold text-gray-800 transition-colors hover:bg-gray-100 hover:text-primary"
+          >
+            {item.name}
+          </Link>
+          {item.subcategories?.map((subcategory) => (
+            <Link
+              key={subcategory.slug}
+              href={`/category/${subcategory.slug}`}
+              className="block px-7 py-1.5 text-sm text-gray-600 transition-colors hover:bg-gray-100 hover:text-primary"
+            >
+              {subcategory.name}
+            </Link>
+          ))}
+        </div>
       ))}
     </div>
   );

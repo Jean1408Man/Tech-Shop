@@ -23,7 +23,7 @@ export default function CategoriesSection({ categories = [] }) {
   useEffect(() => {
     if (!categories || !selectedCategory?.slug) return;
     const index = categories.findIndex(
-      (category) => category.slug === selectedCategory.slug
+      (category) => category.slug === selectedCategory.slug,
     );
     const id = setInterval(() => {
       setSelectedCategory(categories[index + 1] || categories[0]);
@@ -34,9 +34,13 @@ export default function CategoriesSection({ categories = [] }) {
   }, [selectedCategory]);
 
   useEffect(() => {
-    if (!selectedCategory?.slug) return;
+    if (!selectedCategory?.slug || !selectedCategory?.subcategories?.length)
+      return;
     setThumbnails();
-    const getGalleryThumbnails = () => new Array(3).fill({ image: "" }, 0, 3);
+    const getGalleryThumbnails = () =>
+      selectedCategory.subcategories.map((subcategory) => ({
+        image: subcategory.image,
+      }));
     const id = setInterval(() => {
       setThumbnails(getGalleryThumbnails());
     }, 750);

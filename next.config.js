@@ -9,10 +9,13 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    // Allow Unsplash images to be used throughout the site. If you
-    // integrate your own product photography, add additional domains
-    // here. See https://nextjs.org/docs/pages/api-reference/components/image
-    domains: ["images.unsplash.com"],
+    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+    ],
   },
 };
 

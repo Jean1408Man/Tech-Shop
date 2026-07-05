@@ -1,16 +1,40 @@
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { useCart } from "../../context/CartContext";
-import { categories } from "../../data/products";
-import { Search, ShoppingCart } from "lucide-react";
+import { LayoutDashboard, Search, ShoppingCart } from "lucide-react";
 import { Dropdown, DropdownList } from "../dropdown/Dropdown";
 import { useAuth } from "../../hooks/useAuth";
+import { useNavbarCategories } from "../../hooks/useCatalog";
+
 export default function Navbar() {
+  const router = useRouter();
   const { cartItems } = useCart();
-  const { user, isAuthenticated, isHydrated, logout } = useAuth();
+  const { canAccessAdmin, isAuthenticated, isHydrated, logout } = useAuth();
+  const categories = useNavbarCategories();
   const [query, setQuery] = useState("");
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-  const displayName = user?.name || user?.email;
+
+  useEffect(() => {
+    if (router.pathname === "/search") {
+      const nextQuery = Array.isArray(router.query.q)
+        ? router.query.q[0]
+        : router.query.q;
+
+      setQuery(nextQuery || "");
+    }
+  }, [router.pathname, router.query.q]);
+
+  const handleSearch = (event) => {
+    event.preventDefault();
+
+    const trimmedQuery = query.trim();
+    if (!trimmedQuery) {
+      return;
+    }
+
+    router.push(`/search?q=${encodeURIComponent(trimmedQuery)}`);
+  };
 
   return (
     <header className="bg-primary text-white sticky top-0 z-[1000] shadow-md">
@@ -19,7 +43,7 @@ export default function Navbar() {
         ¡Envío gratis en tu primera compra! Compra como un multimillonario.
       </div>
 
-      <div className="max-w-[1856px] mx-auto flex items-center justify-between p-3">
+      <div className="max-w-[1856px] mx-auto flex flex-wrap items-center gap-3 p-3 md:flex-nowrap">
         {/* Logo and Categories Toggle */}
         <div className="flex items-center space-x-4">
           <Link
@@ -33,27 +57,48 @@ export default function Navbar() {
           <Dropdown title="Categorías">
             <DropdownList list={categories} />
           </Dropdown>
+          <Link href="/combos" legacyBehavior>
+            <a className="hidden text-sm font-semibold hover:underline sm:inline">
+              Combos
+            </a>
+          </Link>
         </div>
 
         {/* Search bar */}
-        <div className="flex-1 flex items-center gap-2 mx-auto max-w-2xl rounded-full bg-white overflow-hidden py-1.5 px-4">
+        <form
+          className="order-3 flex w-full min-w-0 items-center gap-2 overflow-hidden rounded-full bg-white py-1.5 pl-4 pr-2 md:order-none md:mx-4 md:max-w-2xl md:flex-1"
+          onSubmit={handleSearch}
+        >
           <input
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Buscar productos"
-            className="flex-1 text-gray-800 placeholder-gray-500 border-none bg-none focus:outline-none"
+            className="min-w-0 flex-1 text-gray-800 placeholder-gray-500 border-none bg-none focus:outline-none"
           />
-          <Search size={16} className="text-gray-800" />
-        </div>
+          <button
+            type="submit"
+            className="inline-flex h-8 w-8 shrink-0 items-center justify-center gap-1 rounded-full bg-primary text-sm font-semibold text-white transition-colors hover:bg-primary-dark sm:w-auto sm:px-3"
+            aria-label="Buscar productos"
+          >
+            <Search size={16} />
+            <span className="hidden sm:inline">Buscar</span>
+          </button>
+        </form>
         {/* Cart icon */}
         <div className=" flex items-center space-x-3">
           {isHydrated && isAuthenticated ? (
             <div className="flex items-center space-x-2">
-              {displayName && (
-                <span className="hidden max-w-40 truncate text-sm md:inline">
-                  Hola, {displayName}
-                </span>
+              {canAccessAdmin && (
+                <Link href="/admin" legacyBehavior>
+                  <a
+                    className="inline-flex h-8 items-center gap-1 rounded-md border border-white/60 px-2 text-sm font-semibold transition-colors hover:bg-white hover:text-primary"
+                    title="Abrir panel de administración"
+                  >
+                    <LayoutDashboard size={16} />
+                    <span>Panel</span>
+                  </a>
+                </Link>
               )}
               <button
                 type="button"

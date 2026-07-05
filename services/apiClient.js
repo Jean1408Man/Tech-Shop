@@ -1,11 +1,10 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+const API_PREFIX = '/api/v1';
+const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || `http://localhost:8000${API_PREFIX}`;
 
-function getApiBaseUrl() {
-  if (!API_BASE_URL) {
-    throw new Error('NEXT_PUBLIC_BACKEND_URL no esta configurada.');
-  }
+export function getApiBaseUrl() {
+  const baseUrl = API_BASE_URL.replace(/\/$/, '');
 
-  return API_BASE_URL.replace(/\/$/, '');
+  return baseUrl.endsWith(API_PREFIX) ? baseUrl : `${baseUrl}${API_PREFIX}`;
 }
 
 function parseResponseBody(body) {
@@ -29,21 +28,32 @@ function getErrorMessage(payload) {
     return payload;
   }
 
+  if (Array.isArray(payload.detail)) {
+    return payload.detail
+      .map((error) => error.msg)
+      .filter(Boolean)
+      .join(' ');
+  }
+
   return payload.message || payload.error || payload.detail || null;
 }
 
 export async function apiRequest(path, options = {}) {
   const headers = new Headers(options.headers || {});
+  const hasBody = options.body !== undefined && options.body !== null;
   const isFormData = options.body instanceof FormData;
+  const isUrlEncoded = options.body instanceof URLSearchParams;
+  const shouldStringifyBody =
+    hasBody && !isFormData && !isUrlEncoded && typeof options.body !== 'string';
 
-  if (options.body && !isFormData && !headers.has('Content-Type')) {
+  if (shouldStringifyBody && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json');
   }
 
   const response = await fetch(`${getApiBaseUrl()}${path}`, {
     ...options,
     headers,
-    body: isFormData ? options.body : JSON.stringify(options.body),
+    body: shouldStringifyBody ? JSON.stringify(options.body) : options.body,
   });
   const payload = parseResponseBody(await response.text());
 

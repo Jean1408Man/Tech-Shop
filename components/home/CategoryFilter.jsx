@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { flattenCategories } from "../../services/catalogService";
 
 export default function CategoryFilter({
   categories,
@@ -58,8 +59,14 @@ export default function CategoryFilter({
     }
   };
 
-  // Prepend "Recomendado" category to the dynamic category list
-  const allCategories = [{ name: "Recomendado", slug: "all" }, ...categories];
+  const catalogCategories = flattenCategories(categories).map((category) => ({
+    ...category,
+    filterName: category.parentCategoryId ? `↳ ${category.name}` : category.name,
+  }));
+  const allCategories = [
+    { name: "Recomendado", filterName: "Recomendado", slug: "all" },
+    ...catalogCategories,
+  ];
 
   return (
     <div className="relative w-full my-6 flex items-center">
@@ -94,7 +101,7 @@ export default function CategoryFilter({
                   : "border border-gray-200 font-normal text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300"
               }`}
             >
-              {category.name}
+              {category.filterName}
             </button>
           );
         })}

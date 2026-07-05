@@ -9,51 +9,61 @@ import { createContext, useContext, useState } from 'react';
  */
 const CartContext = createContext({});
 
+function getCartItemKey(item) {
+  return item.cartKey || `${item.type || 'product'}:${item.id}`;
+}
+
 export function CartProvider({ children }) {
-  // cartItems is an array of objects { id, name, price, image, quantity }
+  // cartItems is an array of objects { id, cartKey, name, price, image, quantity }
   const [cartItems, setCartItems] = useState([]);
 
   /**
-   * Add a product to the cart. If the product already exists in the
+   * Add an item to the cart. If the item already exists in the
    * cart, its quantity is incremented by the provided amount.
-   * @param {Object} product - The product to add to the cart.
-   * @param {number} quantity - How many of this product to add (default 1).
+   * @param {Object} product - The product or combo to add to the cart.
+   * @param {number} quantity - How many of this item to add (default 1).
    */
-  const addToCart = (product, quantity = 1) => {
+  const addToCart = (itemToAdd, quantity = 1) => {
     setCartItems((prevItems) => {
-      const existing = prevItems.find((item) => item.id === product.id);
+      const cartKey = getCartItemKey(itemToAdd);
+      const existing = prevItems.find((item) => getCartItemKey(item) === cartKey);
+
       if (existing) {
         return prevItems.map((item) =>
-          item.id === product.id
+          getCartItemKey(item) === cartKey
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
       }
-      return [...prevItems, { ...product, quantity }];
+
+      return [...prevItems, { ...itemToAdd, cartKey, quantity }];
     });
   };
 
   /**
-   * Remove a product entirely from the cart.
-   * @param {number|string} productId - The id of the product to remove.
+   * Remove an item entirely from the cart.
+   * @param {number|string} itemKey - The cart key of the item to remove.
    */
-  const removeFromCart = (productId) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== productId));
+  const removeFromCart = (itemKey) => {
+    setCartItems((prevItems) =>
+      prevItems.filter((item) => getCartItemKey(item) !== itemKey)
+    );
   };
 
   /**
-   * Update the quantity of a given product. A quantity of zero will
+   * Update the quantity of a given item. A quantity of zero will
    * remove the item from the cart.
-   * @param {number|string} productId - The id of the product.
-   * @param {number} quantity - The new quantity for the product.
+   * @param {number|string} itemKey - The cart key of the item.
+   * @param {number} quantity - The new quantity for the item.
    */
-  const updateQuantity = (productId, quantity) => {
+  const updateQuantity = (itemKey, quantity) => {
     setCartItems((prevItems) => {
       if (quantity <= 0) {
-        return prevItems.filter((item) => item.id !== productId);
+        return prevItems.filter((item) => getCartItemKey(item) !== itemKey);
       }
+
       return prevItems.map((item) =>
-        item.id === productId ? { ...item, quantity } : item
+        getCartItemKey(item) === itemKey ? { ...item, quantity } : item
       );
     });
   };
