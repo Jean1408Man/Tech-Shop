@@ -45,6 +45,8 @@ export default function CategoriesSection({ categories = [] }) {
     const getGalleryThumbnails = () =>
       selectedCategory.subcategories.map((subcategory) => ({
         image: subcategory.image,
+        slug: subcategory.slug,
+        name: subcategory.name,
       }));
     const id = setInterval(() => {
       setThumbnails(getGalleryThumbnails());
@@ -108,10 +110,11 @@ export default function CategoriesSection({ categories = [] }) {
                   "min-w-16 w-[20%] top-8 -right-8",
                 ][i];
                 return (
-                  <picture
+                  <Link
                     key={i}
+                    href={`/category/${t.slug}`}
                     className={
-                      "overflow-hidden aspect-square bg-white rounded-full absolute outline outline-offset-8 outline-primary animate-fade-in-fl " +
+                      "overflow-hidden aspect-square bg-white rounded-full absolute outline outline-offset-8 outline-primary animate-fade-in-fl cursor-pointer group " +
                       dynamic
                     }
                   >
@@ -120,10 +123,15 @@ export default function CategoriesSection({ categories = [] }) {
                         src={t.image}
                         alt={t.name}
                         fill
-                        className="object-fill"
+                        className="object-fill z-0"
                       />
                     )}
-                  </picture>
+                    {t.name && (
+                      <p className="text-white bg-black/25 text-sm absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-30 grid place-items-center">
+                        {t.name}
+                      </p>
+                    )}
+                  </Link>
                 );
               })}
           </div>

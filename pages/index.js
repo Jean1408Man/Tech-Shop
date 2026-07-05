@@ -10,7 +10,6 @@ export default function HomePage() {
   const {
     categories,
     filteredProducts,
-    offers,
     combos,
     selectedCategory,
     setSelectedCategory,
@@ -26,7 +25,7 @@ export default function HomePage() {
   return (
     <div className="max-w-[1856px] mx-auto">
       <HeroSection />
-      <SpecialOffers isLoading={isLoading} offers={offers} />
+      <SpecialOffers />
       <CombosSection isLoading={isLoading} combos={combos} />
       <CategoriesSection categories={categories} />
       <FeaturedProductsSection

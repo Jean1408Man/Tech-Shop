@@ -176,7 +176,7 @@ export default function ProductDetails({ product }) {
 
       {/* Related Products - Grid */}
       <div
-        className="pt-8 border-t border-gray-100 animate-fade-in"
+        className="pt-8 border-t border-gray-300 animate-fade-in mx-auto w-max"
         style={{ animationDelay: "0.5s" }}
       >
         <h3 className="text-lg font-bold text-gray-900 mb-4">
@@ -187,9 +187,9 @@ export default function ProductDetails({ product }) {
             <Link
               key={related.id}
               href={`/product/${related.id}`}
-              className="w-full max-w-[160px] group"
+              className="w-full max-w-[256px] group"
             >
-              <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 shadow-sm mb-2">
+              <div className="relative w-64 aspect-square rounded-xl overflow-hidden bg-gray-100 shadow-sm mb-2">
                 <Image
                   src={related.image}
                   alt={related.name}

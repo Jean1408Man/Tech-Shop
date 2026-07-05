@@ -82,7 +82,7 @@ export function useCatalog({
 }
 
 export function useHomeCatalog() {
-  const catalog = useCatalog({ includeOffers: true, includeCombos: true });
+  const catalog = useCatalog({ includeOffers: false, includeCombos: true });
   const [selectedCategory, setSelectedCategory] = useState("all");
 
   const filteredProducts = useMemo(() => {

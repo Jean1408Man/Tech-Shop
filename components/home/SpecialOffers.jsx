@@ -1,10 +1,29 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { getOffers } from "../../services/catalogService";
 import Loader from "../ui/Loader";
 import TitleTab from "../ui/TitleTab";
 
-export default function SpecialOffers({ offers = [], isLoading = false }) {
+export default function SpecialOffers() {
+  const [offers, setOffers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const loadOffers = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const data = await getOffers();
+      setOffers(data);
+    } catch {
+      setOffers([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadOffers();
+  }, [loadOffers]);
 
   useEffect(() => {
     setCurrentIndex(0);
