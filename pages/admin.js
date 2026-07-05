@@ -24,7 +24,7 @@ export default function AdminPage() {
   }, [canAccessAdmin, isAuthenticated, isHydrated, router]);
 
   if (!isHydrated || !isAuthenticated || !canAccessAdmin) {
-    return <CatalogLoading message="Verificando permisos..." />;
+    return <CatalogLoading message="Verificando permisos" />;
   }
 
   return <AdminDashboard />;

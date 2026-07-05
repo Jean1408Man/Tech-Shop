@@ -1,7 +1,12 @@
-export function CatalogLoading({ message = 'Cargando catalogo...' }) {
+import Loader from "../ui/Loader";
+
+export function CatalogLoading({ message = "Cargando catalogo..." }) {
   return (
-    <div className="max-w-[1856px] mx-auto px-4 py-12 text-center text-gray-500">
-      {message}
+    <div className="max-w-[1856px] mx-auto px-4 py-12 text-center text-gray-500 grid content-center justify-items-center">
+      <h2 className="mb-8 text-2xl font-bold bg-primary text-white px-4 py-2 rounded-md w-max">
+        {message}
+      </h2>
+      <Loader />
     </div>
   );
 }

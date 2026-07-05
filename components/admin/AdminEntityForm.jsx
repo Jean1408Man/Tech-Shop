@@ -1,21 +1,22 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Plus, Trash2, X } from 'lucide-react';
+import { useEffect, useMemo, useState } from "react";
+import { Plus, Trash2, X } from "lucide-react";
 import {
   ENTITY_CONFIG,
   FORM_FIELDS,
   getInitialFormValues,
   toEntityPayload,
-} from './adminConfig';
+} from "./adminConfig";
+import ImageField from "./ImageField";
 
 const INPUT_CLASS =
-  'mt-1 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-primary focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500';
+  "mt-1 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-primary focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500";
 
 function getOptionLabel(source, item) {
-  if (source === 'categorias') {
+  if (source === "categorias") {
     return item.nombre;
   }
 
-  if (source === 'productos') {
+  if (source === "productos") {
     return `${item.nombre} · $${Number(item.precio_base || 0).toFixed(2)}`;
   }
 
@@ -63,18 +64,22 @@ function RelationPicker({ field, options, value, onChange, disabled }) {
                     onChange(
                       isChecked
                         ? selectedValues.filter((item) => item !== optionValue)
-                        : [...selectedValues, optionValue]
+                        : [...selectedValues, optionValue],
                     );
                   }}
                   className="mt-0.5 accent-primary"
                 />
-                <span className="min-w-0 truncate">{getOptionLabel(field.source, option)}</span>
+                <span className="min-w-0 truncate">
+                  {getOptionLabel(field.source, option)}
+                </span>
               </label>
             );
           })}
         </div>
       ) : (
-        <p className="px-2 py-3 text-sm text-gray-500">No hay opciones disponibles.</p>
+        <p className="px-2 py-3 text-sm text-gray-500">
+          No hay opciones disponibles.
+        </p>
       )}
     </fieldset>
   );
@@ -84,8 +89,8 @@ function ProductOrderLines({ lines, products, offers, onChange, disabled }) {
   const updateLine = (index, field, value) => {
     onChange(
       lines.map((line, lineIndex) =>
-        lineIndex === index ? { ...line, [field]: value } : line
-      )
+        lineIndex === index ? { ...line, [field]: value } : line,
+      ),
     );
   };
 
@@ -98,8 +103,8 @@ function ProductOrderLines({ lines, products, offers, onChange, disabled }) {
       {lines.map((line, index) => {
         const availableOffers = offers.filter((offer) =>
           offer.productos?.some(
-            (product) => String(product.id) === String(line.producto_id)
-          )
+            (product) => String(product.id) === String(line.producto_id),
+          ),
         );
 
         return (
@@ -109,7 +114,9 @@ function ProductOrderLines({ lines, products, offers, onChange, disabled }) {
           >
             <select
               value={line.producto_id}
-              onChange={(event) => updateLine(index, 'producto_id', event.target.value)}
+              onChange={(event) =>
+                updateLine(index, "producto_id", event.target.value)
+              }
               className={INPUT_CLASS}
               disabled={disabled}
               aria-label="Producto"
@@ -125,14 +132,18 @@ function ProductOrderLines({ lines, products, offers, onChange, disabled }) {
               type="number"
               min="1"
               value={line.cantidad}
-              onChange={(event) => updateLine(index, 'cantidad', event.target.value)}
+              onChange={(event) =>
+                updateLine(index, "cantidad", event.target.value)
+              }
               className={INPUT_CLASS}
               disabled={disabled}
               aria-label="Cantidad"
             />
             <select
               value={line.oferta_id}
-              onChange={(event) => updateLine(index, 'oferta_id', event.target.value)}
+              onChange={(event) =>
+                updateLine(index, "oferta_id", event.target.value)
+              }
               className={INPUT_CLASS}
               disabled={disabled}
               aria-label="Oferta"
@@ -160,7 +171,7 @@ function ProductOrderLines({ lines, products, offers, onChange, disabled }) {
       <button
         type="button"
         onClick={() =>
-          onChange([...lines, { producto_id: '', cantidad: 1, oferta_id: '' }])
+          onChange([...lines, { producto_id: "", cantidad: 1, oferta_id: "" }])
         }
         className="inline-flex items-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
         disabled={disabled}
@@ -176,8 +187,8 @@ function ComboOrderLines({ lines, combos, onChange, disabled }) {
   const updateLine = (index, field, value) => {
     onChange(
       lines.map((line, lineIndex) =>
-        lineIndex === index ? { ...line, [field]: value } : line
-      )
+        lineIndex === index ? { ...line, [field]: value } : line,
+      ),
     );
   };
 
@@ -190,7 +201,9 @@ function ComboOrderLines({ lines, combos, onChange, disabled }) {
         >
           <select
             value={line.combo_id}
-            onChange={(event) => updateLine(index, 'combo_id', event.target.value)}
+            onChange={(event) =>
+              updateLine(index, "combo_id", event.target.value)
+            }
             className={INPUT_CLASS}
             disabled={disabled}
             aria-label="Combo"
@@ -206,7 +219,9 @@ function ComboOrderLines({ lines, combos, onChange, disabled }) {
             type="number"
             min="1"
             value={line.cantidad}
-            onChange={(event) => updateLine(index, 'cantidad', event.target.value)}
+            onChange={(event) =>
+              updateLine(index, "cantidad", event.target.value)
+            }
             className={INPUT_CLASS}
             disabled={disabled}
             aria-label="Cantidad"
@@ -227,7 +242,7 @@ function ComboOrderLines({ lines, combos, onChange, disabled }) {
       ))}
       <button
         type="button"
-        onClick={() => onChange([...lines, { combo_id: '', cantidad: 1 }])}
+        onClick={() => onChange([...lines, { combo_id: "", cantidad: 1 }])}
         className="inline-flex items-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
         disabled={disabled}
       >
@@ -249,42 +264,44 @@ export default function AdminEntityForm({
   onSave,
   user,
 }) {
-  const [values, setValues] = useState(() => getInitialFormValues(entityKey, item));
-  const [localError, setLocalError] = useState('');
+  const [values, setValues] = useState(() =>
+    getInitialFormValues(entityKey, item),
+  );
+  const [localError, setLocalError] = useState("");
   const isEditing = Boolean(item);
   const config = ENTITY_CONFIG[entityKey];
   const fields = FORM_FIELDS[entityKey];
   const allCategories = useMemo(
     () => flattenCategories(entities.categorias),
-    [entities.categorias]
+    [entities.categorias],
   );
 
   useEffect(() => {
     setValues(getInitialFormValues(entityKey, item));
-    setLocalError('');
+    setLocalError("");
   }, [entityKey, item]);
 
   const isEditingAnotherUser = useMemo(
     () =>
-      entityKey === 'usuarios' &&
+      entityKey === "usuarios" &&
       isEditing &&
       Number(item?.id) !== Number(user?.id),
-    [entityKey, isEditing, item?.id, user?.id]
+    [entityKey, isEditing, item?.id, user?.id],
   );
 
   const setFieldValue = (name, value) => {
     setValues((current) => ({
       ...current,
       [name]: value,
-      ...(entityKey === 'productos' && name === 'categoria_id'
-        ? { subcategoria_id: '' }
+      ...(entityKey === "productos" && name === "categoria_id"
+        ? { subcategoria_id: "" }
         : {}),
     }));
   };
 
   const getFieldOptions = (field) => {
     const sourceOptions =
-      field.source === 'categorias'
+      field.source === "categorias"
         ? allCategories
         : entities[field.source] || [];
 
@@ -299,8 +316,8 @@ export default function AdminEntityForm({
 
       if (
         field.childOfField &&
-        String(option.categoria_padre_id || '') !==
-          String(values[field.childOfField] || '')
+        String(option.categoria_padre_id || "") !==
+          String(values[field.childOfField] || "")
       ) {
         return false;
       }
@@ -314,18 +331,18 @@ export default function AdminEntityForm({
       return true;
     }
 
-    if (entityKey !== 'usuarios') {
+    if (entityKey !== "usuarios") {
       if (
-        entityKey === 'productos' &&
-        field.name === 'subcategoria_id' &&
+        entityKey === "productos" &&
+        field.name === "subcategoria_id" &&
         !values.categoria_id
       ) {
         return true;
       }
 
       if (
-        entityKey === 'categorias' &&
-        field.name === 'categoria_padre_id' &&
+        entityKey === "categorias" &&
+        field.name === "categoria_padre_id" &&
         item?.subcategorias?.length
       ) {
         return true;
@@ -334,29 +351,32 @@ export default function AdminEntityForm({
       return false;
     }
 
-    if (field.name === 'role') {
+    if (field.name === "role") {
       return !isAdmin;
     }
 
-    return isEditingAnotherUser && ['email', 'full_name', 'is_active'].includes(field.name);
+    return (
+      isEditingAnotherUser &&
+      ["email", "full_name", "is_active"].includes(field.name)
+    );
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (
-      entityKey === 'pedidos' &&
+      entityKey === "pedidos" &&
       !values.productos.some((line) => line.producto_id) &&
       !values.combos.some((line) => line.combo_id)
     ) {
-      setLocalError('El pedido debe incluir al menos un producto o un combo.');
+      setLocalError("El pedido debe incluir al menos un producto o un combo.");
       return;
     }
 
-    setLocalError('');
+    setLocalError("");
     const didSave = await onSave(
       toEntityPayload(entityKey, values, isEditing),
-      item
+      item,
     );
 
     if (didSave) {
@@ -376,7 +396,7 @@ export default function AdminEntityForm({
         <div className="flex items-start justify-between border-b border-gray-200 px-5 py-4">
           <div>
             <h2 className="text-xl font-bold text-gray-900">
-              {isEditing ? 'Editar' : 'Crear'} {config.singular.toLowerCase()}
+              {isEditing ? "Editar" : "Crear"} {config.singular.toLowerCase()}
             </h2>
             <p className="mt-1 text-sm text-gray-500">{config.description}</p>
           </div>
@@ -398,9 +418,10 @@ export default function AdminEntityForm({
               </div>
             )}
 
-            {entityKey === 'usuarios' && isEditingAnotherUser && (
+            {entityKey === "usuarios" && isEditingAnotherUser && (
               <p className="rounded-md bg-gray-50 px-3 py-2 text-sm text-gray-600 sm:col-span-2">
-                La API solo permite modificar datos personales del usuario actual. Para otros usuarios se gestiona el rol.
+                La API solo permite modificar datos personales del usuario
+                actual. Para otros usuarios se gestiona el rol.
               </p>
             )}
 
@@ -410,25 +431,33 @@ export default function AdminEntityForm({
               }
 
               const disabled = isFieldDisabled(field);
-              const required = field.required || (!isEditing && field.requiredOnCreate);
-              const className = field.fullWidth ? 'sm:col-span-2' : '';
+              const required =
+                field.required || (!isEditing && field.requiredOnCreate);
+              const className = field.fullWidth ? "sm:col-span-2" : "";
 
-              if (field.type === 'checkbox') {
+              if (field.type === "checkbox") {
                 return (
-                  <label key={field.name} className={`flex items-center gap-3 ${className}`}>
+                  <label
+                    key={field.name}
+                    className={`flex items-center gap-3 ${className}`}
+                  >
                     <input
                       type="checkbox"
                       checked={Boolean(values[field.name])}
-                      onChange={(event) => setFieldValue(field.name, event.target.checked)}
+                      onChange={(event) =>
+                        setFieldValue(field.name, event.target.checked)
+                      }
                       disabled={disabled}
                       className="h-4 w-4 accent-primary"
                     />
-                    <span className="text-sm font-semibold text-gray-700">{field.label}</span>
+                    <span className="text-sm font-semibold text-gray-700">
+                      {field.label}
+                    </span>
                   </label>
                 );
               }
 
-              if (field.type === 'multiselect') {
+              if (field.type === "multiselect") {
                 return (
                   <div key={field.name} className={`block ${className}`}>
                     <span className="text-sm font-semibold text-gray-700">
@@ -445,42 +474,50 @@ export default function AdminEntityForm({
                 );
               }
 
-              if (field.type === 'order-products') {
+              if (field.type === "order-products") {
                 return (
                   <div key={field.name} className={className}>
-                    <p className="text-sm font-semibold text-gray-700">{field.label}</p>
+                    <p className="text-sm font-semibold text-gray-700">
+                      {field.label}
+                    </p>
                     <ProductOrderLines
                       lines={values.productos}
                       products={entities.productos}
                       offers={entities.ofertas}
-                      onChange={(value) => setFieldValue('productos', value)}
+                      onChange={(value) => setFieldValue("productos", value)}
                       disabled={disabled}
                     />
                   </div>
                 );
               }
 
-              if (field.type === 'order-combos') {
+              if (field.type === "order-combos") {
                 return (
                   <div key={field.name} className={className}>
-                    <p className="text-sm font-semibold text-gray-700">{field.label}</p>
+                    <p className="text-sm font-semibold text-gray-700">
+                      {field.label}
+                    </p>
                     <ComboOrderLines
                       lines={values.combos}
                       combos={entities.combos}
-                      onChange={(value) => setFieldValue('combos', value)}
+                      onChange={(value) => setFieldValue("combos", value)}
                       disabled={disabled}
                     />
                   </div>
                 );
               }
 
-              if (field.type === 'role') {
+              if (field.type === "role") {
                 return (
                   <label key={field.name} className={`block ${className}`}>
-                    <span className="text-sm font-semibold text-gray-700">{field.label}</span>
+                    <span className="text-sm font-semibold text-gray-700">
+                      {field.label}
+                    </span>
                     <select
                       value={values[field.name]}
-                      onChange={(event) => setFieldValue(field.name, event.target.value)}
+                      onChange={(event) =>
+                        setFieldValue(field.name, event.target.value)
+                      }
                       className={INPUT_CLASS}
                       required={required}
                       disabled={disabled}
@@ -493,21 +530,25 @@ export default function AdminEntityForm({
                 );
               }
 
-              if (field.type === 'select') {
+              if (field.type === "select") {
                 const options = getFieldOptions(field);
 
                 return (
                   <label key={field.name} className={`block ${className}`}>
-                    <span className="text-sm font-semibold text-gray-700">{field.label}</span>
+                    <span className="text-sm font-semibold text-gray-700">
+                      {field.label}
+                    </span>
                     <select
                       value={values[field.name]}
-                      onChange={(event) => setFieldValue(field.name, event.target.value)}
+                      onChange={(event) =>
+                        setFieldValue(field.name, event.target.value)
+                      }
                       className={INPUT_CLASS}
                       required={required}
                       disabled={disabled}
                     >
                       <option value="">
-                        {field.emptyLabel || 'Seleccionar'}
+                        {field.emptyLabel || "Seleccionar"}
                       </option>
                       {options.map((option) => (
                         <option key={option.id} value={option.id}>
@@ -517,10 +558,10 @@ export default function AdminEntityForm({
                     </select>
                     {field.helpText && (
                       <span className="mt-1 block text-xs text-gray-500">
-                        {entityKey === 'categorias' &&
-                        field.name === 'categoria_padre_id' &&
+                        {entityKey === "categorias" &&
+                        field.name === "categoria_padre_id" &&
                         item?.subcategorias?.length
-                          ? 'Esta categoría ya tiene subcategorías y debe permanecer como categoría principal.'
+                          ? "Esta categoría ya tiene subcategorías y debe permanecer como categoría principal."
                           : field.helpText}
                       </span>
                     )}
@@ -528,13 +569,32 @@ export default function AdminEntityForm({
                 );
               }
 
+              if (field.type === "image") {
+                return (
+                  <div key={field.name} className={`block ${className}`}>
+                    <span className="text-sm font-semibold text-gray-700">
+                      {field.label}
+                    </span>
+                    <ImageField
+                      name={field.name}
+                      value={values[field.name]}
+                      onChange={(file) => setFieldValue(field.name, file)}
+                    />
+                  </div>
+                );
+              }
+
               return (
                 <label key={field.name} className={`block ${className}`}>
-                  <span className="text-sm font-semibold text-gray-700">{field.label}</span>
-                  {field.type === 'textarea' ? (
+                  <span className="text-sm font-semibold text-gray-700">
+                    {field.label}
+                  </span>
+                  {field.type === "textarea" ? (
                     <textarea
                       value={values[field.name]}
-                      onChange={(event) => setFieldValue(field.name, event.target.value)}
+                      onChange={(event) =>
+                        setFieldValue(field.name, event.target.value)
+                      }
                       className={INPUT_CLASS}
                       rows="4"
                       required={required}
@@ -544,7 +604,9 @@ export default function AdminEntityForm({
                     <input
                       type={field.type}
                       value={values[field.name]}
-                      onChange={(event) => setFieldValue(field.name, event.target.value)}
+                      onChange={(event) =>
+                        setFieldValue(field.name, event.target.value)
+                      }
                       className={INPUT_CLASS}
                       min={field.min}
                       step={field.step}
@@ -571,7 +633,11 @@ export default function AdminEntityForm({
               className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
               disabled={isSaving}
             >
-              {isSaving ? 'Guardando...' : isEditing ? 'Guardar cambios' : 'Crear'}
+              {isSaving
+                ? "Guardando..."
+                : isEditing
+                  ? "Guardar cambios"
+                  : "Crear"}
             </button>
           </div>
         </form>
