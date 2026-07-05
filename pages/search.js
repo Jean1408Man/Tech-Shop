@@ -1,18 +1,16 @@
 import BackButton from "../components/navigation/BackButton";
 import ProductGrid from "../components/catalog/ProductGrid";
-import { CatalogError, CatalogLoading } from "../components/catalog/CatalogFeedback";
+import {
+  CatalogError,
+  CatalogLoading,
+} from "../components/catalog/CatalogFeedback";
 import { useProductSearch } from "../hooks/useCatalog";
+import TitleTab from "../components/ui/TitleTab.jsx";
+import Breadcrumb from "../components/ui/Breadcrumb.jsx";
 
 export default function SearchPage() {
-  const {
-    products,
-    query,
-    hasQuery,
-    isLoading,
-    error,
-    reload,
-    isReady,
-  } = useProductSearch();
+  const { products, query, hasQuery, isLoading, error, reload, isReady } =
+    useProductSearch();
 
   if (!isReady || isLoading) {
     return <CatalogLoading message="Buscando productos..." />;
@@ -23,10 +21,20 @@ export default function SearchPage() {
   }
 
   return (
-    <div className="max-w-[1856px] mx-auto px-4 py-6 sm:py-8">
+    <div className="max-w-[1856px] mx-auto py-6 sm:py-8 px-4 border-t-2 border-primary-dark">
+      <TitleTab>Búsqueda</TitleTab>
       <BackButton fallbackHref="/" />
-      <div className="mb-4 sm:mb-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Búsqueda de productos</h1>
+      <Breadcrumb
+        items={
+          hasQuery
+            ? [{ label: `Resultados para "${query}"` }]
+            : [{ label: "Búsqueda" }]
+        }
+      />
+      <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 mb-4 sm:mb-6">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+          Búsqueda de productos
+        </h1>
         <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-gray-600">
           {hasQuery
             ? `Resultados para "${query}"`
