@@ -57,7 +57,7 @@ export default function CategoriesSection({ categories = [] }) {
   }, [selectedCategory]);
 
   return (
-    <section className="w-full max-w-[1856px] h-[512px] mx-auto relative overflow-hidden py-8 border-t-2 border-primary-dark">
+    <section className="w-full max-w-[1856px] h-64 sm:h-80 md:h-96 lg:h-[512px] mx-auto relative overflow-hidden py-6 sm:py-8 border-t-2 border-primary-dark">
       {previousSelected && (
         <Image
           src={previousSelected.image}

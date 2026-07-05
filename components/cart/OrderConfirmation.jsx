@@ -3,24 +3,24 @@ export default function OrderConfirmation({ order }) {
   const comboLines = order.comboLines || [];
 
   return (
-    <div className="rounded-lg bg-white p-4 shadow sm:p-6">
-      <p className="text-sm font-semibold uppercase text-primary">
+    <div className="rounded-lg bg-white p-4 sm:p-6 shadow">
+      <p className="text-xs sm:text-sm font-semibold uppercase text-primary">
         Pedido confirmado
       </p>
-      <h2 className="mt-1 text-2xl font-bold">Pedido #{order.id}</h2>
-      <p className="mt-2 text-sm text-gray-600">
+      <h2 className="mt-1 text-xl sm:text-2xl font-bold">Pedido #{order.id}</h2>
+      <p className="mt-2 text-xs sm:text-sm text-gray-600">
         {order.customerName} · {order.phone}
       </p>
 
-      <div className="mt-6 space-y-4">
+      <div className="mt-4 sm:mt-6 space-y-3 sm:space-y-4">
         {productLines.map((line) => (
           <div
             key={`product-line-${line.id}`}
-            className="flex items-start justify-between gap-4 border-b border-gray-100 pb-3"
+            className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4 border-b border-gray-100 pb-3"
           >
             <div>
-              <p className="font-semibold">{line.producto_nombre}</p>
-              <p className="text-sm text-gray-500">
+              <p className="font-semibold text-sm sm:text-base">{line.producto_nombre}</p>
+              <p className="text-xs sm:text-sm text-gray-500">
                 Producto · Cantidad {line.quantity}
               </p>
               {line.oferta_nombre && (
@@ -29,7 +29,7 @@ export default function OrderConfirmation({ order }) {
                 </p>
               )}
             </div>
-            <p className="font-bold text-primary">
+            <p className="font-bold text-primary text-sm sm:text-base">
               ${line.subtotal.toFixed(2)}
             </p>
           </div>
@@ -38,22 +38,22 @@ export default function OrderConfirmation({ order }) {
         {comboLines.map((line) => (
           <div
             key={`combo-line-${line.id}`}
-            className="flex items-start justify-between gap-4 border-b border-gray-100 pb-3"
+            className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4 border-b border-gray-100 pb-3"
           >
             <div>
-              <p className="font-semibold">{line.combo_nombre}</p>
-              <p className="text-sm text-gray-500">
+              <p className="font-semibold text-sm sm:text-base">{line.combo_nombre}</p>
+              <p className="text-xs sm:text-sm text-gray-500">
                 Combo · Cantidad {line.quantity}
               </p>
             </div>
-            <p className="font-bold text-primary">
+            <p className="font-bold text-primary text-sm sm:text-base">
               ${line.subtotal.toFixed(2)}
             </p>
           </div>
         ))}
       </div>
 
-      <p className="mt-6 text-right text-xl font-bold">
+      <p className="mt-4 sm:mt-6 text-right text-lg sm:text-xl font-bold">
         Total: <span className="text-primary">${order.totalAmount.toFixed(2)}</span>
       </p>
     </div>

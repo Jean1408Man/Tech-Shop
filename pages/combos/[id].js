@@ -27,7 +27,7 @@ export default function ComboPage() {
   return (
     <div className="max-w-[1856px] mx-auto">
       <SpecialOffers />
-      <div className="px-4 py-8">
+      <div className="px-4 py-6 sm:py-8">
         <BackButton fallbackHref="/combos" />
         <Breadcrumb items={breadcrumbItems} />
         {combo ? <ComboDetails combo={combo} /> : <ProductNotFound />}

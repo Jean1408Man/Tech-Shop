@@ -44,7 +44,7 @@ export default function ImageField({ name = "imageFile", value, onChange }) {
           alt="Vista previa"
           width={320}
           height={320}
-          className="shadow-lg mb-2 max-h-80 h-auto w-full rounded-md object-contain"
+          className="shadow-lg mb-2 max-h-60 sm:max-h-80 h-auto w-full rounded-md object-contain"
         />
       )}
       <input

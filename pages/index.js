@@ -23,7 +23,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="max-w-[1856px] mx-auto">
+    <div className="max-w-[1856px] mx-auto px-0 sm:px-0">
       <HeroSection />
       <SpecialOffers />
       <CombosSection isLoading={isLoading} combos={combos} />

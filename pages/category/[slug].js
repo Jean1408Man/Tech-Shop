@@ -32,7 +32,7 @@ export default function CategoryPage() {
 
   if (!category && !isLoading) {
     return (
-      <div className="max-w-[1856px] mx-auto px-4 py-8">
+      <div className="max-w-[1856px] mx-auto px-4 py-6 sm:py-8">
         <BackButton fallbackHref="/" />
         <ProductNotFound message="Categoría no encontrada." />
       </div>
@@ -45,7 +45,7 @@ export default function CategoryPage() {
       <SpecialOffers />
 
       {/* Category Content */}
-      <main className="max-w-[1856px] mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t-2 border-primary-dark">
+      <main className="max-w-[1856px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 border-t-2 border-primary-dark">
         <TitleTab>
           {category ? category.name : "Categoría desconocida"}
         </TitleTab>
@@ -54,12 +54,12 @@ export default function CategoryPage() {
         {/* Breadcrumb */}
         <Breadcrumb items={breadcrumbItems} />
         {category?.subcategories?.length > 0 && (
-          <nav className="mb-6 flex flex-wrap gap-2" aria-label="Subcategorías">
+          <nav className="mb-4 sm:mb-6 flex flex-wrap gap-2" aria-label="Subcategorías">
             {category?.subcategories?.map((subcategory) => (
               <Link
                 key={subcategory.slug}
                 href={`/category/${subcategory.slug}`}
-                className="rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-colors hover:border-primary hover:text-primary"
+                className="rounded-full border border-gray-300 bg-white px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-gray-700 transition-colors hover:border-primary hover:text-primary"
               >
                 {subcategory.name}
               </Link>

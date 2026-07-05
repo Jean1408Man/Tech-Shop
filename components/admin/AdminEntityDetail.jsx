@@ -336,7 +336,7 @@ export default function AdminEntityDetail({
   const config = ENTITY_CONFIG[entityKey];
 
   return (
-    <div className="fixed inset-0 z-[1200] flex items-center justify-center p-3 sm:p-6">
+    <div className="fixed inset-0 z-[1200] flex items-center justify-center p-3 sm:p-4 md:p-6">
       <button
         type="button"
         className="absolute inset-0 bg-black/45"
@@ -344,20 +344,20 @@ export default function AdminEntityDetail({
         aria-label="Cerrar detalle"
       />
       <div className="relative flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-lg bg-white shadow-xl">
-        <div className="flex flex-col gap-3 border-b border-gray-200 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-2 sm:gap-3 border-b border-gray-200 px-4 py-3 sm:px-5 sm:py-4 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase text-primary">Vista detallada</p>
-            <h2 className="mt-1 text-xl font-bold text-gray-900">{config.singular}</h2>
+            <h2 className="mt-1 text-lg sm:text-xl font-bold text-gray-900">{config.singular}</h2>
           </div>
           <div className="flex items-center gap-2">
             {entityKey === 'pedidos' && item && (
               <button
                 type="button"
                 onClick={() => onExportPdf(item.id)}
-                className="inline-flex h-9 items-center gap-2 rounded-md border border-primary px-3 text-sm font-semibold text-primary hover:bg-primary hover:text-white disabled:opacity-60"
+                className="inline-flex h-8 sm:h-9 items-center gap-1.5 sm:gap-2 rounded-md border border-primary px-2.5 sm:px-3 text-xs sm:text-sm font-semibold text-primary hover:bg-primary hover:text-white disabled:opacity-60"
                 disabled={isExporting}
               >
-                <Download size={16} />
+                <Download size={14} sm:size={16} />
                 {isExporting ? 'Exportando...' : 'Exportar PDF'}
               </button>
             )}
@@ -365,24 +365,24 @@ export default function AdminEntityDetail({
               <button
                 type="button"
                 onClick={() => onEdit(item)}
-                className="inline-flex h-9 items-center gap-2 rounded-md bg-primary px-3 text-sm font-semibold text-white hover:bg-primary-dark"
+                className="inline-flex h-8 sm:h-9 items-center gap-1.5 sm:gap-2 rounded-md bg-primary px-2.5 sm:px-3 text-xs sm:text-sm font-semibold text-white hover:bg-primary-dark"
               >
-                <Pencil size={16} />
+                <Pencil size={14} sm:size={16} />
                 Editar
               </button>
             )}
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-md text-gray-500 hover:bg-gray-100"
+              className="inline-flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-md text-gray-500 hover:bg-gray-100"
               aria-label="Cerrar"
             >
-              <X size={20} />
+              <X size={18} sm:size={20} />
             </button>
           </div>
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto p-5 sm:p-6">
+        <div className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-5 sm:p-6">
           {error && (
             <div className="mb-5 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
               {error}

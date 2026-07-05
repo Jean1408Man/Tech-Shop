@@ -95,8 +95,8 @@ export default function ProductDetails({ product }) {
         </div>
 
         {/* Product Image - Top Right */}
-        <div className="relative animate-fade-in-fr order-1 lg:order-2 flex items-start justify-end">
-          <div className="relative w-full md:max-w-[400px] h-[400px] rounded-2xl overflow-hidden bg-gray-100 shadow-lg grid place-items-center">
+        <div className="relative animate-fade-in-fr order-1 lg:order-2 flex items-start justify-center lg:justify-end">
+          <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md h-64 sm:h-72 md:h-80 lg:h-[400px] rounded-2xl overflow-hidden bg-gray-100 shadow-lg grid place-items-center">
             <Image
               src={product.image}
               alt={product.name}
@@ -176,20 +176,20 @@ export default function ProductDetails({ product }) {
 
       {/* Related Products - Grid */}
       <div
-        className="pt-8 border-t border-gray-300 animate-fade-in mx-auto w-max"
+        className="pt-6 sm:pt-8 border-t border-gray-300 animate-fade-in mx-auto w-max"
         style={{ animationDelay: "0.5s" }}
       >
-        <h3 className="text-lg font-bold text-gray-900 mb-4">
+        <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">
           Productos relacionados
         </h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 justify-items-center">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 justify-items-center">
           {relatedProducts.map((related) => (
             <Link
               key={related.id}
               href={`/product/${related.id}`}
-              className="w-full max-w-[256px] group"
+              className="w-full max-w-[200px] sm:max-w-[256px] group"
             >
-              <div className="relative w-64 aspect-square rounded-xl overflow-hidden bg-gray-100 shadow-sm mb-2">
+              <div className="relative w-48 sm:w-64 aspect-square rounded-xl overflow-hidden bg-gray-100 shadow-sm mb-2">
                 <Image
                   src={related.image}
                   alt={related.name}
@@ -197,10 +197,10 @@ export default function ProductDetails({ product }) {
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
-              <p className="text-sm font-medium text-gray-900 truncate">
+              <p className="text-xs sm:text-sm font-medium text-gray-900 truncate">
                 {related.name}
               </p>
-              <p className="text-sm font-bold text-primary">
+              <p className="text-xs sm:text-sm font-bold text-primary">
                 ${related.price.toFixed(2)}
               </p>
             </Link>

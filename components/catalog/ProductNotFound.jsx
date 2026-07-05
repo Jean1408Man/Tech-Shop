@@ -2,11 +2,11 @@ import Link from "next/link";
 
 export default function ProductNotFound() {
   return (
-    <div className="flex flex-col items-center justify-center py-24 text-center animate-fade-in">
-      <div className="relative mb-8">
+    <div className="flex flex-col items-center justify-center py-16 sm:py-24 text-center animate-fade-in px-4">
+      <div className="relative mb-6 sm:mb-8">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-24 w-24 text-gray-300"
+          className="h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 text-gray-300"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -18,24 +18,24 @@ export default function ProductNotFound() {
             d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
           />
         </svg>
-        <div className="absolute -inset-4 bg-primary/5 rounded-full blur-2xl" />
+        <div className="absolute -inset-3 sm:-inset-4 bg-primary/5 rounded-full blur-2xl" />
       </div>
 
-      <h2 className="text-2xl font-bold text-gray-900 mb-3">
+      <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 sm:mb-3">
         Producto no encontrado
       </h2>
-      <p className="text-gray-500 max-w-md mb-8">
+      <p className="text-gray-500 max-w-md mb-6 sm:mb-8 text-sm sm:text-base">
         Lo sentimos, el producto que buscas no existe o ha sido removido de
         nuestro catálogo.
       </p>
 
       <Link
         href="/"
-        className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
+        className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white font-semibold py-2.5 sm:py-3 px-6 sm:px-8 rounded-full transition-all duration-300 shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5"
+          className="h-4 w-4 sm:h-5 sm:w-5"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"

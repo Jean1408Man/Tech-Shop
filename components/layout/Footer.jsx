@@ -6,11 +6,11 @@
  */
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-gray-300 mt-8">
-      <div className="max-w-[1856px] mx-auto px-4 py-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+    <footer className="bg-gray-900 text-gray-300 mt-6 sm:mt-8">
+      <div className="max-w-[1856px] mx-auto px-4 py-6 sm:py-8 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
         <div>
-          <h3 className="text-white font-semibold mb-2">Acerca de</h3>
-          <ul className="space-y-1 text-sm">
+          <h3 className="text-white font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">Acerca de</h3>
+          <ul className="space-y-1 text-xs sm:text-sm">
             <li>
               <a href="#" className="hover:underline">
                 Quiénes somos
@@ -29,8 +29,8 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <h3 className="text-white font-semibold mb-2">Servicio al cliente</h3>
-          <ul className="space-y-1 text-sm">
+          <h3 className="text-white font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">Servicio al cliente</h3>
+          <ul className="space-y-1 text-xs sm:text-sm">
             <li>
               <a href="#" className="hover:underline">
                 Ayuda
@@ -49,8 +49,8 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <h3 className="text-white font-semibold mb-2">Comunidad</h3>
-          <ul className="space-y-1 text-sm">
+          <h3 className="text-white font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">Comunidad</h3>
+          <ul className="space-y-1 text-xs sm:text-sm">
             <li>
               <a href="#" className="hover:underline">
                 Blog
@@ -69,8 +69,8 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <h3 className="text-white font-semibold mb-2">Legal</h3>
-          <ul className="space-y-1 text-sm">
+          <h3 className="text-white font-semibold mb-1.5 sm:mb-2 text-sm sm:text-base">Legal</h3>
+          <ul className="space-y-1 text-xs sm:text-sm">
             <li>
               <a href="#" className="hover:underline">
                 Términos de uso
@@ -89,7 +89,7 @@ export default function Footer() {
           </ul>
         </div>
       </div>
-      <div className="border-t border-gray-700 py-4 text-center text-xs text-gray-500">
+      <div className="border-t border-gray-700 py-3 sm:py-4 text-center text-[10px] sm:text-xs text-gray-500">
         © {new Date().getFullYear()} Temu Clone. Todos los derechos reservados.
       </div>
     </footer>

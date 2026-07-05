@@ -33,12 +33,12 @@ function EntityImage({ src, alt }) {
 
 function NameCell({ image, name, secondary }) {
   return (
-    <div className="flex min-w-56 items-center gap-3">
+    <div className="flex min-w-40 sm:min-w-48 md:min-w-56 items-center gap-2 sm:gap-3">
       <EntityImage src={image} alt={name} />
       <div className="min-w-0">
-        <p className="truncate text-sm font-semibold text-gray-900">{name}</p>
+        <p className="truncate text-xs sm:text-sm font-semibold text-gray-900">{name}</p>
         {secondary && (
-          <p className="max-w-72 truncate text-xs text-gray-500">{secondary}</p>
+          <p className="max-w-40 sm:max-w-56 md:max-w-72 truncate text-[10px] sm:text-xs text-gray-500">{secondary}</p>
         )}
       </div>
     </div>
@@ -80,8 +80,8 @@ function Actions({ item, onDelete, onEdit, onView }) {
 }
 
 const HEADER_CLASS =
-  'whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase text-gray-500';
-const CELL_CLASS = 'whitespace-nowrap px-4 py-3 text-sm text-gray-700';
+  'whitespace-nowrap px-3 sm:px-4 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase text-gray-500';
+const CELL_CLASS = 'whitespace-nowrap px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-gray-700';
 
 function ProductRows({ items, onDelete, onEdit, onView }) {
   return items.map((product) => {
@@ -287,7 +287,7 @@ export default function AdminEntityTable({
 
   if (!items.length) {
     return (
-      <div className="border-t border-gray-200 px-6 py-16 text-center text-sm text-gray-500">
+      <div className="border-t border-gray-200 px-4 sm:px-6 py-12 sm:py-16 text-center text-xs sm:text-sm text-gray-500">
         No hay registros que coincidan con la búsqueda.
       </div>
     );
@@ -295,7 +295,7 @@ export default function AdminEntityTable({
 
   return (
     <div className="overflow-x-auto border-t border-gray-200">
-      <table className="w-full min-w-[760px] border-collapse">
+      <table className="w-full min-w-[640px] sm:min-w-[760px] border-collapse">
         <thead className="bg-gray-50">
           <tr>
             {headers.map((header, index) => (

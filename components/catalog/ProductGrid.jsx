@@ -3,10 +3,7 @@ import ProductCard from "./ProductCard";
 export default function ProductGrid({ products, loading = false }) {
   if (loading) {
     return (
-      <div
-        className="grid gap-4"
-        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(384px, 1fr))" }}
-      >
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {[0, 1, 2, 3].map((i) => (
           <div key={i} className="animate-pulse">
             <div className="bg-gray-200 rounded-lg h-64 w-full" />
@@ -27,10 +24,7 @@ export default function ProductGrid({ products, loading = false }) {
   }
 
   return (
-    <div
-      className="grid gap-4"
-      style={{ gridTemplateColumns: "repeat(auto-fill, minmax(384px, 1fr))" }}
-    >
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
       {products.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}

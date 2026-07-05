@@ -37,7 +37,7 @@ export default function ProductCard({ product, className }) {
       <div
         className={`bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 relative flex flex-col ${className}`}
       >
-        <div className="relative h-40 sm:h-48">
+        <div className="relative h-36 sm:h-40 md:h-48">
           <Image
             src={product.image}
             alt={product.name}
@@ -45,7 +45,7 @@ export default function ProductCard({ product, className }) {
             objectFit="cover"
           />
         </div>
-        <div className="p-3 flex-1 flex flex-col justify-between gap-2">
+        <div className="p-2.5 sm:p-3 flex-1 flex flex-col justify-between gap-1.5 sm:gap-2">
           <h3 className="text-sm font-semibold text-gray-900 leading-tight">
             {product.name}
           </h3>
@@ -80,7 +80,7 @@ export default function ProductCard({ product, className }) {
               </p>
             )}
           </div>
-          <div className="flex justify-end items-center gap-2">
+          <div className="flex flex-wrap justify-end items-center gap-2">
             {quantityInCart > 0 ? (
               <div className="flex items-center justify-center gap-2 bg-primary/10 rounded-full py-1 px-2">
                 <button
@@ -145,7 +145,7 @@ export default function ProductCard({ product, className }) {
         </div>
         <button
           onClick={openModal}
-          className="absolute top-2 right-2 bg-white bg-opacity-90 hover:bg-opacity-100 text-gray-700 px-2 py-1 rounded-full text-xs font-medium shadow-sm transition-all duration-200 z-5"
+          className="absolute top-1.5 sm:top-2 right-1.5 sm:right-2 bg-white bg-opacity-90 hover:bg-opacity-100 text-gray-700 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium shadow-sm transition-all duration-200 z-5"
           aria-label="Fast view"
         >
           Vista rápida
@@ -153,7 +153,7 @@ export default function ProductCard({ product, className }) {
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
           <div
             className="absolute inset-0 bg-black bg-opacity-50"
             onClick={closeModal}
@@ -161,14 +161,14 @@ export default function ProductCard({ product, className }) {
           <div className="relative bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto overflow-x-hidden animate-fade-in-fb">
             <button
               onClick={closeModal}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 bg-white shadow-sm rounded-full p-2 z-10"
+              className="absolute top-3 right-3 sm:top-4 sm:right-4 text-gray-500 hover:text-gray-700 bg-white shadow-sm rounded-full p-1.5 sm:p-2 z-10"
               aria-label="Close modal"
             >
-              <X size={24} />
+              <X size={20} sm:size={24} />
             </button>
-            <div className="grid md:grid-cols-2 gap-6 p-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 p-4 sm:p-6">
               {/* Product Image */}
-              <div className="relative w-full h-[250px] sm:h-[300px] rounded-xl overflow-hidden bg-gray-100 shadow-lg">
+              <div className="relative w-full h-48 sm:h-56 md:h-[250px] lg:h-[300px] rounded-xl overflow-hidden bg-gray-100 shadow-lg">
                 <Image
                   src={product.image}
                   alt={product.name}
@@ -178,9 +178,9 @@ export default function ProductCard({ product, className }) {
               </div>
 
               {/* Product Info */}
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-3 sm:gap-4">
                 <div>
-                  <h2 className="text-xl md:text-2xl font-bold text-gray-900 leading-tight mb-2">
+                  <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 leading-tight mb-2">
                     {product.name}
                   </h2>
                   <div className="flex items-center gap-2">
@@ -188,7 +188,8 @@ export default function ProductCard({ product, className }) {
                       {new Array(5).fill(0).map((_, i) => (
                         <Star
                           key={i}
-                          size={16}
+                          size={14}
+                          sm:size={16}
                           className={`${
                             i < Math.floor(product.rating)
                               ? "text-yellow-400 fill-current"
@@ -197,7 +198,7 @@ export default function ProductCard({ product, className }) {
                         />
                       ))}
                     </div>
-                    <span className="text-sm text-gray-500 font-medium">
+                    <span className="text-xs sm:text-sm text-gray-500 font-medium">
                       {(product.rating || 0).toFixed(1)}
                     </span>
                   </div>
@@ -218,13 +219,13 @@ export default function ProductCard({ product, className }) {
                   <h3 className="text-xs font-semibold text-gray-900 uppercase tracking-wider mb-2">
                     Descripción
                   </h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
                     {product.description}
                   </p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-gray-50 rounded-xl p-3">
+                  <div className="bg-gray-50 rounded-xl p-2.5 sm:p-3">
                     <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-0.5">
                       Envío
                     </p>
@@ -232,7 +233,7 @@ export default function ProductCard({ product, className }) {
                       Gratis +$50
                     </p>
                   </div>
-                  <div className="bg-gray-50 rounded-xl p-3">
+                  <div className="bg-gray-50 rounded-xl p-2.5 sm:p-3">
                     <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-0.5">
                       Devolución
                     </p>
@@ -240,15 +241,15 @@ export default function ProductCard({ product, className }) {
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-2">
                   <Link href={`/product/${product.id}`} legacyBehavior>
-                    <a className="flex-1 bg-primary text-white text-center py-2.5 px-6 rounded-full hover:bg-primary-dark transition-all duration-300 shadow-md font-semibold">
+                    <a className="flex-1 bg-primary text-white text-center py-2 sm:py-2.5 px-4 sm:px-6 rounded-full hover:bg-primary-dark transition-all duration-300 shadow-md font-semibold text-sm sm:text-base">
                       Ver detalles
                     </a>
                   </Link>
                   <button
                     onClick={closeModal}
-                    className="flex-1 sm:flex-none border-2 border-gray-200 hover:border-gray-300 text-gray-700 py-2.5 px-6 rounded-full transition-all duration-300 hover:bg-gray-50 font-semibold"
+                    className="flex-1 sm:flex-none border-2 border-gray-200 hover:border-gray-300 text-gray-700 py-2 sm:py-2.5 px-4 sm:px-6 rounded-full transition-all duration-300 hover:bg-gray-50 font-semibold text-sm sm:text-base"
                   >
                     Cerrar
                   </button>

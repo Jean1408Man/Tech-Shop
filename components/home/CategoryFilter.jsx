@@ -69,16 +69,16 @@ export default function CategoryFilter({
   ];
 
   return (
-    <div className="relative w-full my-6 flex items-center">
+    <div className="relative w-full my-4 sm:my-6 flex items-center">
       {/* Left Fade + Arrow */}
       {showLeftArrow && (
-        <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-l from-transparent to-gray-100 flex items-center justify-start pointer-events-none z-10">
+        <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-16 bg-gradient-to-l from-transparent to-gray-100 flex items-center justify-start pointer-events-none z-10">
           <button
             onClick={() => handleScroll("left")}
-            className="pointer-events-auto w-9 h-9 rounded-full bg-white border border-gray-200 shadow-md flex items-center justify-center hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all cursor-pointer focus:outline-none"
+            className="pointer-events-auto w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white border border-gray-200 shadow-md flex items-center justify-center hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all cursor-pointer focus:outline-none"
             aria-label="Scroll left"
           >
-            <ChevronLeft size={20} className="text-gray-700" />
+            <ChevronLeft size={18} sm:size={20} className="text-gray-700" />
           </button>
         </div>
       )}
@@ -86,7 +86,7 @@ export default function CategoryFilter({
       {/* Categories Scrollable Area */}
       <div
         ref={scrollContainerRef}
-        className="flex items-center gap-3 overflow-x-auto scrollbar-none py-2 px-1 w-full scroll-smooth"
+        className="flex items-center gap-2 sm:gap-3 overflow-x-auto scrollbar-none py-1.5 sm:py-2 px-1 w-full scroll-smooth"
         onScroll={updateArrows}
       >
         {allCategories.map((category) => {
@@ -95,7 +95,7 @@ export default function CategoryFilter({
             <button
               key={category.slug}
               onClick={() => onSelectCategory(category.slug)}
-              className={`px-5 py-2.5 rounded-full text-sm transition duration-200 whitespace-nowrap cursor-pointer select-none focus:outline-none flex-shrink-0 ${
+              className={`px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-full text-xs sm:text-sm transition duration-200 whitespace-nowrap cursor-pointer select-none focus:outline-none flex-shrink-0 ${
                 isSelected
                   ? "border-2 border-black font-semibold text-black bg-white shadow-sm"
                   : "border border-gray-200 font-normal text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300"
@@ -109,13 +109,13 @@ export default function CategoryFilter({
 
       {/* Right Fade + Arrow */}
       {showRightArrow && (
-        <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-r from-transparent to-gray-100 flex items-center justify-end pointer-events-none z-10">
+        <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-16 bg-gradient-to-r from-transparent to-gray-100 flex items-center justify-end pointer-events-none z-10">
           <button
             onClick={() => handleScroll("right")}
-            className="pointer-events-auto w-9 h-9 rounded-full bg-white border border-gray-200 shadow-md flex items-center justify-center hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all cursor-pointer focus:outline-none mr-1"
+            className="pointer-events-auto w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white border border-gray-200 shadow-md flex items-center justify-center hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all cursor-pointer focus:outline-none mr-0.5 sm:mr-1"
             aria-label="Scroll right"
           >
-            <ChevronRight size={20} className="text-gray-700" />
+            <ChevronRight size={18} sm:size={20} className="text-gray-700" />
           </button>
         </div>
       )}

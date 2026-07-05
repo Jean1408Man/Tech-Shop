@@ -39,16 +39,16 @@ export default function Navbar() {
   return (
     <header className="bg-primary text-white sticky top-0 z-[1000] shadow-md">
       {/* Promotional bar */}
-      <div className="bg-primary-dark text-center text-xs py-1">
+      <div className="bg-primary-dark text-center text-xs py-1 px-4">
         ¡Envío gratis en tu primera compra! Compra como un multimillonario.
       </div>
 
-      <div className="max-w-[1856px] mx-auto flex justify-between flex-wrap items-center gap-3 p-3 md:flex-nowrap">
+      <div className="max-w-[1856px] mx-auto flex flex-wrap items-center gap-2 sm:gap-3 p-2 sm:p-3">
         {/* Logo and Categories Toggle */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           <Link
             href="/"
-            className="font-bold text-xl md:text-2xl tracking-tight"
+            className="font-bold text-lg sm:text-xl md:text-2xl tracking-tight"
           >
             Temu
           </Link>
@@ -59,7 +59,7 @@ export default function Navbar() {
           </Dropdown>
           <Link
             href="/combos"
-            className="rounded-full px-4 py-2 hover:bg-black/5"
+            className="rounded-full px-3 sm:px-4 py-1.5 sm:py-2 hover:bg-black/5 text-sm sm:text-base"
           >
             Combos
           </Link>
@@ -67,7 +67,7 @@ export default function Navbar() {
 
         {/* Search bar */}
         <form
-          className="order-3 flex w-full min-w-0 items-center gap-2 overflow-hidden rounded-full bg-white py-1.5 pl-4 pr-2 md:order-none md:mx-4 md:max-w-2xl md:flex-1"
+          className="order-3 flex w-full min-w-0 items-center gap-2 overflow-hidden rounded-full bg-white py-1.5 pl-3 sm:pl-4 pr-2"
           onSubmit={handleSearch}
         >
           <input
@@ -75,11 +75,11 @@ export default function Navbar() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Buscar productos"
-            className="min-w-0 flex-1 text-gray-800 placeholder-gray-500 border-none bg-none focus:outline-none"
+            className="min-w-0 flex-1 text-gray-800 placeholder-gray-500 border-none bg-none focus:outline-none text-sm sm:text-base"
           />
           <button
             type="submit"
-            className="inline-flex h-8 w-8 shrink-0 items-center justify-center gap-1 rounded-full bg-primary text-sm font-semibold text-white transition-colors hover:bg-primary-dark sm:w-auto sm:px-3"
+            className="inline-flex h-8 w-8 sm:w-auto sm:px-3 shrink-0 items-center justify-center gap-1 rounded-full bg-primary text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
             aria-label="Buscar productos"
           >
             <Search size={16} />
@@ -87,39 +87,39 @@ export default function Navbar() {
           </button>
         </form>
         {/* Cart icon */}
-        <div className=" flex items-center space-x-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           {isHydrated && isAuthenticated ? (
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               {canAccessAdmin && (
                 <Link href="/admin" legacyBehavior>
                   <a
-                    className="inline-flex h-8 items-center gap-1 rounded-md border border-white/60 px-2 text-sm font-semibold transition-colors hover:bg-white hover:text-primary"
+                    className="inline-flex h-8 items-center gap-1 rounded-md border border-white/60 px-2 text-xs sm:text-sm font-semibold transition-colors hover:bg-white hover:text-primary"
                     title="Abrir panel de administración"
                   >
-                    <LayoutDashboard size={16} />
-                    <span>Panel</span>
+                    <LayoutDashboard size={14} sm:size={16} />
+                    <span className="hidden sm:inline">Panel</span>
                   </a>
                 </Link>
               )}
               <button
                 type="button"
                 onClick={logout}
-                className="rounded-md bg-white px-3 py-1 text-sm font-semibold text-primary hover:bg-gray-100"
+                className="rounded-md bg-white px-2.5 sm:px-3 py-1 text-xs sm:text-sm font-semibold text-primary hover:bg-gray-100"
               >
                 Salir
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <Link
                 href="/login"
-                className="rounded-full px-4 py-2 hover:bg-black/5"
+                className="rounded-full px-3 sm:px-4 py-1.5 sm:py-2 hover:bg-black/5 text-sm sm:text-base"
               >
                 Entrar
               </Link>
               <Link
                 href="/register"
-                className="rounded-full bg-white px-4 py-2 text-primary hover:bg-gray-100"
+                className="rounded-full bg-white px-3 sm:px-4 py-1.5 sm:py-2 text-primary hover:bg-gray-100 text-sm sm:text-base"
               >
                 Crear cuenta
               </Link>
@@ -127,12 +127,13 @@ export default function Navbar() {
           )}
           <Link href="/cart" className="relative" aria-label="Ver carrito">
             <ShoppingCart
-              size={24}
+              size={20}
+              sm:size={24}
               className="fill-current text-white hover:text-gray-200 hover:scale-110 transition-all"
               style={{ transform: "rotateY(180deg)" }}
             />
             {totalItems > 0 && (
-              <span className="absolute -top-1 -right-2 bg-white text-primary rounded-full text-xs px-1 font-bold">
+              <span className="absolute -top-1 -right-1.5 sm:-right-2 bg-white text-primary rounded-full text-[10px] sm:text-xs px-1 font-bold">
                 {totalItems}
               </span>
             )}

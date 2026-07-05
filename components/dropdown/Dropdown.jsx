@@ -26,7 +26,7 @@ export function DropdownList({ list }) {
   return (
     <div
       className={
-        "absolute left-0 mt-2 w-64 bg-white border border-gray-200 rounded-md shadow-xl z-50 py-2 " +
+        "absolute left-0 mt-2 w-56 sm:w-64 bg-white border border-gray-200 rounded-md shadow-xl z-50 py-2 " +
         style.body
       }
     >

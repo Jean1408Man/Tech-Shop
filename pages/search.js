@@ -23,11 +23,11 @@ export default function SearchPage() {
   }
 
   return (
-    <div className="max-w-[1856px] mx-auto px-4 py-8">
+    <div className="max-w-[1856px] mx-auto px-4 py-6 sm:py-8">
       <BackButton fallbackHref="/" />
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">Búsqueda de productos</h1>
-        <p className="mt-2 text-sm text-gray-600">
+      <div className="mb-4 sm:mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Búsqueda de productos</h1>
+        <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-gray-600">
           {hasQuery
             ? `Resultados para "${query}"`
             : "Escribe un término en el buscador para encontrar productos."}
