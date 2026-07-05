@@ -1,10 +1,12 @@
 import { Trash } from "lucide-react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import { uploadToCloudinary } from "./adminConfig";
 
 export default function ImageField({ name = "imageFile", value, onChange }) {
   const [error, setError] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
   const MAX_BYTES = 15 * 1024 * 1024;
 
   useEffect(() => {
@@ -14,7 +16,7 @@ export default function ImageField({ name = "imageFile", value, onChange }) {
     }
   }, [value]);
 
-  function handleChange(e) {
+  async function handleChange(e) {
     setError(null);
     const file = e.target.files?.[0];
     if (!file) {
@@ -30,10 +32,25 @@ export default function ImageField({ name = "imageFile", value, onChange }) {
       if (onChange) onChange(null);
       return;
     }
-    // Crear preview del archivo
+
+    // Mostrar preview local mientras se sube
     const objectUrl = URL.createObjectURL(file);
     setPreview(objectUrl);
-    if (onChange) onChange(file);
+    setIsUploading(true);
+
+    try {
+      const cloudinaryUrl = await uploadToCloudinary(file);
+      setPreview(cloudinaryUrl);
+      if (onChange) onChange(cloudinaryUrl);
+    } catch (uploadError) {
+      setError(
+        uploadError.message || "No se pudo subir la imagen. Intenta de nuevo.",
+      );
+      setPreview(null);
+      if (onChange) onChange(null);
+    } finally {
+      setIsUploading(false);
+    }
   }
 
   return (
@@ -75,8 +92,9 @@ export default function ImageField({ name = "imageFile", value, onChange }) {
         </svg>
         Seleccionar imagen
       </label>
-      {preview && (
+      {preview && !isUploading && (
         <button
+          type="button"
           className="cursor-pointer flex items-center gap-2 mt-2 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
           onClick={(e) => {
             e.preventDefault();
@@ -86,6 +104,9 @@ export default function ImageField({ name = "imageFile", value, onChange }) {
         >
           <Trash size={16} /> Eliminar imagen
         </button>
+      )}
+      {isUploading && (
+        <p className="mt-2 text-sm text-gray-500">Subiendo imagen...</p>
       )}
       {error && <div className="mt-1 text-sm text-red-600">{error}</div>}
     </div>

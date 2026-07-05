@@ -1,3 +1,38 @@
+export const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME;
+export const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY;
+export const CLOUDINARY_UPLOAD_PRESET = process.env.CLOUDINARY_UPLOAD_PRESET;
+export const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1";
+
+export async function uploadToCloudinary(file) {
+  if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET) {
+    throw new Error(
+      "Cloudinary no está configurado. Verifica CLOUDINARY_CLOUD_NAME y CLOUDINARY_UPLOAD_PRESET.",
+    );
+  }
+
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+  const response = await fetch(
+    `${CLOUDINARY_UPLOAD_URL}/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+    {
+      method: "POST",
+      body: formData,
+    },
+  );
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => null);
+    throw new Error(
+      error?.error?.message || `Error al subir imagen: ${response.status}`,
+    );
+  }
+
+  const data = await response.json();
+  return data.secure_url;
+}
+
 export const ENTITY_KEYS = [
   "productos",
   "categorias",
@@ -215,30 +250,6 @@ function toIsoDate(value) {
   return value ? new Date(value).toISOString() : value;
 }
 
-function isFile(value) {
-  return value instanceof File;
-}
-
-function createFormData(values, imageFields) {
-  const formData = new FormData();
-
-  for (const [key, value] of Object.entries(values)) {
-    if (imageFields.includes(key)) {
-      if (isFile(value)) {
-        formData.append(key, value);
-      } else if (value) {
-        formData.append(key, value);
-      }
-    } else if (Array.isArray(value)) {
-      value.forEach((item) => formData.append(`${key}[]`, item));
-    } else if (value !== null && value !== undefined) {
-      formData.append(key, value);
-    }
-  }
-
-  return formData;
-}
-
 export function getInitialFormValues(entityKey, item = null) {
   switch (entityKey) {
     case "categorias":
@@ -317,21 +328,8 @@ export function getInitialFormValues(entityKey, item = null) {
 }
 
 export function toEntityPayload(entityKey, values, isEditing = false) {
-  const imageFieldsMap = {
-    categorias: ["url_img"],
-    productos: ["url_img"],
-    ofertas: ["imagen"],
-    combos: ["imagen"],
-  };
-
-  const imageFields = imageFieldsMap[entityKey] || [];
-  const hasImageFile = imageFields.some((field) => isFile(values[field]));
-
   switch (entityKey) {
-    case "categorias": {
-      if (hasImageFile) {
-        return createFormData(values, imageFields);
-      }
+    case "categorias":
       return {
         nombre: values.nombre,
         url_img: values.url_img,
@@ -340,11 +338,7 @@ export function toEntityPayload(entityKey, values, isEditing = false) {
           ? Number(values.categoria_padre_id)
           : null,
       };
-    }
-    case "productos": {
-      if (hasImageFile) {
-        return createFormData(values, imageFields);
-      }
+    case "productos":
       return {
         nombre: values.nombre,
         descripcion: values.descripcion,
@@ -352,11 +346,7 @@ export function toEntityPayload(entityKey, values, isEditing = false) {
         url_img: values.url_img,
         categoria_id: Number(values.subcategoria_id || values.categoria_id),
       };
-    }
-    case "ofertas": {
-      if (hasImageFile) {
-        return createFormData(values, imageFields);
-      }
+    case "ofertas":
       return {
         nombre: values.nombre,
         descripcion: values.descripcion,
@@ -366,11 +356,7 @@ export function toEntityPayload(entityKey, values, isEditing = false) {
         imagen: values.imagen,
         producto_ids: values.producto_ids.map(Number),
       };
-    }
-    case "combos": {
-      if (hasImageFile) {
-        return createFormData(values, imageFields);
-      }
+    case "combos":
       return {
         nombre: values.nombre,
         descripcion: values.descripcion,
@@ -378,7 +364,6 @@ export function toEntityPayload(entityKey, values, isEditing = false) {
         imagen: values.imagen,
         producto_ids: values.producto_ids.map(Number),
       };
-    }
     case "pedidos":
       return {
         nombre: values.nombre,
