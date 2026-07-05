@@ -21,10 +21,7 @@ export default function CombosSection({ combos = [], isLoading = false }) {
       {combos && combos.length > 0 && (
         <>
           <TitleTab>Combos</TitleTab>
-          <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-            <p className="text-gray-600">
-              Packs listos con precio final y productos seleccionados.
-            </p>
+          <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-end">
             <Link
               href="/combos"
               className="text-sm font-semibold text-primary hover:text-primary-dark"
