@@ -1,7 +1,7 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { ShoppingCart } from 'lucide-react';
-import { useCart } from '../../context/CartContext';
+import Image from "next/image";
+import Link from "next/link";
+import { ShoppingCart } from "lucide-react";
+import { useCart } from "../../context/CartContext";
 
 export default function ComboCard({ combo }) {
   const { addToCart } = useCart();
@@ -36,9 +36,7 @@ export default function ComboCard({ combo }) {
         <p className="mt-1 text-xs font-semibold text-gray-500">
           {productCount} productos incluidos
         </p>
-        <p className="mt-2 text-primary font-bold">
-          ${price.toFixed(2)}
-        </p>
+        <p className="mt-2 text-primary font-bold">${price.toFixed(2)}</p>
         <div className="mt-3 flex gap-2">
           <Link href={`/combos/${combo.id}`} legacyBehavior>
             <a className="flex-1 rounded-md bg-primary px-2.5 sm:px-3 py-1.5 sm:py-2 text-center text-xs font-semibold text-white transition-colors hover:bg-primary-dark">
@@ -52,7 +50,7 @@ export default function ComboCard({ combo }) {
             aria-label={`Añadir ${combo.name} al carrito`}
             title="Añadir al carrito"
           >
-            <ShoppingCart size={14} sm:size={16} />
+            <ShoppingCart className="w-[14px] h-[14px] sm:w-4 sm:h-4" />
           </button>
         </div>
       </div>

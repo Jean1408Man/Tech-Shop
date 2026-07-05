@@ -1,11 +1,16 @@
-import ComboCard from './ComboCard';
+import PropTypes from "prop-types";
+import ComboCard from "./ComboCard";
 
 export default function ComboGrid({
   combos,
-  emptyMessage = 'No hay combos disponibles.',
+  emptyMessage = "No hay combos disponibles.",
 }) {
   if (!combos.length) {
-    return <p>{emptyMessage}</p>;
+    return (
+      <div className="flex flex-col items-center justify-center py-16 text-center">
+        <p className="text-gray-500 text-lg">{emptyMessage}</p>
+      </div>
+    );
   }
 
   return (
@@ -16,3 +21,12 @@ export default function ComboGrid({
     </div>
   );
 }
+
+ComboGrid.propTypes = {
+  combos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+    }).isRequired
+  ).isRequired,
+  emptyMessage: PropTypes.string,
+};

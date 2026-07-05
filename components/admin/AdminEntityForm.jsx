@@ -64,7 +64,7 @@ function RelationPicker({ field, options, value, onChange, disabled }) {
                     onChange(
                       isChecked
                         ? selectedValues.filter((item) => item !== optionValue)
-                        : [...selectedValues, optionValue],
+                        : [...selectedValues, optionValue]
                     );
                   }}
                   className="mt-0.5 accent-primary"
@@ -89,8 +89,8 @@ function ProductOrderLines({ lines, products, offers, onChange, disabled }) {
   const updateLine = (index, field, value) => {
     onChange(
       lines.map((line, lineIndex) =>
-        lineIndex === index ? { ...line, [field]: value } : line,
-      ),
+        lineIndex === index ? { ...line, [field]: value } : line
+      )
     );
   };
 
@@ -103,8 +103,8 @@ function ProductOrderLines({ lines, products, offers, onChange, disabled }) {
       {lines.map((line, index) => {
         const availableOffers = offers.filter((offer) =>
           offer.productos?.some(
-            (product) => String(product.id) === String(line.producto_id),
-          ),
+            (product) => String(product.id) === String(line.producto_id)
+          )
         );
 
         return (
@@ -163,7 +163,7 @@ function ProductOrderLines({ lines, products, offers, onChange, disabled }) {
               aria-label="Eliminar línea de producto"
               title="Eliminar línea"
             >
-              <Trash2 size={14} sm:size={16} />
+              <Trash2 className="w-[14px] h-[14px] sm:w-4 sm:h-4" />
             </button>
           </div>
         );
@@ -176,7 +176,7 @@ function ProductOrderLines({ lines, products, offers, onChange, disabled }) {
         className="inline-flex items-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-xs sm:text-sm font-semibold text-gray-700 hover:bg-gray-50"
         disabled={disabled}
       >
-        <Plus size={14} sm:size={16} />
+        <Plus className="w-[14px] h-[14px] sm:w-4 sm:h-4" />
         Añadir producto
       </button>
     </div>
@@ -187,8 +187,8 @@ function ComboOrderLines({ lines, combos, onChange, disabled }) {
   const updateLine = (index, field, value) => {
     onChange(
       lines.map((line, lineIndex) =>
-        lineIndex === index ? { ...line, [field]: value } : line,
-      ),
+        lineIndex === index ? { ...line, [field]: value } : line
+      )
     );
   };
 
@@ -236,7 +236,7 @@ function ComboOrderLines({ lines, combos, onChange, disabled }) {
             aria-label="Eliminar línea de combo"
             title="Eliminar línea"
           >
-            <Trash2 size={14} sm:size={16} />
+            <Trash2 className="w-[14px] h-[14px] sm:w-4 sm:h-4" />
           </button>
         </div>
       ))}
@@ -246,7 +246,7 @@ function ComboOrderLines({ lines, combos, onChange, disabled }) {
         className="inline-flex items-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-xs sm:text-sm font-semibold text-gray-700 hover:bg-gray-50"
         disabled={disabled}
       >
-        <Plus size={14} sm:size={16} />
+        <Plus className="w-[14px] h-[14px] sm:w-4 sm:h-4" />
         Añadir combo
       </button>
     </div>
@@ -265,7 +265,7 @@ export default function AdminEntityForm({
   user,
 }) {
   const [values, setValues] = useState(() =>
-    getInitialFormValues(entityKey, item),
+    getInitialFormValues(entityKey, item)
   );
   const [localError, setLocalError] = useState("");
   const isEditing = Boolean(item);
@@ -273,7 +273,7 @@ export default function AdminEntityForm({
   const fields = FORM_FIELDS[entityKey];
   const allCategories = useMemo(
     () => flattenCategories(entities.categorias),
-    [entities.categorias],
+    [entities.categorias]
   );
 
   useEffect(() => {
@@ -286,7 +286,7 @@ export default function AdminEntityForm({
       entityKey === "usuarios" &&
       isEditing &&
       Number(item?.id) !== Number(user?.id),
-    [entityKey, isEditing, item?.id, user?.id],
+    [entityKey, isEditing, item?.id, user?.id]
   );
 
   const setFieldValue = (name, value) => {
@@ -376,7 +376,7 @@ export default function AdminEntityForm({
     setLocalError("");
     const didSave = await onSave(
       toEntityPayload(entityKey, values, isEditing),
-      item,
+      item
     );
 
     if (didSave) {
@@ -398,7 +398,9 @@ export default function AdminEntityForm({
             <h2 className="text-lg sm:text-xl font-bold text-gray-900">
               {isEditing ? "Editar" : "Crear"} {config.singular.toLowerCase()}
             </h2>
-            <p className="mt-1 text-xs sm:text-sm text-gray-500">{config.description}</p>
+            <p className="mt-1 text-xs sm:text-sm text-gray-500">
+              {config.description}
+            </p>
           </div>
           <button
             type="button"
@@ -406,7 +408,7 @@ export default function AdminEntityForm({
             className="inline-flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-md text-gray-500 hover:bg-gray-100"
             aria-label="Cerrar"
           >
-            <X size={18} sm:size={20} />
+            <X className="w-[18px] h-[18px] sm:w-5 sm:h-5" />
           </button>
         </div>
 
@@ -636,8 +638,8 @@ export default function AdminEntityForm({
               {isSaving
                 ? "Guardando..."
                 : isEditing
-                  ? "Guardar cambios"
-                  : "Crear"}
+                ? "Guardar cambios"
+                : "Crear"}
             </button>
           </div>
         </form>

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState } from "react";
 import {
   AlertCircle,
   CheckCircle2,
@@ -7,20 +7,22 @@ import {
   RefreshCw,
   Search,
   Trash2,
-} from 'lucide-react';
-import { useAuth } from '../../hooks/useAuth';
-import { useAdminDashboard } from '../../hooks/useAdminDashboard';
-import AdminEntityForm from './AdminEntityForm';
-import AdminEntityDetail from './AdminEntityDetail';
-import AdminEntityTable from './AdminEntityTable';
-import AdminSidebar from './AdminSidebar';
-import {
-  ENTITY_CONFIG,
-  ENTITY_KEYS,
-  matchesEntitySearch,
-} from './adminConfig';
+} from "lucide-react";
+import { useAuth } from "../../hooks/useAuth";
+import { useAdminDashboard } from "../../hooks/useAdminDashboard";
+import AdminEntityForm from "./AdminEntityForm";
+import AdminEntityDetail from "./AdminEntityDetail";
+import AdminEntityTable from "./AdminEntityTable";
+import AdminSidebar from "./AdminSidebar";
+import { ENTITY_CONFIG, ENTITY_KEYS, matchesEntitySearch } from "./adminConfig";
 
-function DeleteConfirmation({ entityKey, isSaving, item, onCancel, onConfirm }) {
+function DeleteConfirmation({
+  entityKey,
+  isSaving,
+  item,
+  onCancel,
+  onConfirm,
+}) {
   const label = item?.nombre || item?.email || `#${item?.id}`;
 
   return (
@@ -37,9 +39,12 @@ function DeleteConfirmation({ entityKey, isSaving, item, onCancel, onConfirm }) 
             <Trash2 size={19} />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-gray-900">Eliminar {ENTITY_CONFIG[entityKey].singular.toLowerCase()}</h2>
+            <h2 className="text-lg font-bold text-gray-900">
+              Eliminar {ENTITY_CONFIG[entityKey].singular.toLowerCase()}
+            </h2>
             <p className="mt-1 text-sm text-gray-600">
-              Se eliminará <span className="font-semibold">{label}</span>. Esta acción no se puede deshacer.
+              Se eliminará <span className="font-semibold">{label}</span>. Esta
+              acción no se puede deshacer.
             </p>
           </div>
         </div>
@@ -58,7 +63,7 @@ function DeleteConfirmation({ entityKey, isSaving, item, onCancel, onConfirm }) 
             className="rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 disabled:opacity-60"
             disabled={isSaving}
           >
-            {isSaving ? 'Eliminando...' : 'Eliminar'}
+            {isSaving ? "Eliminando..." : "Eliminar"}
           </button>
         </div>
       </div>
@@ -83,8 +88,8 @@ export default function AdminDashboard() {
     exportOrderPdf,
     clearMessages,
   } = useAdminDashboard({ token, user, isAdmin });
-  const [activeEntity, setActiveEntity] = useState('productos');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [activeEntity, setActiveEntity] = useState("productos");
+  const [searchQuery, setSearchQuery] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
@@ -100,14 +105,17 @@ export default function AdminDashboard() {
   const counts = useMemo(
     () =>
       Object.fromEntries(
-        ENTITY_KEYS.map((entityKey) => [entityKey, entities[entityKey]?.length || 0])
+        ENTITY_KEYS.map((entityKey) => [
+          entityKey,
+          entities[entityKey]?.length || 0,
+        ])
       ),
     [entities]
   );
 
   const selectEntity = (entityKey) => {
     setActiveEntity(entityKey);
-    setSearchQuery('');
+    setSearchQuery("");
     setEditingItem(null);
     setIsFormOpen(false);
     setDetailItem(null);
@@ -176,11 +184,15 @@ export default function AdminDashboard() {
                 className="inline-flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50 lg:hidden"
                 aria-label="Abrir menú"
               >
-                <Menu size={18} sm:size={20} />
+                <Menu className="w-[18px] h-[18px] sm:w-5 sm:h-5" />
               </button>
               <div className="min-w-0">
-                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">{config.label}</h1>
-                <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-gray-500">{config.description}</p>
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+                  {config.label}
+                </h1>
+                <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-gray-500">
+                  {config.description}
+                </p>
               </div>
             </div>
 
@@ -191,7 +203,13 @@ export default function AdminDashboard() {
                 className="inline-flex h-9 sm:h-10 items-center justify-center gap-1.5 sm:gap-2 rounded-md border border-gray-300 px-3 text-xs sm:text-sm font-semibold text-gray-700 hover:bg-gray-50"
                 title="Actualizar datos"
               >
-                <RefreshCw size={14} sm:size={16} className={isLoading ? 'animate-spin' : ''} />
+                <RefreshCw
+                  className={
+                    isLoading
+                      ? "animate-spin w-[14px] h-[14px] sm:w-4 sm:h-4"
+                      : "w-[14px] h-[14px] sm:w-4 sm:h-4"
+                  }
+                />
                 Actualizar
               </button>
               <button
@@ -199,7 +217,7 @@ export default function AdminDashboard() {
                 onClick={openCreateForm}
                 className="inline-flex h-9 sm:h-10 items-center justify-center gap-1.5 sm:gap-2 rounded-md bg-primary px-3 sm:px-4 text-xs sm:text-sm font-semibold text-white hover:bg-primary-dark"
               >
-                <Plus size={15} sm:size={17} />
+                <Plus className="w-[15px] h-[15px] sm:w-[17px] sm:h-[17px]" />
                 Nuevo {config.singular.toLowerCase()}
               </button>
             </div>
@@ -209,13 +227,13 @@ export default function AdminDashboard() {
         <div className="p-3 sm:p-4 md:p-6">
           {error && !isFormOpen && (
             <div className="mb-3 sm:mb-4 flex items-start gap-2 sm:gap-3 rounded-md border border-red-200 bg-red-50 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-red-700">
-              <AlertCircle size={16} sm:size={18} className="mt-0.5 shrink-0" />
+              <AlertCircle className="mt-0.5 shrink-0 w-4 h-4 sm:w-[18px] sm:h-[18px]" />
               <span>{error}</span>
             </div>
           )}
           {notice && (
             <div className="mb-3 sm:mb-4 flex items-start gap-2 sm:gap-3 rounded-md border border-green-200 bg-green-50 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-green-700">
-              <CheckCircle2 size={16} sm:size={18} className="mt-0.5 shrink-0" />
+              <CheckCircle2 className="mt-0.5 shrink-0 w-4 h-4 sm:w-[18px] sm:h-[18px]" />
               <span>{notice}</span>
             </div>
           )}
@@ -223,11 +241,7 @@ export default function AdminDashboard() {
           <section className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
             <div className="flex flex-col gap-2 sm:gap-3 px-3 sm:px-4 py-3 sm:py-4 md:flex-row md:items-center md:justify-between">
               <div className="relative w-full sm:max-w-md">
-                <Search
-                  size={15}
-                  sm:size={17}
-                  className="pointer-events-none absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                />
+                <Search className="pointer-events-none absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 text-gray-400 w-[15px] h-[15px] sm:w-[17px] sm:h-[17px]" />
                 <input
                   type="search"
                   value={searchQuery}
@@ -243,7 +257,7 @@ export default function AdminDashboard() {
 
             {isLoading ? (
               <div className="flex items-center justify-center gap-2 border-t border-gray-200 px-4 sm:px-6 py-12 sm:py-16 text-xs sm:text-sm text-gray-500">
-                <RefreshCw size={16} sm:size={18} className="animate-spin" />
+                <RefreshCw className="animate-spin w-4 h-4 sm:w-[18px] sm:h-[18px]" />
                 Cargando datos...
               </div>
             ) : (

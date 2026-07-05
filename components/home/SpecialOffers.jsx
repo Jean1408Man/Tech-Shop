@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/router";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { getOffers } from "../../services/catalogService";
 import Loader from "../ui/Loader";
 import TitleTab from "../ui/TitleTab";
 
 export default function SpecialOffers() {
+  const router = useRouter();
   const [offers, setOffers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -43,7 +45,7 @@ export default function SpecialOffers() {
 
   const prevSlide = () => {
     setCurrentIndex(
-      (prevIndex) => (prevIndex - 1 + offers.length) % offers.length,
+      (prevIndex) => (prevIndex - 1 + offers.length) % offers.length
     );
   };
 
@@ -83,12 +85,22 @@ export default function SpecialOffers() {
                       <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-primary-light mb-1">
                         Oferta Exclusiva
                       </p>
-                      <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2">{offer.name}</h3>
+                      <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2">
+                        {offer.name}
+                      </h3>
                       <p className="text-sm sm:text-base md:text-lg opacity-90">
                         {offer.description ||
-                          `Ahorra $${offer.discount.toFixed(2)} en productos seleccionados`}
+                          `Ahorra $${offer.discount.toFixed(
+                            2
+                          )} en productos seleccionados`}
                       </p>
-                      <button className="mt-3 sm:mt-4 bg-primary hover:bg-primary-dark text-white font-bold py-1.5 sm:py-2 px-4 sm:px-6 rounded-full transition-colors text-sm sm:text-base">
+                      <button
+                        onClick={() =>
+                          offer?.products?.length &&
+                          router.push(`/product/${offer.products[0].slug}`)
+                        }
+                        className="mt-3 sm:mt-4 bg-primary hover:bg-primary-dark text-white font-bold py-1.5 sm:py-2 px-4 sm:px-6 rounded-full transition-colors text-sm sm:text-base"
+                      >
                         Ver Ahora
                       </button>
                     </div>
@@ -103,14 +115,14 @@ export default function SpecialOffers() {
               className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-1.5 sm:p-2 rounded-full backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
               aria-label="Anterior"
             >
-              <ChevronLeft size={24} sm:size={32} />
+              <ChevronLeft className="w-6 h-6 sm:w-8 sm:h-8" />
             </button>
             <button
               onClick={nextSlide}
               className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-1.5 sm:p-2 rounded-full backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
               aria-label="Siguiente"
             >
-              <ChevronRight size={24} sm:size={32} />
+              <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8" />
             </button>
 
             {/* Indicators */}

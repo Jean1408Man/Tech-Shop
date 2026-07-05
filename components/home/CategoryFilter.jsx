@@ -61,7 +61,9 @@ export default function CategoryFilter({
 
   const catalogCategories = flattenCategories(categories).map((category) => ({
     ...category,
-    filterName: category.parentCategoryId ? `↳ ${category.name}` : category.name,
+    filterName: category.parentCategoryId
+      ? `↳ ${category.name}`
+      : category.name,
   }));
   const allCategories = [
     { name: "Recomendado", filterName: "Recomendado", slug: "all" },
@@ -78,7 +80,7 @@ export default function CategoryFilter({
             className="pointer-events-auto w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white border border-gray-200 shadow-md flex items-center justify-center hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all cursor-pointer focus:outline-none"
             aria-label="Scroll left"
           >
-            <ChevronLeft size={18} sm:size={20} className="text-gray-700" />
+            <ChevronLeft className="text-gray-700 w-[18px] h-[18px] sm:w-5 sm:h-5" />
           </button>
         </div>
       )}
@@ -115,7 +117,7 @@ export default function CategoryFilter({
             className="pointer-events-auto w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white border border-gray-200 shadow-md flex items-center justify-center hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all cursor-pointer focus:outline-none mr-0.5 sm:mr-1"
             aria-label="Scroll right"
           >
-            <ChevronRight size={18} sm:size={20} className="text-gray-700" />
+            <ChevronRight className="text-gray-700 w-[18px] h-[18px] sm:w-5 sm:h-5" />
           </button>
         </div>
       )}

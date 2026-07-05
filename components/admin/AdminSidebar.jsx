@@ -6,8 +6,8 @@ import {
   Tags,
   Users,
   X,
-} from 'lucide-react';
-import { ENTITY_CONFIG, ENTITY_KEYS } from './adminConfig';
+} from "lucide-react";
+import { ENTITY_CONFIG, ENTITY_KEYS } from "./adminConfig";
 
 const ENTITY_ICONS = {
   productos: Package,
@@ -32,11 +32,14 @@ function SidebarContent({ activeEntity, counts, onClose, onSelect, role }) {
           className="inline-flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-md text-gray-500 hover:bg-gray-100 lg:hidden"
           aria-label="Cerrar menú"
         >
-          <X size={18} sm:size={19} />
+          <X className="w-[18px] h-[18px] sm:w-[19px] sm:h-[19px]" />
         </button>
       </div>
 
-      <nav className="flex-1 space-y-1 p-2 sm:p-3" aria-label="Entidades administrativas">
+      <nav
+        className="flex-1 space-y-1 p-2 sm:p-3"
+        aria-label="Entidades administrativas"
+      >
         {ENTITY_KEYS.map((entityKey) => {
           const Icon = ENTITY_ICONS[entityKey];
           const isActive = activeEntity === entityKey;
@@ -51,15 +54,17 @@ function SidebarContent({ activeEntity, counts, onClose, onSelect, role }) {
               }}
               className={`flex w-full items-center gap-2 sm:gap-3 rounded-md px-2.5 sm:px-3 py-2 text-left text-xs sm:text-sm font-semibold transition-colors ${
                 isActive
-                  ? 'bg-primary text-white'
-                  : 'text-gray-700 hover:bg-gray-100'
+                  ? "bg-primary text-white"
+                  : "text-gray-700 hover:bg-gray-100"
               }`}
             >
-              <Icon size={16} sm:size={18} />
+              <Icon className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
               <span className="flex-1">{ENTITY_CONFIG[entityKey].label}</span>
               <span
                 className={`min-w-6 sm:min-w-7 rounded px-1 sm:px-1.5 py-0.5 text-center text-xs ${
-                  isActive ? 'bg-white/20 text-white' : 'bg-gray-200 text-gray-600'
+                  isActive
+                    ? "bg-white/20 text-white"
+                    : "bg-gray-200 text-gray-600"
                 }`}
               >
                 {counts[entityKey] || 0}
@@ -71,7 +76,9 @@ function SidebarContent({ activeEntity, counts, onClose, onSelect, role }) {
 
       <div className="border-t border-gray-200 p-3 sm:p-4">
         <p className="text-xs text-gray-500">Sesión con permisos</p>
-        <p className="mt-1 text-xs sm:text-sm font-semibold capitalize text-gray-800">{role}</p>
+        <p className="mt-1 text-xs sm:text-sm font-semibold capitalize text-gray-800">
+          {role}
+        </p>
       </div>
     </>
   );

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { useCart, getCartItemKey } from "../../context/CartContext";
 import PropTypes from "prop-types";
@@ -8,6 +9,7 @@ import { Star, Minus, Plus, ShoppingCart } from "lucide-react";
 
 export default function ComboDetails({ combo }) {
   const { cartItems, addToCart, updateQuantity } = useCart();
+  const [isSaved, setIsSaved] = useState(false);
 
   if (!combo) return null;
 
@@ -21,7 +23,7 @@ export default function ComboDetails({ combo }) {
   const rating =
     products.reduce(
       (pp, cp) => Number(pp.rating || 0) + Number(cp.rating || 0),
-      0,
+      0
     ) / products.length;
 
   return (
@@ -135,11 +137,18 @@ export default function ComboDetails({ combo }) {
             Añadir al carrito
           </button>
         )}
-        <button className="flex-1 sm:flex-none border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-semibold py-3.5 px-8 rounded-full transition-all duration-300 hover:bg-gray-50 flex items-center justify-center gap-2">
+        <button
+          onClick={() => setIsSaved((prev) => !prev)}
+          className={`flex-1 sm:flex-none border-2 font-semibold py-3.5 px-8 rounded-full transition-all duration-300 flex items-center justify-center gap-2 ${
+            isSaved
+              ? "border-primary bg-primary/10 text-primary"
+              : "border-gray-200 hover:border-gray-300 text-gray-700 hover:bg-gray-50"
+          }`}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5"
-            fill="none"
+            fill={isSaved ? "currentColor" : "none"}
             viewBox="0 0 24 24"
             stroke="currentColor"
             strokeWidth={2}
@@ -150,7 +159,7 @@ export default function ComboDetails({ combo }) {
               d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
             />
           </svg>
-          Guardar
+          {isSaved ? "Guardado" : "Guardar"}
         </button>
       </div>
 
@@ -166,7 +175,7 @@ export default function ComboDetails({ combo }) {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 justify-items-center">
             {products.map((product) => {
               const productPrice = Number(
-                product.price || product.basePrice || 0,
+                product.price || product.basePrice || 0
               );
 
               return (
@@ -194,7 +203,9 @@ export default function ComboDetails({ combo }) {
             })}
           </div>
         ) : (
-          <p className="text-sm text-gray-500">No hay productos asociados a este combo.</p>
+          <p className="text-sm text-gray-500">
+            No hay productos asociados a este combo.
+          </p>
         )}
       </div>
     </div>

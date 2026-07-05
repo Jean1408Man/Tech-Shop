@@ -164,7 +164,7 @@ export default function ProductCard({ product, className }) {
               className="absolute top-3 right-3 sm:top-4 sm:right-4 text-gray-500 hover:text-gray-700 bg-white shadow-sm rounded-full p-1.5 sm:p-2 z-10"
               aria-label="Close modal"
             >
-              <X size={20} sm:size={24} />
+              <X className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 p-4 sm:p-6">
               {/* Product Image */}
@@ -188,13 +188,11 @@ export default function ProductCard({ product, className }) {
                       {new Array(5).fill(0).map((_, i) => (
                         <Star
                           key={i}
-                          size={14}
-                          sm:size={16}
                           className={`${
                             i < Math.floor(product.rating)
                               ? "text-yellow-400 fill-current"
                               : "text-gray-300"
-                          }`}
+                          } w-[14px] h-[14px] sm:w-4 sm:h-4`}
                         />
                       ))}
                     </div>

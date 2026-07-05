@@ -96,7 +96,7 @@ export default function Navbar() {
                     className="inline-flex h-8 items-center gap-1 rounded-md border border-white/60 px-2 text-xs sm:text-sm font-semibold transition-colors hover:bg-white hover:text-primary"
                     title="Abrir panel de administración"
                   >
-                    <LayoutDashboard size={14} sm:size={16} />
+                    <LayoutDashboard className="w-[14px] h-[14px] sm:w-4 sm:h-4" />
                     <span className="hidden sm:inline">Panel</span>
                   </a>
                 </Link>
@@ -127,9 +127,7 @@ export default function Navbar() {
           )}
           <Link href="/cart" className="relative" aria-label="Ver carrito">
             <ShoppingCart
-              size={20}
-              sm:size={24}
-              className="fill-current text-white hover:text-gray-200 hover:scale-110 transition-all"
+              className="fill-current text-white hover:text-gray-200 hover:scale-110 transition-all w-5 h-5 sm:w-6 sm:h-6"
               style={{ transform: "rotateY(180deg)" }}
             />
             {totalItems > 0 && (
