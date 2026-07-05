@@ -32,7 +32,7 @@ export default function ProductCard({ product, className }) {
   return (
     <>
       <div
-        className={`bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 relative ${className}`}
+        className={`bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 relative flex flex-col ${className}`}
       >
         <div className="relative h-40 sm:h-48">
           <Image
@@ -42,7 +42,7 @@ export default function ProductCard({ product, className }) {
             objectFit="cover"
           />
         </div>
-        <div className="p-3 h-[384px] flex flex-col justify-between gap-2">
+        <div className="p-3 flex-1 flex flex-col justify-between gap-2">
           <h3 className="text-sm font-semibold text-gray-900 leading-tight">
             {product.name}
           </h3>
@@ -64,7 +64,7 @@ export default function ProductCard({ product, className }) {
               ))}
             </div>
             <span className="text-xs text-gray-500 font-medium">
-              {product.rating.toFixed(1)}
+              {(product.rating || 0).toFixed(1)}
             </span>
           </div>
           <div className="flex gap-2 items-end">
@@ -195,7 +195,7 @@ export default function ProductCard({ product, className }) {
                       ))}
                     </div>
                     <span className="text-sm text-gray-500 font-medium">
-                      {product.rating.toFixed(1)}
+                      {(product.rating || 0).toFixed(1)}
                     </span>
                   </div>
                 </div>

@@ -43,7 +43,7 @@ export default function Navbar() {
         ¡Envío gratis en tu primera compra! Compra como un multimillonario.
       </div>
 
-      <div className="max-w-[1856px] mx-auto flex flex-wrap items-center gap-3 p-3 md:flex-nowrap">
+      <div className="max-w-[1856px] mx-auto flex justify-between flex-wrap items-center gap-3 p-3 md:flex-nowrap">
         {/* Logo and Categories Toggle */}
         <div className="flex items-center space-x-4">
           <Link
@@ -57,10 +57,11 @@ export default function Navbar() {
           <Dropdown title="Categorías">
             <DropdownList list={categories} />
           </Dropdown>
-          <Link href="/combos" legacyBehavior>
-            <a className="hidden text-sm font-semibold hover:underline sm:inline">
-              Combos
-            </a>
+          <Link
+            href="/combos"
+            className="rounded-full px-4 py-2 hover:bg-black/5"
+          >
+            Combos
           </Link>
         </div>
 
@@ -109,34 +110,32 @@ export default function Navbar() {
               </button>
             </div>
           ) : (
-            <div className="flex items-center space-x-2 text-sm font-semibold">
+            <div className="flex items-center gap-2">
               <Link
                 href="/login"
-                className="rounded-md px-3 py-1 hover:bg-black/5"
+                className="rounded-full px-4 py-2 hover:bg-black/5"
               >
                 Entrar
               </Link>
               <Link
                 href="/register"
-                className="rounded-md bg-white px-3 py-1 text-primary hover:bg-gray-100"
+                className="rounded-full bg-white px-4 py-2 text-primary hover:bg-gray-100"
               >
                 Crear cuenta
               </Link>
             </div>
           )}
-          <Link href="/cart" legacyBehavior>
-            <a className="relative" aria-label="Ver carrito">
-              <ShoppingCart
-                size={24}
-                className="fill-current text-white hover:text-gray-400 hover:scale-110 transition-all"
-                style={{ transform: "rotateY(180deg)" }}
-              />
-              {totalItems > 0 && (
-                <span className="absolute -top-1 -right-2 bg-white text-primary rounded-full text-xs px-1 font-bold">
-                  {totalItems}
-                </span>
-              )}
-            </a>
+          <Link href="/cart" className="relative" aria-label="Ver carrito">
+            <ShoppingCart
+              size={24}
+              className="fill-current text-white hover:text-gray-200 hover:scale-110 transition-all"
+              style={{ transform: "rotateY(180deg)" }}
+            />
+            {totalItems > 0 && (
+              <span className="absolute -top-1 -right-2 bg-white text-primary rounded-full text-xs px-1 font-bold">
+                {totalItems}
+              </span>
+            )}
           </Link>
         </div>
       </div>

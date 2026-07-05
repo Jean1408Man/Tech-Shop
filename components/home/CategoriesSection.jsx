@@ -11,6 +11,11 @@ export default function CategoriesSection({ categories = [] }) {
   const [thumbnails, setThumbnails] = useState();
 
   useEffect(() => {
+    if (!categories?.length) return;
+    setSelectedCategory(categories[0]);
+  }, [categories]);
+
+  useEffect(() => {
     if (!selectedCategory?.image) return;
     const id = setTimeout(() => {
       setPreviousSelected(selectedCategory);
@@ -34,9 +39,9 @@ export default function CategoriesSection({ categories = [] }) {
   }, [selectedCategory]);
 
   useEffect(() => {
+    setThumbnails();
     if (!selectedCategory?.slug || !selectedCategory?.subcategories?.length)
       return;
-    setThumbnails();
     const getGalleryThumbnails = () =>
       selectedCategory.subcategories.map((subcategory) => ({
         image: subcategory.image,
@@ -55,7 +60,7 @@ export default function CategoriesSection({ categories = [] }) {
         <Image
           src={previousSelected.image}
           alt={previousSelected.name}
-          layout="fill"
+          fill
           objectFit="cover"
           className="absolute top-0 left-0 -z-20 brightness-75"
         />
@@ -65,7 +70,7 @@ export default function CategoriesSection({ categories = [] }) {
           key={selectedCategory.slug}
           src={selectedCategory.image}
           alt={selectedCategory.name}
-          layout="fill"
+          fill
           objectFit="cover"
           className="absolute top-0 left-0 -z-10 brightness-75 animate-fade-in"
         />
@@ -106,7 +111,7 @@ export default function CategoriesSection({ categories = [] }) {
                   <picture
                     key={i}
                     className={
-                      "aspect-square bg-white rounded-full absolute outline outline-offset-8 outline-primary animate-fade-in-fl " +
+                      "overflow-hidden aspect-square bg-white rounded-full absolute outline outline-offset-8 outline-primary animate-fade-in-fl " +
                       dynamic
                     }
                   >
@@ -114,6 +119,7 @@ export default function CategoriesSection({ categories = [] }) {
                       <Image
                         src={t.image}
                         alt={t.name}
+                        fill
                         className="object-fill"
                       />
                     )}

@@ -28,7 +28,7 @@ export default function SpecialOffers({ offers = [], isLoading = false }) {
     );
   };
 
-  if (!offers?.length) {
+  if (!isLoading && !offers?.length) {
     return null;
   }
 
