@@ -8,6 +8,7 @@ import BackButton from "../../components/navigation/BackButton";
 import Breadcrumb from "../../components/ui/Breadcrumb.jsx";
 import SpecialOffers from "../../components/home/SpecialOffers";
 import { useProductPage } from "../../hooks/useProductPage";
+import SEO from "../../components/seo/SEO.jsx";
 
 export default function ProductPage() {
   const { product, isLoading, error, reload } = useProductPage();
@@ -31,13 +32,26 @@ export default function ProductPage() {
   }
 
   return (
-    <div className="max-w-[1856px] mx-auto">
-      <SpecialOffers />
-      <div className="px-4 py-6 sm:py-8">
-        <BackButton fallbackHref="/" />
-        <Breadcrumb items={breadcrumbItems} />
-        {product ? <ProductDetails product={product} /> : <ProductNotFound />}
+    <>
+      <SEO
+        title={product?.name || "Producto no encontrado"}
+        description={
+          product?.description ||
+          "Descubre este increíble producto en Tech Shop. Los mejores precios en tecnología y electrónica."
+        }
+        keywords={`${product?.name || "producto"}, ${product?.category?.name || "tecnología"}, tech shop, compra online, electrónica`}
+        image={product?.image || "/og-image.jpg"}
+        url={`/product/${product?.id || ""}`}
+        type="product"
+      />
+      <div className="max-w-[1856px] mx-auto">
+        <SpecialOffers />
+        <div className="px-4 py-6 sm:py-8">
+          <BackButton fallbackHref="/" />
+          <Breadcrumb items={breadcrumbItems} />
+          {product ? <ProductDetails product={product} /> : <ProductNotFound />}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import AdminDashboard from "../components/admin/AdminDashboard";
 import { CatalogLoading } from "../components/catalog/CatalogFeedback";
 import { useAuth } from "../hooks/useAuth";
+import SEO from "../components/seo/SEO.jsx";
 
 export default function AdminPage() {
   const router = useRouter();
@@ -27,5 +28,15 @@ export default function AdminPage() {
     return <CatalogLoading message="Verificando permisos" />;
   }
 
-  return <AdminDashboard />;
+  return (
+    <>
+      <SEO
+        title="Panel de Administración"
+        description="Panel de administración de Tech Shop - Gestiona productos, categorías, combos y órdenes."
+        keywords="admin, administración, panel, tech shop, gestión"
+        type="website"
+      />
+      <AdminDashboard />
+    </>
+  );
 }

@@ -8,6 +8,7 @@ import SpecialOffers from "../../components/home/SpecialOffers";
 import Breadcrumb from "../../components/ui/Breadcrumb.jsx";
 import TitleTab from "../../components/ui/TitleTab.jsx";
 import { useCombosPage } from "../../hooks/useCatalog";
+import SEO from "../../components/seo/SEO.jsx";
 
 export default function CombosPage() {
   const { combos, isLoading, error, reload } = useCombosPage();
@@ -21,20 +22,28 @@ export default function CombosPage() {
   }
 
   return (
-    <div className="min-h-screen">
-      <SpecialOffers />
-      <main className="max-w-[1856px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 border-t-2 border-primary-dark">
-        <TitleTab>Combos</TitleTab>
-        <BackButton fallbackHref="/" />
-        <Breadcrumb items={[{ label: "Combos" }]} />
-        <div className="mb-4 sm:mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Combos</h1>
-          <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-gray-600">
-            Packs armados con imagen propia, precio final y productos incluidos.
-          </p>
-        </div>
-        <ComboGrid combos={combos} />
-      </main>
-    </div>
+    <>
+      <SEO
+        title="Combos"
+        description="Descubre nuestros combos exclusivos. Packs armados con imagen propia, precio final y productos incluidos. ¡Aprovecha las mejores ofertas en Tech Shop!"
+        keywords="combos, ofertas, paquetes, tecnología, electrónica, tech shop, descuentos"
+        type="website"
+      />
+      <div className="min-h-screen">
+        <SpecialOffers />
+        <main className="max-w-[1856px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 border-t-2 border-primary-dark">
+          <TitleTab>Combos</TitleTab>
+          <BackButton fallbackHref="/" />
+          <Breadcrumb items={[{ label: "Combos" }]} />
+          <div className="mb-4 sm:mb-6">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Combos</h1>
+            <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-gray-600">
+              Packs armados con imagen propia, precio final y productos incluidos.
+            </p>
+          </div>
+          <ComboGrid combos={combos} />
+        </main>
+      </div>
+    </>
   );
 }
