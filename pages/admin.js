@@ -3,11 +3,15 @@ import { useRouter } from "next/router";
 import AdminDashboard from "../components/admin/AdminDashboard";
 import { CatalogLoading } from "../components/catalog/CatalogFeedback";
 import { useAuth } from "../hooks/useAuth";
+import { useTour } from "../hooks/useTour";
+import { ADMIN_TOUR_STEPS } from "../data/tours";
+import TourButton from "../components/tour/TourButton";
 import SEO from "../components/seo/SEO.jsx";
 
 export default function AdminPage() {
   const router = useRouter();
   const { canAccessAdmin, isAuthenticated, isHydrated } = useAuth();
+  const { startTour } = useTour(ADMIN_TOUR_STEPS);
 
   useEffect(() => {
     if (!isHydrated) {
@@ -37,6 +41,9 @@ export default function AdminPage() {
         type="website"
       />
       <AdminDashboard />
+      <div className="fixed bottom-4 right-4 z-50">
+        <TourButton onClick={startTour} label="Tour" />
+      </div>
     </>
   );
 }

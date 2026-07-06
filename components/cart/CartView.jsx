@@ -88,7 +88,7 @@ export default function CartView() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto">
-      <div className="lg:col-span-2 space-y-3 sm:space-y-4">
+      <div id="tour-cart-items" className="lg:col-span-2 space-y-3 sm:space-y-4">
         {cartItems.map((item) => (
           <CartItem
             key={getCartItemKey(item)}
@@ -99,19 +99,23 @@ export default function CartView() {
         ))}
       </div>
       <div className="lg:col-span-1 space-y-4">
-        <CartSummary
-          onCheckout={handleOpenCheckout}
-          onClear={clearCart}
-          subtotal={total}
-        />
-        {isCheckoutOpen && (
-          <CheckoutForm
-            defaultName={defaultCustomerName}
-            error={checkoutError}
-            isSubmitting={isSubmitting}
-            onCancel={() => setIsCheckoutOpen(false)}
-            onSubmit={handleCreateOrder}
+        <div id="tour-cart-summary">
+          <CartSummary
+            onCheckout={handleOpenCheckout}
+            onClear={clearCart}
+            subtotal={total}
           />
+        </div>
+        {isCheckoutOpen && (
+          <div id="tour-checkout-form">
+            <CheckoutForm
+              defaultName={defaultCustomerName}
+              error={checkoutError}
+              isSubmitting={isSubmitting}
+              onCancel={() => setIsCheckoutOpen(false)}
+              onSubmit={handleCreateOrder}
+            />
+          </div>
         )}
       </div>
     </div>

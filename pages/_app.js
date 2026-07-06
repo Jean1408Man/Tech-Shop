@@ -1,4 +1,5 @@
 import "../styles/globals.css";
+import "driver.js/dist/driver.css";
 import { AuthProvider } from "../context/AuthContext";
 import { CartProvider } from "../context/CartContext";
 import Layout from "../components/layout/Layout";

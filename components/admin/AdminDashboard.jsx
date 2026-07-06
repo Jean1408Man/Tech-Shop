@@ -165,17 +165,19 @@ export default function AdminDashboard() {
 
   return (
     <div className="flex min-h-[calc(100vh-4rem)] sm:min-h-[calc(100vh-6rem)] bg-gray-100">
-      <AdminSidebar
-        activeEntity={activeEntity}
-        counts={counts}
-        isOpen={isSidebarOpen}
-        onClose={() => setIsSidebarOpen(false)}
-        onSelect={selectEntity}
-        role={role}
-      />
+      <div id="tour-admin-sidebar">
+        <AdminSidebar
+          activeEntity={activeEntity}
+          counts={counts}
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+          onSelect={selectEntity}
+          role={role}
+        />
+      </div>
 
       <main className="min-w-0 flex-1">
-        <header className="border-b border-gray-200 bg-white px-3 py-3 sm:px-4 sm:py-4 md:px-6">
+        <header id="tour-admin-header" className="border-b border-gray-200 bg-white px-3 py-3 sm:px-4 sm:py-4 md:px-6">
           <div className="flex flex-col gap-3 sm:gap-4 xl:flex-row xl:items-center xl:justify-between">
             <div className="flex min-w-0 items-start gap-2 sm:gap-3">
               <button
@@ -213,6 +215,7 @@ export default function AdminDashboard() {
                 Actualizar
               </button>
               <button
+                id="tour-admin-create-btn"
                 type="button"
                 onClick={openCreateForm}
                 className="inline-flex h-9 sm:h-10 items-center justify-center gap-1.5 sm:gap-2 rounded-md bg-primary px-3 sm:px-4 text-xs sm:text-sm font-semibold text-white hover:bg-primary-dark"
@@ -238,11 +241,12 @@ export default function AdminDashboard() {
             </div>
           )}
 
-          <section className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+          <section id="tour-admin-table" className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
             <div className="flex flex-col gap-2 sm:gap-3 px-3 sm:px-4 py-3 sm:py-4 md:flex-row md:items-center md:justify-between">
               <div className="relative w-full sm:max-w-md">
                 <Search className="pointer-events-none absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 text-gray-400 w-[15px] h-[15px] sm:w-[17px] sm:h-[17px]" />
                 <input
+                  id="tour-admin-search"
                   type="search"
                   value={searchQuery}
                   onChange={(event) => setSearchQuery(event.target.value)}

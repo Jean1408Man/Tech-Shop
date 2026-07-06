@@ -98,7 +98,7 @@ export default function Navbar() {
           </Link>
 
           {/* Categories Dropdown */}
-          <Dropdown title="Categorías">
+          <Dropdown id="tour-categories" title="Categorías">
             <DropdownList list={categories} />
           </Dropdown>
           <Link
@@ -111,6 +111,7 @@ export default function Navbar() {
 
         {/* Search bar */}
         <form
+          id="tour-search"
           className="flex w-full min-w-0 max-w-[512px] items-center gap-2 overflow-hidden rounded-full bg-white py-1.5 pl-3 sm:pl-4 pr-2"
           onSubmit={handleSearch}
         >
@@ -154,7 +155,7 @@ export default function Navbar() {
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-1.5 sm:gap-2">
+            <div id="tour-auth" className="flex items-center gap-1.5 sm:gap-2">
               <Link
                 href="/login"
                 className="rounded-full px-3 sm:px-4 py-1.5 sm:py-2 hover:bg-black/5 text-sm sm:text-base"
@@ -169,7 +170,7 @@ export default function Navbar() {
               </Link>
             </div>
           )}
-          <Link href="/cart" className="relative" aria-label="Ver carrito">
+          <Link id="tour-cart" href="/cart" className="relative" aria-label="Ver carrito">
             <ShoppingCart
               className="fill-current text-white hover:text-gray-200 hover:scale-110 transition-all w-5 h-5 sm:w-6 sm:h-6"
               style={{ transform: "rotateY(180deg)" }}

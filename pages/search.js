@@ -5,6 +5,9 @@ import {
   CatalogLoading,
 } from "../components/catalog/CatalogFeedback";
 import { useProductSearch } from "../hooks/useCatalog";
+import { useTour } from "../hooks/useTour";
+import { SEARCH_TOUR_STEPS } from "../data/tours";
+import TourButton from "../components/tour/TourButton";
 import TitleTab from "../components/ui/TitleTab.jsx";
 import Breadcrumb from "../components/ui/Breadcrumb.jsx";
 import SEO from "../components/seo/SEO.jsx";
@@ -12,6 +15,7 @@ import SEO from "../components/seo/SEO.jsx";
 export default function SearchPage() {
   const { products, query, hasQuery, isLoading, error, reload, isReady } =
     useProductSearch();
+  const { startTour } = useTour(SEARCH_TOUR_STEPS);
 
   if (!isReady || isLoading) {
     return <CatalogLoading message="Buscando productos..." />;
@@ -61,6 +65,9 @@ export default function SearchPage() {
               : "No hay una búsqueda activa."
           }
         />
+        <div className="fixed bottom-4 right-4 z-50">
+          <TourButton onClick={startTour} label="Tour" />
+        </div>
       </div>
     </>
   );

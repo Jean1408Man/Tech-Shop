@@ -5,6 +5,9 @@ import HeroSection from "../components/home/HeroSection";
 import SpecialOffers from "../components/home/SpecialOffers";
 import { CatalogError } from "../components/catalog/CatalogFeedback";
 import { useHomeCatalog } from "../hooks/useCatalog";
+import { useTour } from "../hooks/useTour";
+import { HOME_TOUR_STEPS } from "../data/tours";
+import TourButton from "../components/tour/TourButton";
 import SEO from "../components/seo/SEO.jsx";
 
 export default function HomePage() {
@@ -18,6 +21,8 @@ export default function HomePage() {
     error,
     reload,
   } = useHomeCatalog();
+
+  const { startTour, isTourCompleted, resetTour } = useTour(HOME_TOUR_STEPS);
 
   if (error) {
     return <CatalogError message={error} onRetry={reload} />;
@@ -43,6 +48,9 @@ export default function HomePage() {
           onSelectCategory={setSelectedCategory}
           loading={isLoading}
         />
+        <div className="fixed bottom-4 right-4 z-50">
+          <TourButton onClick={startTour} label="Tour" />
+        </div>
       </div>
     </>
   );

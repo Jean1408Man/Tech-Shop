@@ -54,7 +54,7 @@ export default function SpecialOffers() {
   }
 
   return (
-    <section className="relative overflow-hidden max-w-[1856px] w-full h-64 mx-auto border-t-2 border-primary-dark">
+    <section id="tour-special-offers" className="relative overflow-hidden max-w-[1856px] w-full h-64 mx-auto border-t-2 border-primary-dark">
       {isLoading && (
         <div className="absolute inset-0 grid justify-items-center content-center gap-8 ">
           <h1 className="text-2xl sm:text-3xl font-bold text-white bg-primary px-4 py-2 rounded-md">

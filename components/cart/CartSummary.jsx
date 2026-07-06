@@ -42,6 +42,7 @@ export default function CartSummary({ onCheckout, onClear, subtotal }) {
       </div>
       <div className="mt-4 sm:mt-6 space-y-2 sm:space-y-4">
         <button
+          id="tour-checkout-btn"
           className="w-full bg-primary text-white py-2.5 sm:py-3 rounded-full hover:bg-primary-dark transition-all duration-300 shadow-sm hover:shadow-md font-semibold text-sm sm:text-base"
           onClick={onCheckout}
         >

@@ -395,7 +395,7 @@ export default function AdminEntityDetail({
         onClick={onClose}
         aria-label="Cerrar detalle"
       />
-      <div className="relative flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-lg bg-white shadow-xl">
+      <div id="tour-admin-detail" className="relative flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-lg bg-white shadow-xl">
         <div className="flex flex-col gap-2 sm:gap-3 border-b border-gray-200 px-4 py-3 sm:px-5 sm:py-4 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase text-primary">
@@ -405,7 +405,7 @@ export default function AdminEntityDetail({
               {config.singular}
             </h2>
           </div>
-          <div className="flex items-center gap-2">
+          <div id="tour-admin-detail-actions" className="flex items-center gap-2">
             {entityKey === "pedidos" && item && (
               <button
                 type="button"

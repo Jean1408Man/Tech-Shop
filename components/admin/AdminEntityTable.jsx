@@ -47,7 +47,7 @@ function NameCell({ image, name, secondary }) {
 
 function Actions({ item, onDelete, onEdit, onView }) {
   return (
-    <div className="flex justify-end gap-1">
+    <div id="tour-admin-actions" className="flex justify-end gap-1">
       <button
         type="button"
         onClick={() => onView(item)}

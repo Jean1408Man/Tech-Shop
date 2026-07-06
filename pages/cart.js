@@ -1,9 +1,14 @@
 import CartView from "../components/cart/CartView.jsx";
 import TitleTab from "../components/ui/TitleTab.jsx";
 import Breadcrumb from "../components/ui/Breadcrumb.jsx";
+import { useTour } from "../hooks/useTour";
+import { CART_TOUR_STEPS } from "../data/tours";
+import TourButton from "../components/tour/TourButton";
 import SEO from "../components/seo/SEO.jsx";
 
 export default function CartPage() {
+  const { startTour } = useTour(CART_TOUR_STEPS);
+
   return (
     <>
       <SEO
@@ -16,6 +21,9 @@ export default function CartPage() {
         <TitleTab>Tu carrito</TitleTab>
         <Breadcrumb items={[{ label: "Carrito" }]} />
         <CartView />
+        <div className="fixed bottom-4 right-4 z-50">
+          <TourButton onClick={startTour} label="Tour" />
+        </div>
       </div>
     </>
   );

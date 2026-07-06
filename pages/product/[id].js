@@ -8,10 +8,14 @@ import BackButton from "../../components/navigation/BackButton";
 import Breadcrumb from "../../components/ui/Breadcrumb.jsx";
 import SpecialOffers from "../../components/home/SpecialOffers";
 import { useProductPage } from "../../hooks/useProductPage";
+import { useTour } from "../../hooks/useTour";
+import { PRODUCT_TOUR_STEPS } from "../../data/tours";
+import TourButton from "../../components/tour/TourButton";
 import SEO from "../../components/seo/SEO.jsx";
 
 export default function ProductPage() {
   const { product, isLoading, error, reload } = useProductPage();
+  const { startTour } = useTour(PRODUCT_TOUR_STEPS);
 
   if (isLoading) {
     return <CatalogLoading message="Cargando producto..." />;
@@ -50,6 +54,9 @@ export default function ProductPage() {
           <BackButton fallbackHref="/" />
           <Breadcrumb items={breadcrumbItems} />
           {product ? <ProductDetails product={product} /> : <ProductNotFound />}
+        </div>
+        <div className="fixed bottom-4 right-4 z-50">
+          <TourButton onClick={startTour} label="Tour" />
         </div>
       </div>
     </>

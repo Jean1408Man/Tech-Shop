@@ -13,7 +13,7 @@ import style from "./HeroSection.module.css";
 
 export default function HeroSection() {
   return (
-    <section className="relative h-56 sm:h-64 md:h-80 lg:h-96 w-full max-w-[1856px] mx-auto grid place-items-center">
+    <section id="tour-hero" className="relative h-56 sm:h-64 md:h-80 lg:h-96 w-full max-w-[1856px] mx-auto grid place-items-center">
       <div>
         <div className="absolute top-0 left-0 scale-50 md:scale-75 lg:scale-100 origin-top-left">
           <Image src={figure1} alt="Figure 1" />

@@ -12,8 +12,8 @@ export default function FeaturedProductsSection({
 }) {
   return (
     <section
+      id="tour-product-grid"
       className="relative max-w-[1856px] mx-auto px-4 py-6 sm:py-8 border-t-2 border-primary-dark"
-      id="explore"
     >
       <TitleTab>Ofertas tendencia</TitleTab>
       <CategoryFilter

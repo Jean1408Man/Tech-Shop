@@ -35,7 +35,7 @@ export default function ProductDetails({ product }) {
       {/* Bento Grid */}
       <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
         {/* Product Info - Top Left */}
-        <div className="flex flex-col gap-5 animate-fade-in-fl order-2 lg:order-1">
+        <div id="tour-product-info" className="flex flex-col gap-5 animate-fade-in-fl order-2 lg:order-1">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight mb-3">
               {product.name}
@@ -71,7 +71,7 @@ export default function ProductDetails({ product }) {
             )}
           </div>
 
-          <div className="border-t border-gray-100 pt-4">
+          <div id="tour-product-description" className="border-t border-gray-100 pt-4">
             <h3 className="text-xs font-semibold text-gray-900 uppercase tracking-wider mb-2">
               Descripción
             </h3>
@@ -97,7 +97,7 @@ export default function ProductDetails({ product }) {
         </div>
 
         {/* Product Image - Top Right */}
-        <div className="relative animate-fade-in-fr order-1 lg:order-2 flex items-start justify-center lg:justify-end">
+        <div id="tour-product-image" className="relative animate-fade-in-fr order-1 lg:order-2 flex items-start justify-center lg:justify-end">
           <div className="relative w-full max-w-full md:max-w-md h-72 md:h-80 lg:h-[400px] rounded-2xl overflow-hidden bg-gray-100 shadow-lg grid place-items-center">
             <Image
               src={product.image}
@@ -137,6 +137,7 @@ export default function ProductDetails({ product }) {
           </div>
         ) : (
           <button
+            id="tour-add-to-cart"
             onClick={() => addToCart(product)}
             className="flex-1 bg-primary hover:bg-primary-dark text-white font-semibold py-3.5 px-8 rounded-full transition-all duration-300 shadow-md hover:shadow-lg hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2"
           >
