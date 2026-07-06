@@ -81,7 +81,7 @@ export default function CategoriesSection({ categories = [] }) {
       <div className="flex flex-col md:flex-row gap-6 bg-gradient-to-t from-black/60 to-transparent h-full w-full min-w-0 px-4 pb-8">
         {/* Sidebar with category list */}
         <div className="md:w-1/4">
-          <ul className="md:space-y-2 md:grid gap-2 flex items-center justify-center md:justify-start">
+          <ul className="md:space-y-2 md:grid gap-2 flex items-center justify-center md:justify-stretch">
             {categories.map((category) => (
               <li key={category.slug}>
                 <button
