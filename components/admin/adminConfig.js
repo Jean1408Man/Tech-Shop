@@ -1,7 +1,9 @@
-export const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME;
-export const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY;
-export const CLOUDINARY_UPLOAD_PRESET = process.env.CLOUDINARY_UPLOAD_PRESET;
-export const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1";
+export const CLOUDINARY_CLOUD_NAME =
+  process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+export const CLOUDINARY_UPLOAD_PRESET =
+  process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
+export const CLOUDINARY_UPLOAD_URL =
+  process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_URL;
 
 export async function uploadToCloudinary(file) {
   if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET) {
@@ -10,6 +12,7 @@ export async function uploadToCloudinary(file) {
     );
   }
 
+  file.name = Date.now() + `-${file.name}`;
   const formData = new FormData();
   formData.append("file", file);
   formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
