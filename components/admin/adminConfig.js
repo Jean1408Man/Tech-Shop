@@ -12,9 +12,13 @@ export async function uploadToCloudinary(file) {
     );
   }
 
-  file.name = Date.now() + `-${file.name}`;
+  const newFile = new File(
+    [file],
+    `${Date.now()}_${file.name.replace(" ", "_")}`,
+    { type: file.type },
+  );
   const formData = new FormData();
-  formData.append("file", file);
+  formData.append("file", newFile);
   formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
 
   const response = await fetch(

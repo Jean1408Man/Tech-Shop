@@ -98,7 +98,7 @@ export default function ProductDetails({ product }) {
 
         {/* Product Image - Top Right */}
         <div className="relative animate-fade-in-fr order-1 lg:order-2 flex items-start justify-center lg:justify-end">
-          <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md h-64 sm:h-72 md:h-80 lg:h-[400px] rounded-2xl overflow-hidden bg-gray-100 shadow-lg grid place-items-center">
+          <div className="relative w-full max-w-full md:max-w-md h-72 md:h-80 lg:h-[400px] rounded-2xl overflow-hidden bg-gray-100 shadow-lg grid place-items-center">
             <Image
               src={product.image}
               alt={product.name}

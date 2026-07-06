@@ -23,7 +23,7 @@ export default function ComboDetails({ combo }) {
   const rating =
     products.reduce(
       (pp, cp) => Number(pp.rating || 0) + Number(cp.rating || 0),
-      0
+      0,
     ) / products.length;
 
   return (
@@ -91,7 +91,7 @@ export default function ComboDetails({ combo }) {
 
         {/* Combo Image - Top Right */}
         <div className="relative animate-fade-in-fr order-1 lg:order-2 flex items-start justify-center lg:justify-end">
-          <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md h-64 sm:h-72 md:h-80 lg:h-[400px] rounded-2xl overflow-hidden bg-gray-100 shadow-lg grid place-items-center">
+          <div className="relative w-full max-w-full md:max-w-md h-72 md:h-80 lg:h-[400px] rounded-2xl overflow-hidden bg-gray-100 shadow-lg grid place-items-center">
             <Image
               src={combo.image}
               alt={combo.name}
@@ -175,7 +175,7 @@ export default function ComboDetails({ combo }) {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 justify-items-center">
             {products.map((product) => {
               const productPrice = Number(
-                product.price || product.basePrice || 0
+                product.price || product.basePrice || 0,
               );
 
               return (

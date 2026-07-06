@@ -1,12 +1,16 @@
 import { Trash } from "lucide-react";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { uploadToCloudinary } from "./adminConfig";
 
-export default function ImageField({ name = "imageFile", value, onChange }) {
+export default function ImageField({
+  name = "imageFile",
+  value,
+  onChange,
+  isUploading = false,
+}) {
   const [error, setError] = useState(null);
   const [preview, setPreview] = useState(null);
-  const [isUploading, setIsUploading] = useState(false);
+
   const MAX_BYTES = 15 * 1024 * 1024;
 
   useEffect(() => {
@@ -36,21 +40,7 @@ export default function ImageField({ name = "imageFile", value, onChange }) {
     // Mostrar preview local mientras se sube
     const objectUrl = URL.createObjectURL(file);
     setPreview(objectUrl);
-    setIsUploading(true);
-
-    try {
-      const cloudinaryUrl = await uploadToCloudinary(file);
-      setPreview(cloudinaryUrl);
-      if (onChange) onChange(cloudinaryUrl);
-    } catch (uploadError) {
-      setError(
-        uploadError.message || "No se pudo subir la imagen. Intenta de nuevo.",
-      );
-      setPreview(null);
-      if (onChange) onChange(null);
-    } finally {
-      setIsUploading(false);
-    }
+    onChange(file);
   }
 
   return (

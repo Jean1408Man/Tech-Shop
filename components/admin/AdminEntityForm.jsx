@@ -5,6 +5,7 @@ import {
   FORM_FIELDS,
   getInitialFormValues,
   toEntityPayload,
+  uploadToCloudinary,
 } from "./adminConfig";
 import ImageField from "./ImageField";
 
@@ -64,7 +65,7 @@ function RelationPicker({ field, options, value, onChange, disabled }) {
                     onChange(
                       isChecked
                         ? selectedValues.filter((item) => item !== optionValue)
-                        : [...selectedValues, optionValue]
+                        : [...selectedValues, optionValue],
                     );
                   }}
                   className="mt-0.5 accent-primary"
@@ -89,8 +90,8 @@ function ProductOrderLines({ lines, products, offers, onChange, disabled }) {
   const updateLine = (index, field, value) => {
     onChange(
       lines.map((line, lineIndex) =>
-        lineIndex === index ? { ...line, [field]: value } : line
-      )
+        lineIndex === index ? { ...line, [field]: value } : line,
+      ),
     );
   };
 
@@ -103,8 +104,8 @@ function ProductOrderLines({ lines, products, offers, onChange, disabled }) {
       {lines.map((line, index) => {
         const availableOffers = offers.filter((offer) =>
           offer.productos?.some(
-            (product) => String(product.id) === String(line.producto_id)
-          )
+            (product) => String(product.id) === String(line.producto_id),
+          ),
         );
 
         return (
@@ -187,8 +188,8 @@ function ComboOrderLines({ lines, combos, onChange, disabled }) {
   const updateLine = (index, field, value) => {
     onChange(
       lines.map((line, lineIndex) =>
-        lineIndex === index ? { ...line, [field]: value } : line
-      )
+        lineIndex === index ? { ...line, [field]: value } : line,
+      ),
     );
   };
 
@@ -265,15 +266,17 @@ export default function AdminEntityForm({
   user,
 }) {
   const [values, setValues] = useState(() =>
-    getInitialFormValues(entityKey, item)
+    getInitialFormValues(entityKey, item),
   );
   const [localError, setLocalError] = useState("");
+  const [isUploadingImg, setIsUploadingImg] = useState(false);
+
   const isEditing = Boolean(item);
   const config = ENTITY_CONFIG[entityKey];
   const fields = FORM_FIELDS[entityKey];
   const allCategories = useMemo(
     () => flattenCategories(entities.categorias),
-    [entities.categorias]
+    [entities.categorias],
   );
 
   useEffect(() => {
@@ -286,7 +289,7 @@ export default function AdminEntityForm({
       entityKey === "usuarios" &&
       isEditing &&
       Number(item?.id) !== Number(user?.id),
-    [entityKey, isEditing, item?.id, user?.id]
+    [entityKey, isEditing, item?.id, user?.id],
   );
 
   const setFieldValue = (name, value) => {
@@ -373,10 +376,25 @@ export default function AdminEntityForm({
       return;
     }
 
+    if (values.url_img instanceof File) {
+      try {
+        setIsUploadingImg(true);
+        const cloudinaryUrl = await uploadToCloudinary(values.url_img);
+        values.url_img = cloudinaryUrl;
+      } catch (uploadError) {
+        setLocalError(
+          uploadError.message ||
+            "No se pudo subir la imagen. Intenta de nuevo.",
+        );
+      } finally {
+        setIsUploadingImg(false);
+      }
+    }
+
     setLocalError("");
     const didSave = await onSave(
       toEntityPayload(entityKey, values, isEditing),
-      item
+      item,
     );
 
     if (didSave) {
@@ -581,6 +599,7 @@ export default function AdminEntityForm({
                       name={field.name}
                       value={values[field.name]}
                       onChange={(file) => setFieldValue(field.name, file)}
+                      isUploading={isUploadingImg}
                     />
                   </div>
                 );
@@ -638,8 +657,8 @@ export default function AdminEntityForm({
               {isSaving
                 ? "Guardando..."
                 : isEditing
-                ? "Guardar cambios"
-                : "Crear"}
+                  ? "Guardar cambios"
+                  : "Crear"}
             </button>
           </div>
         </form>

@@ -15,6 +15,7 @@ export default function Navbar() {
   const [query, setQuery] = useState("");
   const [prevScrollY, setPrevScrollY] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
+  const [scrollFlag, setScrollFlag] = useState(false);
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   useEffect(() => {
@@ -28,6 +29,24 @@ export default function Navbar() {
   }, [router.pathname, router.query.q]);
 
   useEffect(() => {
+    setScrollFlag(window.matchMedia("(min-width: 768px)").matches);
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.matchMedia("(min-width: 768px)").matches) {
+        setScrollFlag(true);
+      } else {
+        setScrollFlag(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+
+    if (scrollFlag)
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
+
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
@@ -41,8 +60,11 @@ export default function Navbar() {
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [prevScrollY]);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [prevScrollY, scrollFlag]);
 
   const handleSearch = (event) => {
     event.preventDefault();
