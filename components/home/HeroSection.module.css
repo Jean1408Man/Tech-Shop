@@ -1,5 +1,6 @@
-@media screen and (max-width: 512px) {
-  .figures {
-    display: none;
+@media screen and (max-width: 1024px) {
+  .content {
+    border-radius: 32px;
+    backdrop-filter: blur(16px);
   }
 }

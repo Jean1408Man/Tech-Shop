@@ -13,8 +13,8 @@ import style from "./HeroSection.module.css";
 
 export default function HeroSection() {
   return (
-    <section className="relative h-56 sm:h-64 md:h-80 lg:h-96 w-full max-w-[1856px] mx-auto">
-      <div className={style["figures"]}>
+    <section className="relative h-56 sm:h-64 md:h-80 lg:h-96 w-full max-w-[1856px] mx-auto grid place-items-center">
+      <div>
         <div className="absolute top-0 left-0 scale-50 md:scale-75 lg:scale-100 origin-top-left">
           <Image src={figure1} alt="Figure 1" />
         </div>
@@ -45,7 +45,8 @@ export default function HeroSection() {
       </div>
       <div
         className={
-          "absolute inset-0 flex flex-col items-center justify-center text-center px-4"
+          "absolute grid content-center justify-items-center text-center p-4 " +
+          style.content
         }
       >
         <h1 className="text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-primary-dark to-primary">

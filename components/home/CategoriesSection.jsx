@@ -57,7 +57,7 @@ export default function CategoriesSection({ categories = [] }) {
   }, [selectedCategory]);
 
   return (
-    <section className="w-full max-w-[1856px] h-64 sm:h-80 md:h-96 lg:h-[512px] mx-auto relative overflow-hidden py-6 sm:py-8 border-t-2 border-primary-dark">
+    <section className="w-full max-w-[1856px] h-full lg:h-[512px] mx-auto relative overflow-hidden pt-6 sm:pt-8 border-t-2 border-primary-dark">
       {previousSelected && (
         <Image
           src={previousSelected.image}
@@ -78,15 +78,15 @@ export default function CategoriesSection({ categories = [] }) {
         />
       )}
       <TitleTab>Galerías de productos</TitleTab>
-      <div className="flex flex-col md:flex-row gap-6 bg-gradient-to-t from-black/60 to-transparent h-full w-full min-w-0 px-4">
+      <div className="flex flex-col md:flex-row gap-6 bg-gradient-to-t from-black/60 to-transparent h-full w-full min-w-0 px-4 pb-8">
         {/* Sidebar with category list */}
         <div className="md:w-1/4">
-          <ul className="space-y-2">
+          <ul className="md:space-y-2 md:grid gap-2 flex items-center justify-center md:justify-start">
             {categories.map((category) => (
               <li key={category.slug}>
                 <button
                   onClick={() => setSelectedCategory(category)}
-                  className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-200 ${
+                  className={`w-full text-left px-4 py-2 rounded-lg transition-all duration-200 text-ellipsis overflow-hidden text-nowrap ${
                     selectedCategory?.slug === category.slug
                       ? "bg-primary text-white"
                       : "bg-white hover:bg-gray-100 text-gray-700"
@@ -143,7 +143,7 @@ export default function CategoriesSection({ categories = [] }) {
               <h3 className="text-white text-3xl font-bold mb-3">
                 {selectedCategory.name}
               </h3>
-              <p className="text-white text-sm mb-4 max-w-md">
+              <p className="text-white text-sm mb-4 max-w-64">
                 {selectedCategory.description}
               </p>
               <Link href={`/category/${selectedCategory.slug}`} legacyBehavior>
