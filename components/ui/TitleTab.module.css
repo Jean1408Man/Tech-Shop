@@ -37,3 +37,47 @@
   border-width: 2px 0 0 2px;
   box-shadow: -8px -8px 0px var(--y);
 }
+
+@media screen and (max-width: 768px) {
+  .title-tab {
+    border-radius: 0 0 24px 24px;
+  }
+  .title-tab::after,
+  .title-tab::before {
+    width: 40px;
+    height: 24px;
+    translate: 0 -2px;
+  }
+  .title-tab::before {
+    left: calc(-40px + 2px);
+    border-top-right-radius: 24px;
+    border-width: 1px 1px 0 0;
+  }
+  .title-tab::after {
+    right: calc(-40px + 2px);
+    border-top-left-radius: 24px;
+    border-width: 1px 0 0 1px;
+  }
+}
+
+@media screen and (max-width: 512px) {
+  .title-tab {
+    border-radius: 0 0 16px 16px;
+  }
+  .title-tab::after,
+  .title-tab::before {
+    width: 32px;
+    height: 16px;
+    translate: 0 -2px;
+  }
+  .title-tab::before {
+    left: calc(-32px + 2px);
+    border-top-right-radius: 16px;
+    border-width: 1px 1px 0 0;
+  }
+  .title-tab::after {
+    right: calc(-32px + 2px);
+    border-top-left-radius: 16px;
+    border-width: 1px 0 0 1px;
+  }
+}

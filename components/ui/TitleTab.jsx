@@ -2,7 +2,9 @@ import style from "./TitleTab.module.css";
 
 export default function TitleTab({ children, variant = "relative" }) {
   const className =
-    variant === "relative" ? "relative -translate-y-6 sm:-translate-y-8" : "absolute";
+    variant === "relative"
+      ? "relative -translate-y-6 sm:-translate-y-8"
+      : "absolute";
   return (
     <div
       className={

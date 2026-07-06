@@ -101,7 +101,7 @@ export default function CategoriesSection({ categories = [] }) {
 
         {/* Dynamic content area with background image */}
         <div className="md:w-3/4 flex justify-between items-center overflow-hidden">
-          <div className="relative flex-1 max-w-md -top-16">
+          <div className="relative flex-1 max-w-md -top-16 opacity-0 pointer-events-none lg:opacity-100 lg:pointer-events-auto">
             {!!thumbnails?.length &&
               thumbnails.map((t, i) => {
                 const dynamic = [

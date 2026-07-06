@@ -40,7 +40,10 @@ export default function CheckoutForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-xl bg-white shadow-sm p-4 sm:p-6">
+    <form
+      onSubmit={handleSubmit}
+      className="rounded-xl bg-white shadow-sm p-4 sm:p-6"
+    >
       <h2 className="text-lg sm:text-xl font-bold">Datos para el pedido</h2>
       <p className="mt-1 text-xs sm:text-sm text-gray-600">
         Se calcularán total, descuentos y subtotales al confirmar.
@@ -54,7 +57,9 @@ export default function CheckoutForm({
 
       <div className="mt-3 sm:mt-4 grid gap-3 sm:gap-4">
         <label className="block">
-          <span className="text-xs sm:text-sm font-semibold text-gray-700">Nombre</span>
+          <span className="text-xs sm:text-sm font-semibold text-gray-700">
+            Nombre
+          </span>
           <input
             type="text"
             name="nombre"
@@ -67,7 +72,9 @@ export default function CheckoutForm({
         </label>
 
         <label className="block">
-          <span className="text-xs sm:text-sm font-semibold text-gray-700">Teléfono</span>
+          <span className="text-xs sm:text-sm font-semibold text-gray-700">
+            Teléfono
+          </span>
           <input
             type="tel"
             name="telefono"
@@ -81,7 +88,7 @@ export default function CheckoutForm({
         </label>
       </div>
 
-      <div className="mt-4 sm:mt-6 flex flex-col gap-2 sm:flex-row sm:justify-end">
+      <div className="mt-4 sm:mt-6 flex flex-col-reverse lg:flex-col gap-2 sm:flex-row sm:justify-end">
         <button
           type="button"
           onClick={onCancel}
