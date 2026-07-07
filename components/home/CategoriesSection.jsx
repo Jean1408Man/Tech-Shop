@@ -57,7 +57,10 @@ export default function CategoriesSection({ categories = [] }) {
   }, [selectedCategory]);
 
   return (
-    <section className="w-full max-w-[1856px] h-full lg:h-[512px] mx-auto relative overflow-hidden pt-6 sm:pt-8 border-t-2 border-primary-dark">
+    <section
+      className="w-full max-w-[1856px] h-full lg:h-[512px] mx-auto relative overflow-hidden pt-6 sm:pt-8 border-t-2 border-primary-dark"
+      id="tour-categories"
+    >
       {previousSelected && (
         <Image
           src={previousSelected.image}

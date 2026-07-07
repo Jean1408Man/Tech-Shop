@@ -9,7 +9,10 @@ export default function CombosSection({ combos = [], isLoading = false }) {
   }
 
   return (
-    <section className="max-w-[1856px] mx-auto px-4 py-6 sm:py-8 border-t-2 border-primary-dark">
+    <section
+      className="max-w-[1856px] mx-auto px-4 py-6 sm:py-8 border-t-2 border-primary-dark"
+      id="tour-combos"
+    >
       {isLoading && (
         <div className="grid justify-items-center content-center gap-6 sm:gap-8 py-8 sm:py-12">
           <h1 className="text-2xl sm:text-3xl font-bold text-primary px-4 py-2 rounded-md">

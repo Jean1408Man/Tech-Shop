@@ -35,7 +35,10 @@ export default function ProductDetails({ product }) {
       {/* Bento Grid */}
       <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
         {/* Product Info - Top Left */}
-        <div id="tour-product-info" className="flex flex-col gap-5 animate-fade-in-fl order-2 lg:order-1">
+        <div
+          id="tour-product-info"
+          className="flex flex-col gap-5 animate-fade-in-fl order-2 lg:order-1"
+        >
           <div>
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight mb-3">
               {product.name}
@@ -71,7 +74,10 @@ export default function ProductDetails({ product }) {
             )}
           </div>
 
-          <div id="tour-product-description" className="border-t border-gray-100 pt-4">
+          <div
+            id="tour-product-description"
+            className="border-t border-gray-100 pt-4"
+          >
             <h3 className="text-xs font-semibold text-gray-900 uppercase tracking-wider mb-2">
               Descripción
             </h3>
@@ -81,12 +87,16 @@ export default function ProductDetails({ product }) {
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-gray-50 rounded-xl p-3">
-              <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-0.5">
-                Envío
-              </p>
-              <p className="text-xs font-medium text-gray-900">Gratis +$50</p>
-            </div>
+            {product.offer && (
+              <div className="bg-gray-50 rounded-xl p-3">
+                <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-0.5">
+                  Oferta
+                </p>
+                <p className="text-xs font-medium text-gray-900">
+                  {product.offer?.name} - {product.offer?.discount}
+                </p>
+              </div>
+            )}
             <div className="bg-gray-50 rounded-xl p-3">
               <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-0.5">
                 Devolución
@@ -97,7 +107,10 @@ export default function ProductDetails({ product }) {
         </div>
 
         {/* Product Image - Top Right */}
-        <div id="tour-product-image" className="relative animate-fade-in-fr order-1 lg:order-2 flex items-start justify-center lg:justify-end">
+        <div
+          id="tour-product-image"
+          className="relative animate-fade-in-fr order-1 lg:order-2 flex items-start justify-center lg:justify-end"
+        >
           <div className="relative w-full max-w-full md:max-w-md h-72 md:h-80 lg:h-[400px] rounded-2xl overflow-hidden bg-gray-100 shadow-lg grid place-items-center">
             <Image
               src={product.image}

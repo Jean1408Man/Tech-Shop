@@ -36,6 +36,13 @@ export const HOME_TOUR_STEPS = [
     side: "top",
   },
   {
+    element: "#tour-combos",
+    title: "Ofertas de combos",
+    description:
+      "Explora los combos preparados y ofertados por tiempo limitado.",
+    side: "top",
+  },
+  {
     element: "#tour-product-grid",
     title: "Catálogo de productos",
     description:

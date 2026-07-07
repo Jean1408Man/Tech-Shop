@@ -134,7 +134,7 @@ export default function Navbar() {
         {/* Cart icon */}
         <div className="flex items-center gap-2 sm:gap-3">
           {isHydrated && isAuthenticated ? (
-            <div className="flex items-center gap-1.5 sm:gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2" id="tour-auth">
               {canAccessAdmin && (
                 <Link href="/admin" legacyBehavior>
                   <a
@@ -170,7 +170,12 @@ export default function Navbar() {
               </Link>
             </div>
           )}
-          <Link id="tour-cart" href="/cart" className="relative" aria-label="Ver carrito">
+          <Link
+            id="tour-cart"
+            href="/cart"
+            className="relative"
+            aria-label="Ver carrito"
+          >
             <ShoppingCart
               className="fill-current text-white hover:text-gray-200 hover:scale-110 transition-all w-5 h-5 sm:w-6 sm:h-6"
               style={{ transform: "rotateY(180deg)" }}
