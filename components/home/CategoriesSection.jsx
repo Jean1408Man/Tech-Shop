@@ -120,6 +120,10 @@ export default function CategoriesSection({ categories = [] }) {
                       "overflow-hidden aspect-square bg-white rounded-full absolute outline outline-offset-8 outline-primary animate-fade-in-fl cursor-pointer group " +
                       dynamic
                     }
+                    style={{
+                      animationDelay: `${i * 0.2}s`,
+                      animationFillMode: "both",
+                    }}
                   >
                     {t.image && (
                       <Image
