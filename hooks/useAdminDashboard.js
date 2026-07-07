@@ -21,6 +21,7 @@ export function useAdminDashboard({ token, user, isAdmin }) {
   const [isSaving, setIsSaving] = useState(false);
   const [isDetailLoading, setIsDetailLoading] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
+  const [isImporting, setIsImporting] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
 
@@ -161,12 +162,102 @@ export function useAdminDashboard({ token, user, isAdmin }) {
     [token]
   );
 
+  const exportToXlsx = useCallback(
+    async (entityKey) => {
+      setIsExporting(true);
+      setError('');
+      setNotice('');
+
+      try {
+        const response = await fetch(`/api/admin/export-xlsx?entity=${entityKey}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => null);
+          throw new Error(errorData?.detail || `Error al exportar ${entityKey}.`);
+        }
+
+        const blob = await response.blob();
+        const disposition = response.headers.get('Content-Disposition');
+        const filename =
+          disposition?.match(/filename="?([^";]+)"?/i)?.[1] ||
+          `${entityKey}_${new Date().toISOString().slice(0, 10)}.xlsx`;
+        const objectUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+
+        link.href = objectUrl;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(objectUrl), 0);
+
+        setNotice(`Se exportó ${ENTITY_CONFIG[entityKey].label} a XLSX correctamente.`);
+        return true;
+      } catch (exportError) {
+        setError(getErrorMessage(exportError));
+        return false;
+      } finally {
+        setIsExporting(false);
+      }
+    },
+    [token]
+  );
+
+  const importFromXlsx = useCallback(
+    async (entityKey, file) => {
+      setIsImporting(true);
+      setError('');
+      setNotice('');
+
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('entity', entityKey);
+
+        const response = await fetch('/api/admin/import-xlsx', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.detail || `Error al importar ${entityKey}.`);
+        }
+
+        const successCount = result.results?.filter((r) => r.success).length || 0;
+        const failCount = result.results?.filter((r) => !r.success).length || 0;
+
+        setNotice(
+          `Importación completada: ${successCount} exitosos, ${failCount} fallidos.`
+        );
+
+        await loadAll();
+        return result;
+      } catch (importError) {
+        setError(getErrorMessage(importError));
+        return null;
+      } finally {
+        setIsImporting(false);
+      }
+    },
+    [loadAll, token]
+  );
+
   return {
     entities,
     isLoading,
     isSaving,
     isDetailLoading,
     isExporting,
+    isImporting,
     error,
     notice,
     reload: loadAll,
@@ -174,6 +265,8 @@ export function useAdminDashboard({ token, user, isAdmin }) {
     removeEntity,
     loadEntityDetail,
     exportOrderPdf,
+    exportToXlsx,
+    importFromXlsx,
     clearMessages: () => {
       setError('');
       setNotice('');

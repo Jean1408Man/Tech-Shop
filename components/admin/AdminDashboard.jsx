@@ -1,12 +1,14 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef } from "react";
 import {
   AlertCircle,
   CheckCircle2,
+  Download,
   Menu,
   Plus,
   RefreshCw,
   Search,
   Trash2,
+  Upload,
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import { useAdminDashboard } from "../../hooks/useAdminDashboard";
@@ -79,6 +81,7 @@ export default function AdminDashboard() {
     isSaving,
     isDetailLoading,
     isExporting,
+    isImporting,
     error,
     notice,
     reload,
@@ -86,6 +89,8 @@ export default function AdminDashboard() {
     removeEntity,
     loadEntityDetail,
     exportOrderPdf,
+    exportToXlsx,
+    importFromXlsx,
     clearMessages,
   } = useAdminDashboard({ token, user, isAdmin });
   const [activeEntity, setActiveEntity] = useState("productos");
@@ -96,6 +101,7 @@ export default function AdminDashboard() {
   const [deletingItem, setDeletingItem] = useState(null);
   const [detailItem, setDetailItem] = useState(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const importFileRef = useRef(null);
   const config = ENTITY_CONFIG[activeEntity];
   const activeItems = entities[activeEntity] || [];
   const filteredItems = useMemo(
@@ -163,6 +169,21 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleImportClick = () => {
+    importFileRef.current?.click();
+  };
+
+  const handleImportChange = async (event) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    await importFromXlsx(activeEntity, file);
+    event.target.value = '';
+  };
+
   return (
     <div className="flex min-h-[calc(100vh-4rem)] sm:min-h-[calc(100vh-6rem)] bg-gray-100">
       <div id="tour-admin-sidebar">
@@ -223,6 +244,45 @@ export default function AdminDashboard() {
                 <Plus className="w-[15px] h-[15px] sm:w-[17px] sm:h-[17px]" />
                 Nuevo {config.singular.toLowerCase()}
               </button>
+              <button
+                type="button"
+                onClick={() => exportToXlsx(activeEntity)}
+                disabled={isExporting}
+                className="inline-flex h-9 sm:h-10 items-center justify-center gap-1.5 sm:gap-2 rounded-md border border-gray-300 px-3 text-xs sm:text-sm font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-60"
+                title="Exportar a XLSX"
+              >
+                <Download
+                  className={
+                    isExporting
+                      ? "animate-spin w-[14px] h-[14px] sm:w-4 sm:h-4"
+                      : "w-[14px] h-[14px] sm:w-4 sm:h-4"
+                  }
+                />
+                Exportar a XLSX
+              </button>
+              <button
+                type="button"
+                onClick={handleImportClick}
+                disabled={isImporting}
+                className="inline-flex h-9 sm:h-10 items-center justify-center gap-1.5 sm:gap-2 rounded-md border border-gray-300 px-3 text-xs sm:text-sm font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-60"
+                title="Importar XLSX"
+              >
+                <Upload
+                  className={
+                    isImporting
+                      ? "animate-spin w-[14px] h-[14px] sm:w-4 sm:h-4"
+                      : "w-[14px] h-[14px] sm:w-4 sm:h-4"
+                  }
+                />
+                Importar XLSX
+              </button>
+              <input
+                ref={importFileRef}
+                type="file"
+                accept=".xlsx"
+                onChange={handleImportChange}
+                className="hidden"
+              />
             </div>
           </div>
         </header>

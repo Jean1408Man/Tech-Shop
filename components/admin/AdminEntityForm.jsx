@@ -410,7 +410,10 @@ export default function AdminEntityForm({
         onClick={onClose}
         aria-label="Cerrar formulario"
       />
-      <div id="tour-admin-form" className="relative flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-lg bg-white shadow-xl">
+      <div
+        id="tour-admin-form"
+        className="relative flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-lg bg-white shadow-xl"
+      >
         <div className="flex items-start justify-between border-b border-gray-200 px-4 py-3 sm:px-5 sm:py-4">
           <div>
             <h2 className="text-lg sm:text-xl font-bold text-gray-900">
@@ -645,7 +648,7 @@ export default function AdminEntityForm({
               type="button"
               onClick={onClose}
               className="rounded-md border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
-              disabled={isSaving}
+              disabled={isSaving || isUploadingImg}
             >
               Cancelar
             </button>
@@ -653,9 +656,9 @@ export default function AdminEntityForm({
               id="tour-admin-form-submit"
               type="submit"
               className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-60"
-              disabled={isSaving}
+              disabled={isSaving || isUploadingImg}
             >
-              {isSaving
+              {isSaving || isUploadingImg
                 ? "Guardando..."
                 : isEditing
                   ? "Guardar cambios"
