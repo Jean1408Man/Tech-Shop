@@ -1,12 +1,31 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ShoppingCart } from "lucide-react";
+import { useRef, useState, useEffect } from "react";
 import { useCart } from "../../context/CartContext";
 
 export default function ComboCard({ combo }) {
   const { addToCart } = useCart();
   const price = Number(combo.price || 0);
   const productCount = combo.products?.length || 0;
+  const description = combo.description || "";
+
+  const descRef = useRef(null);
+  const [isOverflowing, setIsOverflowing] = useState(false);
+
+  // Detect if the clamped description overflows its two-line box so we can
+  // apply the `test-ellipsis` class and reveal the full-text tooltip on hover.
+  useEffect(() => {
+    const el = descRef.current;
+    if (!el) return;
+    const checkOverflow = () => {
+      setIsOverflowing(el.scrollHeight > el.clientHeight + 1);
+    };
+    checkOverflow();
+    const observer = new ResizeObserver(checkOverflow);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [description]);
 
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow hover:shadow-md transition-shadow duration-200">
@@ -33,6 +52,25 @@ export default function ComboCard({ combo }) {
             </h3>
           </a>
         </Link>
+        <div className="relative group">
+          <p
+            ref={descRef}
+            className={`mt-1 text-xs text-gray-600 line-clamp-2 ${
+              isOverflowing ? "test-ellipsis" : ""
+            }`}
+          >
+            {description}
+          </p>
+          {isOverflowing && (
+            <span
+              role="tooltip"
+              className="absolute left-0 bottom-full -z-20 group-hover:z-20 hover:z-20 mb-1 w-full rounded-md bg-gray-900 px-2 py-1 text-xs leading-snug text-white shadow-lg opacity-0 hover:opacity-100 group-hover:animate-fade-in-fb"
+              style={{ animationDelay: "1s", animationFillMode: "both" }}
+            >
+              {description}
+            </span>
+          )}
+        </div>
         <p className="mt-1 text-xs font-semibold text-gray-500">
           {productCount} productos incluidos
         </p>

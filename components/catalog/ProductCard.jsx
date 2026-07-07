@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { X, Star, Minus, Plus } from "lucide-react";
 import PropTypes from "prop-types";
 import { useCart, getCartItemKey } from "../../context/CartContext";
@@ -15,6 +15,24 @@ export default function ProductCard({ product, className }) {
   const { cartItems, addToCart, updateQuantity } = useCart();
   const price = Number(product.price || 0);
   const basePrice = Number(product.basePrice || price);
+  const description = product.description || "";
+
+  const descRef = useRef(null);
+  const [isOverflowing, setIsOverflowing] = useState(false);
+
+  // Detect if the clamped description overflows its two-line box so we can
+  // apply the `test-ellipsis` class and reveal the full-text tooltip on hover.
+  useEffect(() => {
+    const el = descRef.current;
+    if (!el) return;
+    const checkOverflow = () => {
+      setIsOverflowing(el.scrollHeight > el.clientHeight + 1);
+    };
+    checkOverflow();
+    const observer = new ResizeObserver(checkOverflow);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [description]);
 
   // Check if product is in cart
   const cartKey =
@@ -49,9 +67,25 @@ export default function ProductCard({ product, className }) {
           <h3 className="text-sm font-semibold text-gray-900 leading-tight">
             {product.name}
           </h3>
-          <p className="text-xs text-gray-500 line-clamp-2">
-            {product.description}
-          </p>
+          <div className="relative group">
+            <p
+              ref={descRef}
+              className={`text-xs text-gray-500 line-clamp-2 ${
+                isOverflowing ? "test-ellipsis" : ""
+              }`}
+            >
+              {product.description}
+            </p>
+            {isOverflowing && (
+              <span
+                role="tooltip"
+                className="absolute left-0 bottom-full -z-20 group-hover:z-20 hover:z-20 mb-1 w-full rounded-md bg-gray-900 px-2 py-1 text-xs leading-snug text-white shadow-lg opacity-0 hover:opacity-100 group-hover:animate-fade-in-fb"
+                style={{ animationDelay: "1s", animationFillMode: "both" }}
+              >
+                {product.description}
+              </span>
+            )}
+          </div>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-0.5">
               {new Array(5).fill(0).map((_, i) => (
