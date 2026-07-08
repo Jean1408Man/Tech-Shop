@@ -1,19 +1,19 @@
-import { Eye, Pencil, Trash2 } from 'lucide-react';
+import { Eye, Pencil, Trash2 } from "lucide-react";
 
 function formatCurrency(value) {
   const amount = Number(value);
 
-  return Number.isFinite(amount) ? `$${amount.toFixed(2)}` : '—';
+  return Number.isFinite(amount) ? `$${amount.toFixed(2)}` : "—";
 }
 
 function formatDate(value) {
   if (!value) {
-    return '—';
+    return "—";
   }
 
-  return new Intl.DateTimeFormat('es', {
-    dateStyle: 'medium',
-    timeStyle: 'short',
+  return new Intl.DateTimeFormat("es", {
+    dateStyle: "medium",
+    timeStyle: "short",
   }).format(new Date(value));
 }
 
@@ -26,7 +26,7 @@ function EntityImage({ src, alt }) {
     />
   ) : (
     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-gray-100 text-sm font-bold text-gray-400">
-      {alt?.charAt(0)?.toUpperCase() || '—'}
+      {alt?.charAt(0)?.toUpperCase() || "—"}
     </div>
   );
 }
@@ -36,9 +36,13 @@ function NameCell({ image, name, secondary }) {
     <div className="flex min-w-40 sm:min-w-48 md:min-w-56 items-center gap-2 sm:gap-3">
       <EntityImage src={image} alt={name} />
       <div className="min-w-0">
-        <p className="truncate text-xs sm:text-sm font-semibold text-gray-900">{name}</p>
+        <p className="truncate text-xs sm:text-sm font-semibold text-gray-900">
+          {name}
+        </p>
         {secondary && (
-          <p className="max-w-40 sm:max-w-56 md:max-w-72 truncate text-[10px] sm:text-xs text-gray-500">{secondary}</p>
+          <p className="max-w-40 sm:max-w-56 md:max-w-72 truncate text-[10px] sm:text-xs text-gray-500">
+            {secondary}
+          </p>
         )}
       </div>
     </div>
@@ -80,8 +84,9 @@ function Actions({ item, onDelete, onEdit, onView }) {
 }
 
 const HEADER_CLASS =
-  'whitespace-nowrap px-3 sm:px-4 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase text-gray-500';
-const CELL_CLASS = 'whitespace-nowrap px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-gray-700';
+  "whitespace-nowrap px-3 sm:px-4 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-semibold uppercase text-gray-500";
+const CELL_CLASS =
+  "whitespace-nowrap px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-gray-700";
 
 function ProductRows({ items, onDelete, onEdit, onView }) {
   return items.map((product) => {
@@ -90,7 +95,10 @@ function ProductRows({ items, onDelete, onEdit, onView }) {
     const offerPrice = Math.max(basePrice - discount, 0);
 
     return (
-      <tr key={product.id} className="border-t border-gray-100 hover:bg-gray-50">
+      <tr
+        key={product.id}
+        className="border-t border-gray-100 hover:bg-gray-50"
+      >
         <td className={CELL_CLASS}>
           <NameCell
             image={product.url_img}
@@ -98,12 +106,18 @@ function ProductRows({ items, onDelete, onEdit, onView }) {
             secondary={`ID ${product.id}`}
           />
         </td>
-        <td className={CELL_CLASS}>{product.categoria?.nombre || product.categoria_id}</td>
-        <td className={`${CELL_CLASS} font-semibold`}>{formatCurrency(basePrice)}</td>
+        <td className={CELL_CLASS}>
+          {product.categoria?.nombre || product.categoria_id}
+        </td>
+        <td className={`${CELL_CLASS} font-semibold`}>
+          {formatCurrency(basePrice)}
+        </td>
         <td className={CELL_CLASS}>
           {product.oferta_actual ? (
             <div>
-              <p className="font-bold text-primary">{formatCurrency(offerPrice)}</p>
+              <p className="font-bold text-primary">
+                {formatCurrency(offerPrice)}
+              </p>
               <p className="text-xs text-gray-500">
                 −{formatCurrency(discount)} · {product.oferta_actual.nombre}
               </p>
@@ -113,7 +127,12 @@ function ProductRows({ items, onDelete, onEdit, onView }) {
           )}
         </td>
         <td className={CELL_CLASS}>
-          <Actions item={product} onDelete={onDelete} onEdit={onEdit} onView={onView} />
+          <Actions
+            item={product}
+            onDelete={onDelete}
+            onEdit={onEdit}
+            onView={onView}
+          />
         </td>
       </tr>
     );
@@ -122,14 +141,17 @@ function ProductRows({ items, onDelete, onEdit, onView }) {
 
 function CategoryRows({ items, onDelete, onEdit, onView }) {
   const categoriesById = new Map(
-    items.map((category) => [String(category.id), category])
+    items.map((category) => [String(category.id), category]),
   );
 
   return items.map((category) => {
     const parent = categoriesById.get(String(category.categoria_padre_id));
 
     return (
-      <tr key={category.id} className="border-t border-gray-100 hover:bg-gray-50">
+      <tr
+        key={category.id}
+        className="border-t border-gray-100 hover:bg-gray-50"
+      >
         <td className={CELL_CLASS}>
           <NameCell
             image={category.url_img}
@@ -153,7 +175,12 @@ function CategoryRows({ items, onDelete, onEdit, onView }) {
         <td className={CELL_CLASS}>{category.subcategorias?.length || 0}</td>
         <td className={CELL_CLASS}>#{category.id}</td>
         <td className={CELL_CLASS}>
-          <Actions item={category} onDelete={onDelete} onEdit={onEdit} onView={onView} />
+          <Actions
+            item={category}
+            onDelete={onDelete}
+            onEdit={onEdit}
+            onView={onView}
+          />
         </td>
       </tr>
     );
@@ -164,18 +191,29 @@ function OfferRows({ items, onDelete, onEdit, onView }) {
   return items.map((offer) => (
     <tr key={offer.id} className="border-t border-gray-100 hover:bg-gray-50">
       <td className={CELL_CLASS}>
-        <NameCell image={offer.imagen} name={offer.nombre} secondary={offer.descripcion} />
+        <NameCell
+          image={offer.imagen}
+          name={offer.nombre}
+          secondary={offer.descripcion}
+        />
       </td>
       <td className={`${CELL_CLASS} font-semibold text-primary`}>
-        {formatCurrency(offer.monto_descuento)}
+        {(Number(offer.monto_descuento) || 0).toFixed(2)}%
       </td>
       <td className={CELL_CLASS}>
         <p>{formatDate(offer.fecha_inicio)}</p>
-        <p className="text-xs text-gray-500">Hasta {formatDate(offer.fecha_fin)}</p>
+        <p className="text-xs text-gray-500">
+          Hasta {formatDate(offer.fecha_fin)}
+        </p>
       </td>
       <td className={CELL_CLASS}>{offer.productos?.length || 0}</td>
       <td className={CELL_CLASS}>
-        <Actions item={offer} onDelete={onDelete} onEdit={onEdit} onView={onView} />
+        <Actions
+          item={offer}
+          onDelete={onDelete}
+          onEdit={onEdit}
+          onView={onView}
+        />
       </td>
     </tr>
   ));
@@ -185,12 +223,23 @@ function ComboRows({ items, onDelete, onEdit, onView }) {
   return items.map((combo) => (
     <tr key={combo.id} className="border-t border-gray-100 hover:bg-gray-50">
       <td className={CELL_CLASS}>
-        <NameCell image={combo.imagen} name={combo.nombre} secondary={combo.descripcion} />
+        <NameCell
+          image={combo.imagen}
+          name={combo.nombre}
+          secondary={combo.descripcion}
+        />
       </td>
-      <td className={`${CELL_CLASS} font-semibold`}>{formatCurrency(combo.precio)}</td>
+      <td className={`${CELL_CLASS} font-semibold`}>
+        {formatCurrency(combo.precio)}
+      </td>
       <td className={CELL_CLASS}>{combo.productos?.length || 0}</td>
       <td className={CELL_CLASS}>
-        <Actions item={combo} onDelete={onDelete} onEdit={onEdit} onView={onView} />
+        <Actions
+          item={combo}
+          onDelete={onDelete}
+          onEdit={onEdit}
+          onView={onView}
+        />
       </td>
     </tr>
   ));
@@ -216,7 +265,12 @@ function OrderRows({ items, onDelete, onEdit, onView }) {
         {formatCurrency(order.total)}
       </td>
       <td className={CELL_CLASS}>
-        <Actions item={order} onDelete={onDelete} onEdit={onEdit} onView={onView} />
+        <Actions
+          item={order}
+          onDelete={onDelete}
+          onEdit={onEdit}
+          onView={onView}
+        />
       </td>
     </tr>
   ));
@@ -227,7 +281,9 @@ function UserRows({ items, onDelete, onEdit, onView }) {
     <tr key={user.id} className="border-t border-gray-100 hover:bg-gray-50">
       <td className={CELL_CLASS}>
         <div className="min-w-56">
-          <p className="font-semibold text-gray-900">{user.full_name || 'Sin nombre'}</p>
+          <p className="font-semibold text-gray-900">
+            {user.full_name || "Sin nombre"}
+          </p>
           <p className="text-xs text-gray-500">{user.email}</p>
         </div>
       </td>
@@ -237,13 +293,18 @@ function UserRows({ items, onDelete, onEdit, onView }) {
         </span>
       </td>
       <td className={CELL_CLASS}>
-        <span className={user.is_active ? 'text-green-700' : 'text-gray-400'}>
-          {user.is_active ? 'Activo' : 'Inactivo'}
+        <span className={user.is_active ? "text-green-700" : "text-gray-400"}>
+          {user.is_active ? "Activo" : "Inactivo"}
         </span>
       </td>
       <td className={CELL_CLASS}>#{user.id}</td>
       <td className={CELL_CLASS}>
-        <Actions item={user} onDelete={onDelete} onEdit={onEdit} onView={onView} />
+        <Actions
+          item={user}
+          onDelete={onDelete}
+          onEdit={onEdit}
+          onView={onView}
+        />
       </td>
     </tr>
   ));
@@ -251,27 +312,40 @@ function UserRows({ items, onDelete, onEdit, onView }) {
 
 const TABLES = {
   productos: {
-    headers: ['Producto', 'Categoría', 'Precio base', 'Precio con oferta', 'Acciones'],
+    headers: [
+      "Producto",
+      "Categoría",
+      "Precio base",
+      "Precio con oferta",
+      "Acciones",
+    ],
     Rows: ProductRows,
   },
   categorias: {
-    headers: ['Categoría', 'Tipo', 'Productos', 'Subcategorías', 'ID', 'Acciones'],
+    headers: [
+      "Categoría",
+      "Tipo",
+      "Productos",
+      "Subcategorías",
+      "ID",
+      "Acciones",
+    ],
     Rows: CategoryRows,
   },
   ofertas: {
-    headers: ['Oferta', 'Descuento', 'Vigencia', 'Productos', 'Acciones'],
+    headers: ["Oferta", "Descuento", "Vigencia", "Productos", "Acciones"],
     Rows: OfferRows,
   },
   combos: {
-    headers: ['Combo', 'Precio final', 'Productos', 'Acciones'],
+    headers: ["Combo", "Precio final", "Productos", "Acciones"],
     Rows: ComboRows,
   },
   pedidos: {
-    headers: ['Pedido', 'Cliente', 'Contenido', 'Total', 'Acciones'],
+    headers: ["Pedido", "Cliente", "Contenido", "Total", "Acciones"],
     Rows: OrderRows,
   },
   usuarios: {
-    headers: ['Usuario', 'Rol', 'Estado', 'ID', 'Acciones'],
+    headers: ["Usuario", "Rol", "Estado", "ID", "Acciones"],
     Rows: UserRows,
   },
 };
@@ -301,7 +375,7 @@ export default function AdminEntityTable({
             {headers.map((header, index) => (
               <th
                 key={header}
-                className={`${HEADER_CLASS} ${index === headers.length - 1 ? 'text-right' : ''}`}
+                className={`${HEADER_CLASS} ${index === headers.length - 1 ? "text-right" : ""}`}
               >
                 {header}
               </th>
@@ -309,7 +383,12 @@ export default function AdminEntityTable({
           </tr>
         </thead>
         <tbody className="bg-white">
-          <Rows items={items} onDelete={onDelete} onEdit={onEdit} onView={onView} />
+          <Rows
+            items={items}
+            onDelete={onDelete}
+            onEdit={onEdit}
+            onView={onView}
+          />
         </tbody>
       </table>
     </div>
